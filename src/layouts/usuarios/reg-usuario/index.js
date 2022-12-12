@@ -88,7 +88,7 @@ function NewUser() {
         regional: values.regional,
         comision: values.comision,
         tipo_Mesa: values.tipoMesa,
-        confirmacion_envio: false,
+        confirmacion_envio: false
       });
       Swal.fire({
         icon: 'success',

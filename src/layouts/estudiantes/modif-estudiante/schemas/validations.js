@@ -13,7 +13,7 @@ export default [
     [email.name]: Yup.string().required(email.errorMsg).email(email.invalidMsg),
     [edad.name]: Yup.number().required(edad.errorMsg).positive(edad.invalidMsg).integer(edad.invalidMsg).min(12, edad.invalidMsg),
     [sexo.name]: Yup.string().required(sexo.errorMsg),
-    [telefono.name]: Yup.string().required(telefono.errorMsg).length(10, telefono.invalidMsg),
+    [telefono.name]: Yup.string().required(telefono.errorMsg),
     
   }),
 
@@ -32,6 +32,6 @@ export default [
   }),
 
   Yup.object().shape({
-    [telefono_padres.name]: Yup.string().required(telefono_padres.errorMsg).length(10, telefono.invalidMsg),
+    [telefono_padres.name]: Yup.string().required(telefono_padres.errorMsg),
   }),
 ];

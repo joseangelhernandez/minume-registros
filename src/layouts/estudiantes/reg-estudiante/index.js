@@ -55,7 +55,7 @@ function getStepContent(stepIndex, formData) {
 }
 
 function NewUser() {
-  const url = "http://jose03-001-site1.htempurl.com/api/ESTUDIANTES"
+  const url = "https://minume-umnurd.edu.do/api/ESTUDIANTES"
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const { formId, formField } = form;

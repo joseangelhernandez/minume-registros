@@ -65,9 +65,10 @@ function DataTable({
     state: { pageIndex, pageSize, globalFilter },
   } = tableInstance;
 
+  //const pageIndice = useMemo(() => pageIndex + 1, [pageIndex]);
+
   // Set the default value for the entries per page when component mounts
   useEffect(() => {
-    console.log(pageIndex) 
     setPageSize(defaultValue)}, [pageIndex]);
 
   // Set the entries per page value based on the select value

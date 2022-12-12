@@ -1,7 +1,8 @@
 import { useState,useEffect } from "react";
-import Cookies from 'universal-cookie';
-import axios from 'axios';
-import { useHistory } from "react-router";
+import axios from 'api/axios';
+import axiosORIGIN from 'axios';
+import { useNavigate, useLocation } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 // formik components
 import { Formik, Form } from "formik";
@@ -56,26 +57,34 @@ function getStepContent(stepIndex, formData, estudiantePut, id) {
   }
 }
 
-function NewUser(ESTUDIANTE) {
-  const url = 'http://jose03-001-site1.htempurl.com/api/ESTUDIANTES'+`/${ESTUDIANTE.location.persona.id}`
+function NewUser() {
+  const cookies = new Cookies();
+  const location = useLocation();
+  const jwtInterceoptor = axiosORIGIN.create({});
+  const url = 'https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${location.state.persona.id}`
   const [activeStep, setActiveStep] = useState(0);
-  const history = useHistory();
+  const history = useNavigate();
   const steps = getSteps();
   const { formId, formField } = form;
   const currentValidation = validations[activeStep];
   const isLastStep = activeStep === steps.length - 1;
-  const cookies = new Cookies();
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const handleBack = () => setActiveStep(activeStep - 1);
+
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   const submitForm = async (values, actions) => {
     await sleep(500);
 
     try{
-      axios.put(url,
+      jwtInterceoptor.put(url,
       {
-        id: ESTUDIANTE.location.persona.id,
+        id: location.state.persona.id,
         nombres: values.nombre,
         apellidos: values.apellido,
         correo_electronico: values.email,
@@ -120,10 +129,8 @@ function NewUser(ESTUDIANTE) {
 
     await sleep(2500);
 
-    history.push({
-      pathname: "/estudiantes",
-    });
-    history.go(0);
+    history('/estudiantes/gestionar-estudiantes');
+    history(0);
   };
 
   const handleSubmit = (values, actions) => {
@@ -174,7 +181,7 @@ function NewUser(ESTUDIANTE) {
                           touched,
                           formField,
                           errors,
-                        }, ESTUDIANTE.location.persona, ESTUDIANTE.location.persona.id)}
+                        }, location.state.persona, location.state.persona.id)}
                         <SuiBox mt={2} width="100%" display="flex" justifyContent="space-between">
                           {activeStep === 0 ? (
                             <SuiBox />

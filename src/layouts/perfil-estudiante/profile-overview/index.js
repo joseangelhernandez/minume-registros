@@ -1,9 +1,10 @@
 import { useState, useEffect, React } from "react";
 import {Route, Link, Routes, useParams} from 'react-router-dom';
-import axios from 'axios';
-import { useHistory } from "react-router";
+import axios from 'api/axios';
+import { useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import QRCODE from 'qrcode'
+import logoCarga from "assets/images/pantallaCarga/Logo-minume-carga.gif";
 
 //HEADER
 // @mui material components
@@ -109,12 +110,12 @@ function Overview() {
     visado_americana: '',
   });
   const parametros = useParams();
-  const history = useHistory();
+  const history = useNavigate();
   const [cargando, setCargando] = useState(true)
   const [ScreenSize, setScreenSize] = useState(window.innerWidth);
   const cookies = new Cookies();
   const [qrcode, setQRCode] = useState('');
-  const _URL = 'http://localhost:3000/estudiante'+`/${parametros.estuID}`
+  const _URL = 'https://localhost:44315/estudiante'+`/${parametros.estuID}`
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -128,7 +129,7 @@ function Overview() {
 
   const confirmar = async () => {
     try{
-      await axios.put('http://jose03-001-site1.htempurl.com/api/ESTUDIANTES'+`/${parametros.estuID}`,{
+      await axios.put('/ESTUDIANTES'+`/${parametros.estuID}`,{
         id: parametros.estuID,
         nombres: estuPut.nombres,
         apellidos: estuPut.apellidos,
@@ -158,7 +159,7 @@ function Overview() {
         showConfirmButton: false,
       });
       await sleep(2600);
-      history.go(0);
+      history(0);
     }catch{
       Swal.fire({
         icon: 'error',
@@ -171,13 +172,13 @@ function Overview() {
     
   }
 
-  useEffect(async ()=>{
-    await axios.get('http://jose03-001-site1.htempurl.com/api/ESTUDIANTES'+`/${parametros.estuID}`)
+  useEffect(()=>{
+    axios.get('/ESTUDIANTES'+`/${parametros.estuID}`)
       .then((response)=> {
         setEstuput(response.data)
       });
 
-    await axios.get('http://jose03-001-site1.htempurl.com/api/PERFIL_ESTUDIANTE'+`/${parametros.estuID}`)
+    axios.get('/PERFIL_ESTUDIANTE'+`/${parametros.estuID}`)
       .then((response)=> {
         setEstudiante(response.data)
         setCargando(false)
@@ -195,7 +196,7 @@ function Overview() {
     })
 
     if(!estudiante){
-      history.push({pathname: "/Inicio"})
+      history('/Inicio')
     }
 
     setScreenSize(window.innerWidth);
@@ -203,7 +204,7 @@ function Overview() {
   },[cargando, ScreenSize])
 
   if(cargando){
-    return(<div>cargando...</div>)
+    return(<img src={logoCarga} alt="loading..." style={{position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%) translateY(-50%)', maxWidth: '40%', maxHeight: '40%'}}/>)
   }else{
     return (
       <DashboardLayout>

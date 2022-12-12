@@ -1,7 +1,9 @@
 import { useState,useEffect } from "react";
-import { useHistory } from "react-router";
-import axios from 'axios';
-import Cookies from 'universal-cookie';
+import { useNavigate } from "react-router-dom";
+import axios from 'api/axios';
+import useAuth from "hooks/useAuth";
+import axiosORIGIN from 'axios';
+import Cookies from "universal-cookie";
 
 // @mui material components
 import Icon from "@mui/material/Icon";
@@ -20,6 +22,9 @@ import SuiButton from "components/SuiButton";
 import Swal from "sweetalert2";
 
 function ActionCell(id) {
+  const cookies = new Cookies();
+  const { auth } = useAuth();
+  const [estudiante, setEstudiante] = useState([]);
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "button button-success",
@@ -28,22 +33,48 @@ function ActionCell(id) {
     buttonsStyling: false
   })
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const history = useHistory();
-  const cookies = new Cookies();
+  const history = useNavigate();
+  const jwtInterceoptor = axiosORIGIN.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   const Perfil = () => {
     window.open('/estudiante'+`/${id.id}`, "_blank")
   }
 
   const Editar = () => {
-    axios.get('http://jose03-001-site1.htempurl.com/api/ESTUDIANTES'+`/${id.id}`)
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${id.id}`)
       .then((response)=> {
-        history.push({
-          pathname: "/estudiantes/editar-estudiante",
-          persona: response.data
-        });
+        history('/estudiantes/editar-estudiante',{state: {persona: response.data}});
       });
   }
+
+  const Confirmar = () => {
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTUDIANTES/confirmar', { params: {estudianteID: id.id}}).then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Registro confirmado',
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        axios.get('/ESTUDIANTES'+`/${id.id}`)
+        .then((response)=> {
+          setEstudiante(response.data);
+        });
+      });
+    
+  }
+
+  useEffect(() => {
+    axios.get('/ESTUDIANTES'+`/${id.id}`)
+      .then((response)=> {
+        setEstudiante(response.data);
+      });
+  }, []);
   
   const Eliminar = () => {
     swalWithBootstrapButtons.fire({
@@ -62,10 +93,10 @@ function ActionCell(id) {
           'success'
         ).then((result)=>{
           if (result.isConfirmed) {
-            history.go(0);
+            history(0);
           }
         })
-        axios.delete('http://jose03-001-site1.htempurl.com/api/ESTUDIANTES'+`/${id.id}`);
+        jwtInterceoptor.delete('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${id.id}`);
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -93,11 +124,22 @@ function ActionCell(id) {
             </SuiButton>
           </Tooltip>
       </SuiBox>
-      <Tooltip title="Eliminar" placement="top">
-        <SuiButton variant="gradient" color="error" size="medium" onClick={Eliminar} iconOnly>
-          <Icon>delete</Icon>
-        </SuiButton>
-      </Tooltip>
+      {auth.role === 1 
+      &&<Tooltip title="Eliminar" placement="top">
+          <SuiButton variant="gradient" color="error" size="medium" onClick={Eliminar} iconOnly>
+            <Icon>delete</Icon>
+          </SuiButton>
+        </Tooltip>
+      }
+      {estudiante.confirmacion === false 
+      &&<SuiBox mx={2}>
+        <Tooltip title="Confirmar" placement="top">
+            <SuiButton variant="gradient" color="success" size="medium" onClick={Confirmar} iconOnly>
+              <Icon>check</Icon>
+            </SuiButton>
+        </Tooltip>
+      </SuiBox>
+      }
     </SuiBox>
   );
 }

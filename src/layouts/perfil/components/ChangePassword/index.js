@@ -1,7 +1,9 @@
 import { useState,useEffect } from "react";
-import Cookies from 'universal-cookie';
-import axios from 'axios';
-import { useHistory } from "react-router";
+import useAuth from "hooks/useAuth";
+import axios from 'api/axios';
+import axiosORIGIN from 'axios';
+import Cookies from "universal-cookie";
+
 
 // formik components
 import { Formik, Form } from "formik";
@@ -18,6 +20,10 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
 import SuiButton from "components/SuiButton";
+import Box from '@mui/material/Box';
+import CircularProgress, {
+  circularProgressClasses,
+} from '@mui/material/CircularProgress';
 
 // NewUser layout schemas for form and form feilds
 import validations from "layouts/perfil/baseComponents/schemasPassword/validations";
@@ -189,12 +195,20 @@ function getContent(formData, usuarioPut, id) {
 };
 
 function ChangePassword() {
-  const cookies = new Cookies();
+  const {auth} = useAuth();
 
   const [usuario, setUsuario] = useState('');
   const [cargando, setCargando] = useState(true);
-  const url = 'http://jose03-001-site1.htempurl.com/api/USUARIOS'+`/${cookies.get('usuario')}`;
+  const url = 'https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`;
   const { formId, formField } = form;
+
+  const cookies = new Cookies();
+  const jwtInterceoptor = axiosORIGIN.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -204,9 +218,9 @@ function ChangePassword() {
     await sleep(500);
 
     try{
-      axios.put(url,
+      jwtInterceoptor.put(url,
       {
-        usuario: cookies.get('usuario'),
+        usuario: auth.usuario,
         nombre: usuario.nombre,
         apellido: usuario.apellido,
         contraseña: values.nuevaContraseña,
@@ -215,8 +229,12 @@ function ChangePassword() {
         regional: usuario.regional,
         comision: usuario.comision,
         tipo_Mesa: usuario.tipo_Mesa,
+        imageName: usuario.imageName,
         confirmacion_envio: usuario.confirmacion_envio,
         codigoResetPass: usuario.codigoResetPass,
+        refreshToken: usuario.refreshToken,
+        tokenCreado: usuario.tokenCreado,
+        tokenExpira: usuario.tokenExpira,
       })
 
       Swal.fire({
@@ -242,7 +260,7 @@ function ChangePassword() {
     actions.resetForm();
 
     await sleep(2700);
-    history.go(0);
+    //history.go(0);
   };
 
   const handleSubmit = (values, actions) => {
@@ -270,18 +288,43 @@ function ChangePassword() {
   });
 
 
-  useEffect(async ()=>{
-    await axios.get('http://jose03-001-site1.htempurl.com/api/USUARIOS'+`/${cookies.get('usuario')}`)
+  useEffect(()=>{
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`)
       .then((response)=> {
         setUsuario(response.data)
         setCargando(false)
       });
-
-
   },[cargando]);
 
   if(cargando){
-    return(<div>cargando...</div>);
+    return(    
+    <Box sx={{ position: 'relative' }}>
+      <CircularProgress
+        variant="determinate"
+        sx={{
+          color: (theme) =>
+            theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+        }}
+        size={40}
+        thickness={4}
+        value={100}
+      />
+      <CircularProgress
+        variant="indeterminate"
+        disableShrink
+        sx={{
+          color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
+          animationDuration: '550ms',
+          position: 'absolute',
+          left: 0,
+          [`& .${circularProgressClasses.circle}`]: {
+            strokeLinecap: 'round',
+          },
+        }}
+        size={40}
+        thickness={4}
+      />
+    </Box>);
   }else
   {
     return (

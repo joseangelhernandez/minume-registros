@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import axios from 'axios';
+import axios from 'api/axios';
 
 // prop-type is a library for typechecking of props
 import PropTypes from "prop-types";
@@ -41,12 +41,12 @@ function InfoGeneral({ formData, usuarioPut, id }) {
   };
 
  useEffect(()=>{
-  axios.get('http://jose03-001-site1.htempurl.com/api/COMISIONDROPDOWN')
+  axios.get('/COMISIONDROPDOWN')
     .then((response)=> {
       setComisiones(response.data)
     });
 
-    axios.get('http://jose03-001-site1.htempurl.com/api/REGIONALES_EDUCATIVAS')
+    axios.get('/REGIONALES_EDUCATIVAS')
     .then((response)=> {
       setRegionales(response.data)
     });

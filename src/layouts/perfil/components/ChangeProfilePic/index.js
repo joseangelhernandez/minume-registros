@@ -1,4 +1,4 @@
-import Cookies from 'universal-cookie';
+import useAuth from 'hooks/useAuth';
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -14,7 +14,7 @@ import SuiDropzone from "components/SuiDropzone";
 import Swal from "sweetalert2";
 
 function ProfilePic() {
-  const cookies = new Cookies();
+  const { auth } = useAuth();
 
   const picRequirements = [
     "Foto con calidad estimada de 720px x 720px.",
@@ -45,7 +45,7 @@ function ProfilePic() {
             uploadMultiple: false,
             paramName: "FormFile",
             renameFile: function () {
-              let newName = `${cookies.get('usuario') + '.png'}`;
+              let newName = `${auth.usuario + '.png'}`;
               return newName;
           },
             maxFiles: 1, init: function() {

@@ -1,8 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useMemo} from "react";
 import axios from 'axios';
-import { useHistory } from "react-router";
 import QRCODE from 'qrcode'
 import Cookies from 'universal-cookie';
+import axiosORIGIN from 'axios';
+import useAuth from "hooks/useAuth";
+import { useNavigate} from "react-router-dom";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -36,12 +38,17 @@ import { saveAs } from "file-saver";
 // sweetalert2 components
 import Swal from "sweetalert2";
 
-// Data
-//import dataTableData from "layouts/estudiantes/gest-estudiante/data/dataTableData";
-
-function ProductsList() {
-  const history = useHistory();
+function GestUser() {
+  const navigate = useNavigate();
+  const {auth} = useAuth();
   const cookies = new Cookies();
+  const jwtInterceoptor = axiosORIGIN.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
+
   let [tblUser, settblUser] = useState([
     {
       usuario: '',
@@ -69,18 +76,19 @@ function ProductsList() {
   }
 
   function obtenerDatos(){
-    axios.get('http://jose03-001-site1.htempurl.com/api/USUARIOS_SP'+`/${cookies.get('usuario')}`)
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS_SP'+`/${auth.usuario}`)
     .then((response)=> {
       settblUser(response.data)
     });
   }
 
   useEffect(()=>{
-    axios.get('http://jose03-001-site1.htempurl.com/api/USUARIOS_SP'+`/${cookies.get('usuario')}`)
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS_SP'+`/${auth.usuario}`)
     .then((response)=> {
       settblUser(response.data)
     });
 
+    auth.role !== 1 && navigate('/Inicio', {replace: true});
   }, []);
 
 
@@ -134,7 +142,7 @@ function ProductsList() {
   );
 
 
-  let atributos = {
+  const atributos = {
     columns: [
       {
         Header: "Id",
@@ -149,6 +157,8 @@ function ProductsList() {
   
     rows: nuevaUser,
   }
+
+  const tablaDatosUsuario = useMemo(() => atributos, [tblUser]);
 
   return (
     <DashboardLayout>
@@ -183,10 +193,10 @@ function ProductsList() {
             </Stack>
           </SuiBox>
           <DataTable
-            table={atributos}
+            table={tablaDatosUsuario}
             entriesPerPage={{
               defaultValue: 15,
-              entries: [5, 10, 15, 20, 25],
+              entries: [15, 20, 25],
             }}
             canSearch
           />
@@ -197,4 +207,4 @@ function ProductsList() {
   );
 }
 
-export default ProductsList;
+export default GestUser;

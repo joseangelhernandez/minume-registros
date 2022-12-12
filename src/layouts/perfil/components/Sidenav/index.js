@@ -20,7 +20,7 @@ function Sidenav() {
     { icon: <Document />, label: "perfil", href: "perfil" },
     { icon: <Cube />, label: "cambiar contraseña", href: "cambiar-contraseña" },
     { icon: <Settings />, label: "cambiar foto", href: "cambiar-foto" },
-    { icon: <CustomerSupport />, label: "notificaciones", href: "notificaciones" },
+    //{ icon: <CustomerSupport />, label: "notificaciones", href: "notificaciones" },
   ];
 
   const renderSidenavItems = sidenavItems.map(({ icon, label, href }, key) => {

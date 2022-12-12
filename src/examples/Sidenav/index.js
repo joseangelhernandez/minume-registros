@@ -37,14 +37,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }, props) {
 
   const cerrarSesion=()=>{
     cookies.remove('usuario', {path: '/'});
-    cookies.remove('roleid',  {path: '/'});
-    cookies.remove('email',  {path: '/'});
-    cookies.remove('regional', {path: '/'});
-    cookies.remove('comision', {path: '/'});
-    cookies.remove('tipomesa', {path: '/'});
-    cookies.remove('nombre', {path: '/'});
-    cookies.remove('apellido', {path: '/'});
-    cookies.remove('confirmacion_envio', {path: '/'});
+    cookies.remove('TaHjtwSe',  {path: '/'});
     window.location.replace('/');
   }
 
@@ -154,7 +147,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }, props) {
           <Link
             href={href}
             key={key}
-            active={key === itemName}
+            active={toString(key === itemName)}
             rel="noreferrer"
             sx={{ textDecoration: "none" }}
           >

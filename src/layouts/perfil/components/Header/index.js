@@ -1,7 +1,9 @@
 import { useState,useEffect } from "react";
-import Cookies from 'universal-cookie';
-import axios from 'axios';
-import { useHistory } from "react-router";
+import useAuth from "hooks/useAuth";
+import axios from 'api/axios';
+import axiosORIGIN from 'axios';
+import Cookies from "universal-cookie";
+import Skeleton from '@mui/material/Skeleton';
 
 
 // @mui material components
@@ -15,24 +17,30 @@ import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
 import SuiAvatar from "components/SuiAvatar";
 
-// Images
-import burceMars from "assets/images/bruce-mars.jpg";
 
 function Header() {
-  const cookies = new Cookies();
+  const { auth } = useAuth();
   const [usuario, setUsuario] = useState({});
   const [cargando, setCargando] = useState(true);
+  const cookies = new Cookies();
+  const jwtInterceoptor = axiosORIGIN.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   const [visible, setVisible] = useState(true);
 
   const handleSetVisible = () => setVisible(!visible);
 
-  useEffect(async()=>{
-    await axios.get('http://jose03-001-site1.htempurl.com/api/USUARIOPERFIL'+`/${cookies.get('usuario')}`)
-    .then((response) => {
-      setUsuario(response.data)
-      setCargando(false);
-    });
+  useEffect(()=>{
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOPERFIL'+`/${auth.usuario}`)
+      .then((response) => {
+        setUsuario(response.data)
+        setCargando(false);
+      });
+  
   }, [cargando]);
 
   // Badges
@@ -55,30 +63,37 @@ function Header() {
     <SuiBadge variant="gradient" color="warning" size="sm" badgeContent="Voluntario" container />
   );
 
-  if(cargando){
-    return(<div>cargando...</div>)
-  }else{
-    return (
+  return (
       <Card id="perfil">
         <SuiBox p={2}>
           <Grid container spacing={3} alignItems="center">
             <Grid item>
-              <SuiAvatar
-                src={usuario.imageSrc}
-                alt="profile-image"
-                variant="rounded"
-                size="xl"
-                shadow="sm"
-              />
+              {cargando? <Skeleton animation="wave" variant="circular" width={75} height={75}/> 
+              : <SuiAvatar
+                  src={usuario.imageSrc}
+                  alt="profile-image"
+                  variant="rounded"
+                  size="xl"
+                  shadow="sm"
+                />}
             </Grid>
             <Grid item>
               <SuiBox height="100%" mt={0.5} lineHeight={1}>
-                <SuiTypography variant="h5" fontWeight="medium">
+                {cargando 
+                ? <SuiTypography variant="h5" fontWeight="medium">
+                    <Skeleton animation="wave" width={250}/>
+                  </SuiTypography>
+                :<SuiTypography variant="h5" fontWeight="medium">
                   {usuario.nombre} {usuario.apellido}
+                </SuiTypography>}
+                {cargando 
+                ? <SuiTypography variant="button" color="text" fontWeight="medium">
+                  <Skeleton animation="wave" width={100}/>
                 </SuiTypography>
-                <SuiTypography variant="button" color="text" fontWeight="medium">
+                :<SuiTypography variant="button" color="text" fontWeight="medium">
                   {usuario.comision} / {usuario.tipo_Mesa}
-                </SuiTypography>
+                </SuiTypography>}
+                
               </SuiBox>
             </Grid>
             <Grid item xs={12} md={6} lg={3} sx={{ ml: "auto" }}>
@@ -88,12 +103,14 @@ function Header() {
                 alignItems="center"
                 lineHeight={1}
               >
-                {usuario.roleId == "Super User" && superUser}
-                {usuario.roleId == "Admin" && Admin}
-                {usuario.roleId == "Docente Centro" && DocenteCentro}
-                {usuario.roleId == "Tecnico Distrito" && TecDistrito}
-                {usuario.roleId == "Tecnico Regional" && TecReg}
-                {usuario.roleId == "Voluntario" && Voluntario}
+                {cargando
+                ? <Skeleton animation="wave" width={80}/>
+                :usuario.roleId == "Super User" ? superUser
+                :usuario.roleId == "Admin" ? Admin
+                :usuario.roleId == "Docente Centro" ? DocenteCentro
+                :usuario.roleId == "Tecnico Distrito" ? TecDistrito
+                :usuario.roleId == "Tecnico Regional" ? TecReg
+                :usuario.roleId == "Voluntario" && Voluntario}
                 
               </SuiBox>
             </Grid>
@@ -101,7 +118,6 @@ function Header() {
         </SuiBox>
       </Card>
     );
-  };
 }
 
 export default Header;

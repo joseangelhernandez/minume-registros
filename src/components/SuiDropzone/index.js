@@ -20,7 +20,7 @@ import SuiDropzoneRoot from "components/SuiDropzone/SuiDropzoneRoot";
 
 function SuiDropzone({ options }) {
   const cookies = new Cookies();
-  const url = 'http://jose03-001-site1.htempurl.com/api/USUARIOPERFIL'+`/${cookies.get('usuario')}`
+  const url = 'https://minume-umnurd.edu.do/api/USUARIOPERFIL'+`/${cookies.get('usuario')}`
   const dropzoneRef = useRef();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function SuiDropzone({ options }) {
     createDropzone();
 
     return () => removeDropzone();
-  }, [options]);
+  }, []);
 
   return (
     <SuiDropzoneRoot
@@ -51,7 +51,7 @@ function SuiDropzone({ options }) {
       
     >
       <SuiBox className="fallback">
-        <SuiBox component="input" type="img" isRequired />
+        <SuiBox component="input" type="img"/>
       </SuiBox>
       
     </SuiDropzoneRoot>

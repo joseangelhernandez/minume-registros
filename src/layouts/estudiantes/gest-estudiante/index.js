@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
-import axios from 'axios';
-import { useHistory } from "react-router";
+import {useEffect, useState, useMemo} from "react";
+import axios from 'api/axios';
 import QRCODE from 'qrcode'
+import useAuth from "hooks/useAuth";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack";
 import Icon from "@mui/material/Icon";
 import Tooltip from "@mui/material/Tooltip";
 import QrCode2Icon from '@mui/icons-material/QrCode2';
+import Skeleton from '@mui/material/Skeleton';
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/SuiBox";
@@ -35,11 +36,8 @@ import { saveAs } from "file-saver";
 // sweetalert2 components
 import Swal from "sweetalert2";
 
-// Data
-//import dataTableData from "layouts/estudiantes/gest-estudiante/data/dataTableData";
-
 function ProductsList() {
-  const history = useHistory();
+  const { auth } = useAuth();
   const [tblEstu, setTblEstu] = useState([
     {
       id: '',
@@ -54,7 +52,30 @@ function ProductsList() {
       }]
   );
 
-  const nuevaEstud = tblEstu.map(e => ({
+  const [qrcode, setQRCode] = useState('');
+
+  let url = '';
+  const refrescarLista = () => {
+    obtenerDatos();
+  }
+
+  function obtenerDatos(){
+    axios.get('/tablaESTUDIANTE', {params: {comision: auth.comision}})
+    .then((response)=> {
+      setTblEstu(response.data)
+    });
+  }
+
+  useEffect(()=>{
+    axios.get('/tablaESTUDIANTE', {params: {comision: auth.comision}})
+    .then((response)=> {
+      setTblEstu(response.data)
+    });
+  }, []);
+
+  let nuevaEstud = null;
+  auth.role === 1
+  ?nuevaEstud = tblEstu.map(e => ({
     id: e.id,
     nombre: e.nombre,
     grado: e.grado,
@@ -65,28 +86,14 @@ function ProductsList() {
     confirmacion: e.confirmacion,
     action: <ActionCell id={e.id}/>,
   }))
-
-  const [qrcode, setQRCode] = useState('');
-
-  let url = '';
-  const refrescarLista = () => {
-    obtenerDatos();
-  }
-
-  function obtenerDatos(){
-    axios.get('http://jose03-001-site1.htempurl.com/api/tablaESTUDIANTE')
-    .then((response)=> {
-      setTblEstu(response.data)
-    });
-  }
-
-  useEffect(()=>{
-    axios.get('http://jose03-001-site1.htempurl.com/api/tablaESTUDIANTE')
-    .then((response)=> {
-      setTblEstu(response.data)
-    });
-    console.log('este estado se refresco');
-  }, []);
+  :nuevaEstud = tblEstu.map(e => ({
+    id: e.id,
+    nombre: e.nombre,
+    Regional: e.regional,
+    pais: e.pais,
+    action: <ActionCell id={e.id}/>,
+  }))
+  
 
 
   const generarQRs = () => {
@@ -138,8 +145,9 @@ function ProductsList() {
     <SuiBadge variant="contained" color="success" size="xs" badgeContent="Confirmado" container />
   );
 
-
-  const atributos = {
+  let atributos = null;
+  auth.role === 1
+  ?atributos = {
     columns: [
       {
         Header: "Id",
@@ -160,7 +168,22 @@ function ProductsList() {
     ],
   
     rows: nuevaEstud,
+  }:atributos = {
+    columns: [
+      {
+        Header: "Id",
+        accessor: "id",
+      },
+      { Header: "Nombre", accessor: "nombre" },
+      { Header: "Regional", accessor: "Regional" },
+      { Header: "País", accessor: "pais" },
+      { Header: "Acción", accessor: "action" },
+    ],
+  
+    rows: nuevaEstud,
   }
+
+  const tablaDatos = useMemo(() => atributos, [tblEstu]);
 
   return (
     <DashboardLayout>
@@ -177,32 +200,179 @@ function ProductsList() {
               </SuiTypography>
             </SuiBox>
             <Stack spacing={1} direction="row">
-              <Link to="/estudiantes/registrar-estudiante">
+              {auth.role === 1 
+              &&<Link to="/estudiantes/registrar-estudiante">
                 <SuiButton variant="gradient" color="info" size="small">
                   + Nuevo estudiante
                 </SuiButton>
-              </Link>
+              </Link>}
               <Tooltip title="Actualizar" placement="bottom">
                 <SuiButton variant="gradient" color="warning" size="medium" onClick={refrescarLista} iconOnly>
                   <Icon>sync</Icon>
                 </SuiButton>
               </Tooltip>
-              <Tooltip title="Generar QRs" placement="bottom">
-                <SuiButton variant="gradient" color="dark" size="medium" onClick={generarQRs} iconOnly>
-                  <QrCode2Icon/>
-                </SuiButton>
-              </Tooltip>
+              {auth.role === 1 
+              &&<Tooltip title="Generar QRs" placement="bottom">
+              <SuiButton variant="gradient" color="dark" size="medium" onClick={generarQRs} iconOnly>
+                <QrCode2Icon/>
+              </SuiButton>
+            </Tooltip>}
             </Stack>
           </SuiBox>
-          <DataTable
-            table={atributos}
-            entriesPerPage={{
-              defaultValue: 15,
-              entries: [15, 20, 25],
+          {tblEstu.length === 1 
+          ? <DataTable
+              table={{columns: [
+                {
+                  Header: "Id",
+                  accessor: "id",
+                },
+                { Header: "Nombre", accessor: "nombre" },
+                { Header: "Grado", accessor: "grado" },
+                { Header: "Regional", accessor: "Regional" },
+                { Header: "Comisión", accessor: "comision" },
+                { Header: "País", accessor: "pais" },
+                { Header: "Habitación", accessor: "habitacion" },
+                {
+                  Header: "Confirmación",
+                  accessor: "confirmacion",
+                },
+              ],
+  
+              rows: [
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+                {
+                  id: <Skeleton animation="wave" width={100}/>,
+                  nombre: <Skeleton animation="wave" width={100}/>,
+                  edad: <Skeleton animation="wave" width={100}/>,
+                  grado: <Skeleton animation="wave" width={100}/>,
+                  Regional: <Skeleton animation="wave" width={100}/>,
+                  comision: <Skeleton animation="wave" width={100}/>,
+                  pais: <Skeleton animation="wave" width={100}/>,
+                  habitacion: <Skeleton animation="wave" width={100}/>,
+                  confirmacion: <Skeleton animation="wave" width={100}/>,
+                },
+              ]
             }}
-            autoResetPage = {false}
-            canSearch
-          />
+              entriesPerPage={false}
+            /> 
+          : <DataTable
+              table={tablaDatos}
+              entriesPerPage={{
+                defaultValue: 15,
+                entries: [15, 20, 25],
+              }}
+              autoResetPage = {false}
+              canSearch
+            />}
         </Card>
       </SuiBox>
       <Footer />

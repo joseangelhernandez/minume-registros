@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import Cookies from 'universal-cookie';
+import useAuth from 'hooks/useAuth';
 
 // react-router components
-import { Route, Switch, useLocation, Redirect } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Icon from "@mui/material/Icon";
+import IconMUI from "@mui/material/Icon";
+import { Icon } from '@iconify/react';
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/SuiBox";
@@ -20,11 +22,12 @@ import Configurator from "examples/Configurator";
 import theme from "assets/theme";
 
 // Soft UI Dashboard PRO React routes
-import routes from "routes";
-import login from "layouts/authentication/sign-in/illustration";
+import Login from "layouts/authentication/sign-in/illustration";
 import ModificarEstudiante from "layouts/estudiantes/modif-estudiante";
 import PerfilEstudiante from "layouts/perfil-estudiante/profile-overview";
-import ModificarUsuario from "layouts/usuarios/modif-usuario"
+import ModificarUsuario from "layouts/usuarios/modif-usuario";
+import RequireAuth from "layouts/RequireAuth/RequireAuth";
+import PersistLogin  from "PersistLogin";
 
 // Soft UI Dashboard PRO React contexts
 import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -32,15 +35,220 @@ import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "contex
 // Images
 import brand from "assets/images/logos/logoMinume.png";
 
-require("dotenv").config();
+// Soft UI Dashboard PRO React icons
+import SettingsIcon from "examples/Icons/Settings";
+import SpaceShip from "examples/Icons/SpaceShip";
+import CustomerSupport from "examples/Icons/CustomerSupport";
+import CreditCard from "examples/Icons/CreditCard";
+
+//#region RUTAS DE COMPONENTES
+import Default from "layouts/dashboards/default";
+import RegEstudiante from "layouts/estudiantes/reg-estudiante"
+import GestEstudiante from "layouts/estudiantes/gest-estudiante"
+import RegUser from "layouts/usuarios/reg-usuario"
+import GestUser from "layouts/usuarios/gest-usuario"
+import Perfil from "layouts/perfil"
+import Calificaciones from "layouts/calificaciones/gest-calificaciones"
+import Error404 from "layouts/authentication/error/404";
+//#endregion
 
 export default function App() {
+  const { auth } = useAuth();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
   const cookies = new Cookies();
   const locations = useLocation();
+
+  const routesSuper =[
+    {
+      type: "individual",
+      name: "Inicio",
+      key: "Inicio",
+      route: "/Inicio",
+      component: <Default/>,
+      icon: <Icon icon="flat-color-icons:home" />,
+      noCollapse: true,
+    },{
+      type: "individual",
+      name: "Perfil",
+      key: "Perfil",
+      route: "/Perfil",
+      component: <Perfil/>,
+      icon: <Icon icon="flat-color-icons:info" />,
+      noCollapse: true,
+    },
+    { type: "title", title: "ADM", key: "title-adm" },
+    {
+      type: "collapse",
+      name: "Estudiantes",
+      key: "estudiantes",
+      icon: <Icon icon="flat-color-icons:graduation-cap" />,
+      collapse: [
+        {
+          name: "Gestión de estudiantes",
+          key: "gestionar-estudiantes",
+          route: "/estudiantes/gestionar-estudiantes",
+          component: <GestEstudiante/>,
+        },
+        {
+          name: "Registrar estudiante",
+          key: "registrar-estudiante",
+          route: "/estudiantes/registrar-estudiante",
+          component: <RegEstudiante/>,
+        },
+      ],
+    },
+    {
+      type: "collapse",
+      name: "Usuarios",
+      key: "usuarios",
+      icon: <Icon icon="flat-color-icons:key" />,
+      collapse: [
+        {
+          name: "Cuentas",
+          key: "cuentas",
+          collapse: [
+            {
+              name: "Gestionar cuentas",
+              key: "gestionar-cuentas",
+              route: "/usuarios/cuentas/gestionar-cuentas",
+              component: <GestUser/>,
+            },
+            {
+              name: "Crear cuenta",
+              key: "crear-cuenta",
+              route: "/usuarios/cuentas/crear-cuenta",
+              component: <RegUser/>,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "individual",
+      name: "Calificaciones",
+      key: "Calificaciones",
+      route: "/Calificaciones",
+      component: <Calificaciones/>,
+      icon: <Icon icon="flat-color-icons:view-details" />,
+      noCollapse: true,
+    },
+  ]
+
+  const routesNormal =[
+    {
+      type: "individual",
+      name: "Inicio",
+      key: "Inicio",
+      route: "/Inicio",
+      component: <Default/>,
+      icon: <Icon icon="flat-color-icons:home" />,
+      noCollapse: true,
+    },{
+      type: "individual",
+      name: "Perfil",
+      key: "Perfil",
+      route: "/Perfil",
+      component: <Perfil/>,
+      icon: <Icon icon="flat-color-icons:info" />,
+      noCollapse: true,
+    },
+    { type: "title", title: "ADM", key: "title-adm" },
+    {
+      type: "collapse",
+      name: "Estudiantes",
+      key: "estudiantes",
+      icon: <Icon icon="flat-color-icons:graduation-cap" />,
+      collapse: [
+        {
+          name: "Gestión de estudiantes",
+          key: "gestionar-estudiantes",
+          route: "/estudiantes/gestionar-estudiantes",
+          component: <GestEstudiante/>,
+        },
+      ],
+    },
+    
+  ]
+
+  const rutas =[
+    {
+      type: "individual",
+      name: "Inicio",
+      key: "Inicio",
+      route: "/Inicio",
+      component: <Default/>,
+      icon: <Icon icon="flat-color-icons:home" />,
+      noCollapse: true,
+    },{
+      type: "individual",
+      name: "Perfil",
+      key: "Perfil",
+      route: "/Perfil",
+      component: <Perfil/>,
+      icon: <Icon icon="flat-color-icons:info" />,
+      noCollapse: true,
+    },
+    { type: "title", title: "ADM", key: "title-adm" },
+    {
+      type: "collapse",
+      name: "Estudiantes",
+      key: "estudiantes",
+      icon: <Icon icon="flat-color-icons:graduation-cap" />,
+      collapse: [
+        {
+          name: "Gestión de estudiantes",
+          key: "gestionar-estudiantes",
+          route: "/estudiantes/gestionar-estudiantes",
+          component: <GestEstudiante/>,
+        },
+        {
+          name: "Registrar estudiante",
+          key: "registrar-estudiante",
+          route: "/estudiantes/registrar-estudiante",
+          component: <RegEstudiante/>,
+        },
+      ],
+    },
+    {
+      type: "collapse",
+      name: "Usuarios",
+      key: "usuarios",
+      icon: <Icon icon="flat-color-icons:key" />,
+      collapse: [
+        {
+          name: "Cuentas",
+          key: "cuentas",
+          collapse: [
+            {
+              name: "Gestionar cuentas",
+              key: "gestionar-cuentas",
+              route: "/usuarios/cuentas/gestionar-cuentas",
+              component: <GestUser/>,
+            },
+            {
+              name: "Crear cuenta",
+              key: "crear-cuenta",
+              route: "/usuarios/cuentas/crear-cuenta",
+              component: <RegUser/>,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "individual",
+      name: "Calificaciones",
+      key: "Calificaciones",
+      route: "/Calificaciones",
+      component: <Calificaciones/>,
+      icon: <Icon icon="flat-color-icons:view-details" />,
+      noCollapse: true,
+    },
+  ]
+
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -79,7 +287,7 @@ export default function App() {
       }
 
       if (route.route) {
-        return <Route exact path={route.route} component={route.component} key={route.key} />;
+        return <Route path={route.route} element={route.component} key={route.key}/>;
       }
 
       return null;
@@ -103,110 +311,54 @@ export default function App() {
       sx={{ cursor: "pointer" }}
       onClick={handleConfiguratorOpen}
     >
-      <Icon fontSize="default" color="inherit">
+      <IconMUI fontSize="default" color="inherit">
         settings
-      </Icon>
+      </IconMUI>
     </SuiBox>
   );
 
-  //SI EL USUARIO ESTA LOGEADO PERO NO EXISTE LA RUTA
-  if(cookies.get('usuario'))
-  { if(locations.pathname === '/estudiante'){
-    return(
-      <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Switch>
-        {getRoutes(routes)}
-        <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-        <Route exact path="/" component={login} />
-        <Route exact path="/estudiante/:estuID" component={PerfilEstudiante} />
-      </Switch>
-        <Redirect from="*" to="/" />
-    </ThemeProvider>)
-    }else if(locations.pathname === '/estudiantes'){
-      return(
-        <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Switch>
-          {getRoutes(routes)}
-          <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-          <Route exact path="/" component={login} />
-          <Route exact path="/estudiante/:estuID" component={PerfilEstudiante} />
-        </Switch>
-          <Redirect from="*" to="/estudiantes/gestionar-estudiantes" />
-      </ThemeProvider>)
-    }else if(locations.pathname === '/usuarios' || locations.pathname === '/cuentas'){
-      return(
-        <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Switch>
-          {getRoutes(routes)}
-          <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-          <Route exact path="/" component={login} />
-          <Route exact path="/estudiante/:estuID" component={PerfilEstudiante} />
-        </Switch>
-          <Redirect from="*" to="/usuarios/cuentas/gestionar-cuentas" />
-      </ThemeProvider>)
-    }
+  return(
+    <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <Routes>
+      <Route path="/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)"  element={<Navigate to={pathname.slice(0, -1)} replace/>} />
+      <Route path="/" element={<Login/>} />
+      <Route path="/estudiante/:estuID" element={<PerfilEstudiante/>} />
+      <Route path="*" element={<Navigate to="/" replace />} />
 
-    //SI EL USUARIO ESTA LOGEADO PERO SI EXISTE LA RUTA
-    else if(getRoutes(routes) && locations.pathname.slice(0, locations.pathname.lastIndexOf('/')) !== '/estudiante'){
-      return(
-        <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Switch>
-          {getRoutes(routes)}
-          <Redirect from="/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)" to={pathname.slice(0, -1)} />
-          <Route exact path="/" component={login} />
-          <Route exact path="/estudiantes/editar-estudiante" component={ModificarEstudiante} />
-          <Route exact path="/estudiante/:estuID" component={PerfilEstudiante} />
-          <Route exact path="/usuarios/editar-usuario" component={ModificarUsuario} />
-        </Switch> <>
-          <Sidenav
-          color={sidenavColor}
-          brand={brand}
-          brandName="MINUME - PLERD"
-          routes={routes}
-          onMouseEnter={handleOnMouseEnter}
-          onMouseLeave={handleOnMouseLeave}
-        />
-        </>
-      </ThemeProvider>)
-    }
-  }
-
-  //SI EL USUARIO NO ESTA LOGUEADO
-  if(!cookies.get('usuario') && getRoutes(routes) ){
-    return(
-      <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Switch>
-        {getRoutes(routes)}
-        <Redirect from="/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)" to={pathname.slice(0, -1)} />
-        <Route exact path="/" component={login} />
-        <Route exact path="/estudiantes/editar-estudiante" component={ModificarEstudiante} />
-        <Route exact path="/estudiante/:estuID" component={PerfilEstudiante} />
-        <Route exact path="/usuarios/editar-usuario" component={ModificarUsuario} />
-      </Switch>
-      <Redirect from="*" to="/" />
-    </ThemeProvider>
-    )
-  }else {
-    return(
-      <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Switch>
-        {getRoutes(routes)}
-        <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-        <Route exact path="/" component={login} />
-        <Route exact path="/estudiantes/editar-estudiante" component={ModificarEstudiante} />
-        <Route exact path="/estudiante/:estuID" component={PerfilEstudiante} />
-        <Route exact path="/usuarios/editar-usuario" component={ModificarUsuario} />
-      </Switch>
+      <Route element={<PersistLogin/>}>
+        <Route element={<RequireAuth/>}>
+          {getRoutes(rutas)}
+          <Route path="/estudiantes/editar-estudiante" element={<ModificarEstudiante/>} />
+          <Route path="/usuarios/editar-usuario" element={<ModificarUsuario/>} />
+        </Route>
+      </Route>
       
-    </ThemeProvider>
-    )
-  }
-}
 
+    </Routes><>
+      {auth.role === 1 && (
+        <Sidenav
+        color={sidenavColor}
+        brand={brand}
+        brandName="MINUME - PLERD"
+        routes={routesSuper}
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+      />
+      )}
+      {auth.role > 1  && (
+        <Sidenav
+        color={sidenavColor}
+        brand={brand}
+        brandName="MINUME - PLERD"
+        routes={routesNormal}
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+      />
+      )}
+    </>
+
+  </ThemeProvider>
+  )
+}
 

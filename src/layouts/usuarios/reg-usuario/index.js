@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import { useNavigate} from "react-router-dom";
+import useAuth from "hooks/useAuth";
 
 // formik components
 import { Formik, Form } from "formik";
@@ -49,21 +51,32 @@ function getStepContent(stepIndex, formData) {
 }
 
 function NewUser() {
-  const url = "http://jose03-001-site1.htempurl.com/api/USUARIOS"
+  const { auth} = useAuth();
+  const navigate = useNavigate();
+  const cookies = new Cookies();
+  const url = "https://minume-umnurd.edu.do/api/USUARIOS"
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const { formId, formField } = form;
   const currentValidation = validations[activeStep];
   const isLastStep = activeStep === steps.length - 1;
+  const jwtInterceoptor = axios.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const handleBack = () => setActiveStep(activeStep - 1);
+
+  useEffect(() => {auth.role !== 1 && navigate('/Inicio', {replace: true});}, []);
 
   const submitForm = async (values, actions) => {
     await sleep(500);
 
     try{
-      axios.post(url,
+      jwtInterceoptor.post(url,
       {
         usuario: String(values.cedula),
         contraseña: values.contraseña,

@@ -1,7 +1,8 @@
 import { useState,useEffect } from "react";
-import Cookies from 'universal-cookie';
-import axios from 'axios';
-import { useHistory } from "react-router";
+import useAuth from "hooks/useAuth";
+import axios from 'api/axios';
+import axiosORIGIN from 'axios';
+import Cookies from "universal-cookie";
 
 // formik components
 import { Formik, Form } from "formik";
@@ -9,6 +10,10 @@ import { Formik, Form } from "formik";
 // @material-ui core components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import Box from '@mui/material/Box';
+import CircularProgress, {
+  circularProgressClasses,
+} from '@mui/material/CircularProgress';
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/SuiBox";
@@ -31,14 +36,20 @@ function getContent(formData, usuarioPut, id) {
 };
 
 function BasicInfo() {
-  const cookies = new Cookies();
+  const {auth} = useAuth();
 
   const [usuario, setUsuario] = useState('');
   const currentValidation = validations[0];
   const [cargando, setCargando] = useState(true);
-  const url = 'http://jose03-001-site1.htempurl.com/api/USUARIOS'+`/${cookies.get('usuario')}`;
-  const history = useHistory();
+  const url = 'https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`;
   const { formId, formField } = form;
+  const cookies = new Cookies();
+  const jwtInterceoptor = axiosORIGIN.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -49,9 +60,9 @@ function BasicInfo() {
     await sleep(500);
 
     try{
-      axios.put(url,
+      jwtInterceoptor.put(url,
       {
-        usuario: cookies.get('usuario'),
+        usuario: auth.usuario,
         nombre: usuario.nombre,
         apellido: usuario.apellido,
         contraseña: usuario.contraseña,
@@ -92,8 +103,8 @@ function BasicInfo() {
     submitForm(values, actions);
   };
 
-  useEffect(async ()=>{
-    await axios.get('http://jose03-001-site1.htempurl.com/api/USUARIOS'+`/${cookies.get('usuario')}`)
+  useEffect(()=>{
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`)
       .then((response)=> {
         setUsuario(response.data)
         setCargando(false)
@@ -102,7 +113,33 @@ function BasicInfo() {
   },[cargando]);
 
   if(cargando){
-    return(<div>cargando...</div>);
+    return(<Box sx={{ position: 'relative' }}>
+    <CircularProgress
+      variant="determinate"
+      sx={{
+        color: (theme) =>
+          theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+      }}
+      size={40}
+      thickness={4}
+      value={100}
+    />
+    <CircularProgress
+      variant="indeterminate"
+      disableShrink
+      sx={{
+        color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
+        animationDuration: '550ms',
+        position: 'absolute',
+        left: 0,
+        [`& .${circularProgressClasses.circle}`]: {
+          strokeLinecap: 'round',
+        },
+      }}
+      size={40}
+      thickness={4}
+    />
+  </Box>);
   }else
   {
     return (

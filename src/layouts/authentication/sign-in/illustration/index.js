@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import * as React from "react";
 import Cookies from 'universal-cookie';
-import axios from 'axios';
+import axios from 'api/axios';
+import useAuth from "hooks/useAuth";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 // @mui material components
 import Switch from "@mui/material/Switch";
@@ -37,8 +38,11 @@ import IllustrationLayout from "layouts/authentication/components/IllustrationLa
 import chat from "assets/images/illustrations/login.png";
 
 function SignIn(props) {
-  const baseURL = "http://jose03-001-site1.htempurl.com/api/USUARIOS";
+  const { auth, setAuth } = useAuth();
+  const LOGIN_URL = '/USUARIOS';
   const cookies = new Cookies();
+
+  const navigate = useNavigate();
 
   const initialValues={
     username:'',
@@ -50,32 +54,20 @@ function SignIn(props) {
   })
 
   const Ingresar = async(valores) => {
-    await axios.get(baseURL+`/${valores.username}/${valores.password}`)
+    await axios.get(LOGIN_URL+`/${valores.username}/${valores.password}`, {withCredentials: true})
     .then(response=>{
       return response.data;
     }).then(response=>{
-      if(response.length>0){
-        var respuesta=response[0];
-        cookies.set('usuario', respuesta.usuario, {path: '/'});
-        cookies.set('roleid', respuesta.roleId, {path: '/'});
-        cookies.set('email', respuesta.email, {path: '/'});
-        cookies.set('regional', respuesta.regional, {path: '/'});
-        cookies.set('comision', respuesta.comision, {path: '/'});
-        cookies.set('tipomesa', respuesta.tipomesa, {path: '/'});
-        cookies.set('nombre', respuesta.nombre, {path: '/'});
-        cookies.set('apellido', respuesta.apellido, {path: '/'});
-        cookies.set('confirmacion_envio', respuesta.confirmacion_envio, {path: '/'});
-        props.history.push('/Inicio');
-      }else{
-        //loading = false;
-        Swal.fire({
-          icon: 'error',
-          title: 'Credenciales Incorrectas',
-          timer: 2500,
-          showConfirmButton: false,
-          text: 'El usuario o contrasena no son correctos.',
-        });
-      }
+      var respuesta=response;
+      cookies.set('usuario', respuesta.usuario, {path: '/'});
+      var usuario = respuesta.usuario;
+      var role = respuesta.roleId;
+      var token = respuesta.accessToken;
+      var comision = respuesta.comision;
+      var nombre = respuesta.nombre;
+      var apellido = respuesta.apellido;
+      setAuth({usuario, nombre, apellido, comision, role, token});
+      navigate('/Inicio');
     })
 
     .catch(error=>{
@@ -103,8 +95,8 @@ function SignIn(props) {
   };
 
   useEffect(()=>{
-  if(cookies.get('usuario')){
-    props.history.push('/Inicio');
+  if(auth !== ''){
+    navigate('/Inicio');
   }
   },[]);
 

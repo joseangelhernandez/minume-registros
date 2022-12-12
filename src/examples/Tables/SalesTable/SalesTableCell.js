@@ -79,7 +79,6 @@ SalesTableCell.defaultProps = {
 // Typechecking props for the SalesTableCell
 SalesTableCell.propTypes = {
   title: PropTypes.string.isRequired,
-  content: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   image: PropTypes.string,
   noBorder: PropTypes.bool,
 };

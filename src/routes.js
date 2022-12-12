@@ -92,22 +92,22 @@ import PeopleAltTwoToneIcon from '@mui/icons-material/PeopleAltTwoTone';
 import SchoolTwoToneIcon from '@mui/icons-material/SchoolTwoTone';
 import { layouts } from "chart.js";
 
+
 const routes = [
   {
     type: "individual",
     name: "Inicio",
     key: "Inicio",
     route: "/Inicio",
-    component: Default,
+    component: <Default/>,
     icon: <Icon icon="flat-color-icons:home" />,
     noCollapse: true,
-  },
-  {
+  },{
     type: "individual",
     name: "Perfil",
     key: "Perfil",
     route: "/Perfil",
-    component: Perfil,
+    component: <Perfil/>,
     icon: <Icon icon="flat-color-icons:info" />,
     noCollapse: true,
   },
@@ -122,19 +122,13 @@ const routes = [
         name: "Gestión de estudiantes",
         key: "gestionar-estudiantes",
         route: "/estudiantes/gestionar-estudiantes",
-        component: GestEstudiante,
+        component: <GestEstudiante/>,
       },
       {
         name: "Registrar estudiante",
         key: "registrar-estudiante",
         route: "/estudiantes/registrar-estudiante",
-        component: RegEstudiante,
-      },
-      {
-        name: "Ejemplo estudiante",
-        key: "ejemplo-estudiante",
-        route: "/estudiantes/ejemplo-estudiante",
-        component: ProductsList,
+        component: <RegEstudiante/>,
       },
     ],
   },
@@ -152,13 +146,13 @@ const routes = [
             name: "Gestionar cuentas",
             key: "gestionar-cuentas",
             route: "/usuarios/cuentas/gestionar-cuentas",
-            component: GestUser,
+            component: <GestUser/>,
           },
           {
             name: "Crear cuenta",
             key: "crear-cuenta",
             route: "/usuarios/cuentas/crear-cuenta",
-            component: RegUser,
+            component: <RegUser/>,
           },
         ],
       },
@@ -257,18 +251,13 @@ const routes = [
     ],
   },
   {
-    type: "collapse",
+    type: "individual",
     name: "Calificaciones",
-    key: "calificaciones",
+    key: "Calificaciones",
+    route: "/Calificaciones",
+    component: <Calificaciones/>,
     icon: <Icon icon="flat-color-icons:view-details" />,
-    collapse: [
-      {
-        name: "Gestión de calificaciones",
-        key: "gestionar-calificaciones",
-        route: "/calificaciones/gestionar-calificaciones",
-        component: Calificaciones,
-      },
-    ],
+    noCollapse: true,
   },
   {
     type: "collapse",

@@ -1,25 +1,13 @@
-/**
-=========================================================
-* Soft UI Dashboard PRO React - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
+import CircularProgress, {
+  circularProgressClasses,
+} from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/SuiBox";
@@ -62,16 +50,31 @@ function MiniStatisticsCard({ bgColor, title, count, percentage, icon, direction
                 >
                   {title.text}
                 </SuiTypography>
-                <SuiTypography
+
+                {count !== null ? <SuiTypography
                   variant="h5"
                   fontWeight="bold"
                   color={bgColor === "white" ? "dark" : "white"}
                 >
-                  {count}{" "}
+                  {count}
                   <SuiTypography variant="button" color={percentage.color} fontWeight="bold">
                     {percentage.text}
                   </SuiTypography>
-                </SuiTypography>
+                </SuiTypography> 
+                : <Box paddingTop={1}><CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    sx={{
+                      color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
+                      animationDuration: '550ms',
+                      left: 0,
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: 'round',
+                      },
+                    }}
+                    size={25}
+                    thickness={4}
+                  /></Box>}
               </SuiBox>
             </Grid>
             {direction === "right" ? (
@@ -132,7 +135,7 @@ MiniStatisticsCard.propTypes = {
     fontWeight: PropTypes.oneOf(["light", "regular", "medium", "bold"]),
     text: PropTypes.string,
   }),
-  count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   percentage: PropTypes.shape({
     color: PropTypes.oneOf([
       "primary",

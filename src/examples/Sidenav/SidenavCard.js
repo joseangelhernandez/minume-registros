@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Soft UI Dashboard PRO React - v3.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-pro-react
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -47,28 +32,28 @@ function SidenavCard() {
           sx={cardIconBox}
         >
           <Icon fontSize="medium" sx={(theme) => cardIcon(theme, { sidenavColor })}>
-            star
+            question_mark 
           </Icon>
         </SuiBox>
         <SuiBox lineHeight={1}>
           <SuiTypography variant="h6" color="white">
-            Need help?
+            ¿Tienes alguna duda?
           </SuiTypography>
           <SuiBox mb={1.825} mt={-1}>
             <SuiTypography variant="caption" color="white" fontWeight="medium">
-              Please check our docs
+              Escríbeme directo a mi Whatsapp
             </SuiTypography>
           </SuiBox>
           <SuiButton
             component={Link}
-            href="https://www.creative-tim.com/learning-lab/react/quick-start/soft-ui-dashboard/"
+            href="https://wa.me/18098200522?text=Hola,%20José%20Angel%20tengo%20una%20consulta%20sobre%20MINUME%20APP"
             target="_blank"
             rel="noreferrer"
             size="small"
             color="white"
             fullWidth
           >
-            documentation
+            Escribirle a José Angel
           </SuiButton>
         </SuiBox>
       </CardContent>
@@ -77,3 +62,5 @@ function SidenavCard() {
 }
 
 export default SidenavCard;
+
+

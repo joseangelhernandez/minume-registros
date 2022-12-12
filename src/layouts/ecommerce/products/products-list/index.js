@@ -65,10 +65,6 @@ function ProductsList() {
           </SuiBox>
           <DataTable
             table={dataTableData}
-            entriesPerPage={{
-              defaultValue: 7,
-              entries: [5, 7, 10, 15, 20, 25],
-            }}
             canSearch
           />
         </Card>

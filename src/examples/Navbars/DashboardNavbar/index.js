@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import Cookies from 'universal-cookie';
+import useAuth from "hooks/useAuth";
 
 // react-router components
 import { useLocation } from "react-router-dom";
@@ -46,13 +46,12 @@ import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
 function DashboardNavbar({ absolute, light, isMini }) {
-
+  const { auth } = useAuth();
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
-  const cookies = new Cookies();
 
   useEffect(() => {
     // Setting the navbar type
@@ -78,6 +77,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
     // Remove event listener on cleanup
     return () => window.removeEventListener("scroll", handleTransparentNavbar);
+
     
   }, [dispatch, fixedNavbar]);
 
@@ -98,7 +98,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
     >
-      <NotificationItem
+      {/*<NotificationItem
         image={<img src={team2} alt="person" />}
         title={["New message", "from Laur"]}
         date="13 minutes ago"
@@ -120,7 +120,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
         title={["", "Payment successfully completed"]}
         date="2 days"
         onClick={handleCloseMenu}
-      />
+      />*/}
     </Menu>
   );
   
@@ -145,7 +145,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     fontWeight="medium"
                     color={light ? "white" : "dark"}
                   >
-                    {cookies.get('nombre')} {cookies.get('apellido')}
+                    {auth.nombre} {auth.apellido}
                   </SuiTypography>
               <IconButton
                 size="small"

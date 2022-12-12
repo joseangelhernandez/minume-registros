@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import axios from 'axios';
+import axios from 'api/axios';
 
 // prop-type is a library for typechecking of props
 import PropTypes from "prop-types";
@@ -79,7 +79,7 @@ function Proced({ formData, estudiantePut, id  }) {
     }
 
     if(valores != 0){
-      axios.get('http://jose03-001-site1.htempurl.com/api/DISTRITOS_EDUCATIVOS'+`/${values.regional}`)
+      axios.get('/DISTRITOS_EDUCATIVOS'+`/${values.regional}`)
       .then((response)=> {
         setDistrito(response.data)
         setcampoDistrito(false)
@@ -94,7 +94,7 @@ function Proced({ formData, estudiantePut, id  }) {
     }
 
     if(valores != 0){
-      axios.get('http://jose03-001-site1.htempurl.com/api/CENTROS_EDUCATIVOS'+`/${values.distrito}`)
+      axios.get('/CENTROS_EDUCATIVOS'+`/${values.distrito}`)
       .then((response)=> {
         setCentro(response.data)
         setcampoCentro(false)
@@ -103,7 +103,7 @@ function Proced({ formData, estudiantePut, id  }) {
   }
 
   useEffect(()=>{
-    axios.get('http://jose03-001-site1.htempurl.com/api/REGIONALES_EDUCATIVAS')
+    axios.get('/REGIONALES_EDUCATIVAS')
     .then((response)=> {
       setRegionales(response.data)
     });

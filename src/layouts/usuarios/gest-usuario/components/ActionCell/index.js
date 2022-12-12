@@ -1,7 +1,8 @@
 import { useState,useEffect } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import axiosORIGIN from 'axios';
 
 // @mui material components
 import Icon from "@mui/material/Icon";
@@ -20,6 +21,13 @@ import SuiButton from "components/SuiButton";
 import Swal from "sweetalert2";
 
 function ActionCell(id) {
+  const jwtInterceoptor = axiosORIGIN.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
+
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "button button-success",
@@ -28,7 +36,7 @@ function ActionCell(id) {
     buttonsStyling: false
   })
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const history = useHistory();
+  const history = useNavigate();
   const cookies = new Cookies();
 
   const Perfil = () => {
@@ -36,12 +44,9 @@ function ActionCell(id) {
   }
 
   const Editar = () => {
-    axios.get('http://jose03-001-site1.htempurl.com/api/USUARIOS'+`/${id.id}`)
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS'+`/${id.id}`)
       .then((response)=> {
-        history.push({
-          pathname: "/usuarios/editar-usuario",
-          persona: response.data
-        });
+        history('/usuarios/editar-usuario',{state: {persona: response.data}});
       });
   }
   
@@ -62,10 +67,10 @@ function ActionCell(id) {
           'success'
         ).then((result)=>{
           if (result.isConfirmed) {
-            history.go(0);
+            history(0);
           }
         })
-        axios.delete('http://jose03-001-site1.htempurl.com/api/USUARIOS'+`/${id.id}`);
+        jwtInterceoptor.delete('https://minume-umnurd.edu.do/api/USUARIOS'+`/${id.id}`);
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {

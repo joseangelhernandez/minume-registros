@@ -85,7 +85,6 @@ SalesTable.defaultProps = {
 // Typechecking props for the SalesTable
 SalesTable.propTypes = {
   title: PropTypes.string.isRequired,
-  rows: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default SalesTable;

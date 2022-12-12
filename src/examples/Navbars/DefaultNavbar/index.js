@@ -125,7 +125,6 @@ function DefaultNavbar({ routes, transparent, light, action }) {
               component="img"
               src={logoEducacion}
               alt="logoeducacion"
-              width="120rem"
               position="relative"
               width="100%"
               maxWidth="12.5rem"

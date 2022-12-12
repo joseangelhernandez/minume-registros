@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import axios from 'axios';
+import axios from 'api/axios';
 
 // prop-type is a library for typechecking of props
 import PropTypes from "prop-types";
@@ -52,7 +52,7 @@ function Representacion({ formData, estudiantePut, id }) {
     }
 
     if(valores != 0){
-      axios.get('http://jose03-001-site1.htempurl.com/api/PAISESDROPDOWN'+`/${values.comision}`)
+      axios.get('/PAISESDROPDOWN'+`/${values.comision}`)
       .then((response)=> {
         setPaises(response.data)
         setcampoPais(false)
@@ -61,7 +61,7 @@ function Representacion({ formData, estudiantePut, id }) {
   }
 
   useEffect(()=>{
-    axios.get('http://jose03-001-site1.htempurl.com/api/COMISIONDROPDOWN')
+    axios.get('/COMISIONDROPDOWN')
     .then((response)=> {
       setComisiones(response.data)
     });

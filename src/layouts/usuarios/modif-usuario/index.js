@@ -1,7 +1,8 @@
 import { useState,useEffect } from "react";
 import Cookies from 'universal-cookie';
 import axios from 'axios';
-import { useHistory } from "react-router";
+import { useNavigate, useLocation} from "react-router-dom";
+import useAuth from "hooks/useAuth";
 
 // formik components
 import { Formik, Form } from "formik";
@@ -49,26 +50,37 @@ function getStepContent(stepIndex, formData, usuarioPut, id) {
   }
 }
 
-function NewUser(USUARIO) {
-  const url = 'http://jose03-001-site1.htempurl.com/api/USUARIOS'+`/${USUARIO.location.persona.usuario}`
+function NewUser() {
+  const { auth} = useAuth();
+  const cookies = new Cookies();
+  const location = useLocation();
+  const jwtInterceoptor = axios.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
+  const url = 'https://minume-umnurd.edu.do/api/USUARIOS'+`/${location.state.persona.usuario}`
   const [activeStep, setActiveStep] = useState(0);
-  const history = useHistory();
+  const history = useNavigate();
   const steps = getSteps();
   const { formId, formField } = form;
   const currentValidation = validations[activeStep];
   const isLastStep = activeStep === steps.length - 1;
-  const cookies = new Cookies();
+  
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const handleBack = () => setActiveStep(activeStep - 1);
+
+  useEffect(() => {auth.role !== 1 && navigate('/Inicio', {replace: true});}, []);
 
   const submitForm = async (values, actions) => {
     await sleep(500);
 
     try{
-      axios.put(url,
+      jwtInterceoptor.put(url,
       {
-        usuario: USUARIO.location.persona.usuario,
+        usuario: location.state.persona.usuario,
         nombre: values.nombre,
         apellido: values.apellido,
         contraseña: values.contraseña,
@@ -103,10 +115,8 @@ function NewUser(USUARIO) {
 
     await sleep(2500);
 
-    history.push({
-      pathname: "/usuarios",
-    });
-    history.go(0);
+    history('/usuarios/cuentas/gestionar-cuentas');
+    history(0);
   };
 
   const handleSubmit = (values, actions) => {
@@ -148,7 +158,7 @@ function NewUser(USUARIO) {
                           touched,
                           formField,
                           errors,
-                        }, USUARIO.location.persona, USUARIO.location.persona.usuario)}
+                        }, location.state.persona, location.state.persona.usuario)}
                         <SuiBox mt={2} width="100%" display="flex" justifyContent="space-between">
                           {activeStep === 0 ? (
                             <SuiBox />

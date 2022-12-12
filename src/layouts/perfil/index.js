@@ -36,9 +36,6 @@ function Settings() {
                 <Grid item xs={12}>
                   <ChangeProfilePic />
                 </Grid>
-                <Grid item xs={12}>
-                  <Notifications />
-                </Grid>
               </Grid>
             </SuiBox>
           </Grid>

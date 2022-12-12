@@ -329,7 +329,7 @@ export default function App() {
       <Route element={<PersistLogin/>}>
         <Route element={<RequireAuth/>}>
           {getRoutes(rutas)}
-          <Route path="/estudiantes/editar-estudiante" element={<ModificarEstudiante/>} />
+          <Route path="/estudiantes/editar-estudiantes" element={<ModificarEstudiante/>} />
           <Route path="/usuarios/editar-usuario" element={<ModificarUsuario/>} />
         </Route>
       </Route>

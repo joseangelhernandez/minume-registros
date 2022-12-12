@@ -73,6 +73,9 @@ function BasicInfo() {
         tipo_Mesa: usuario.tipo_Mesa,
         confirmacion_envio: usuario.confirmacion_envio,
         codigoResetPass: usuario.codigoResetPass,
+        refreshToken: usuario.refreshToken,
+        tokenCreado : usuario.tokenCreado,
+        tokenExpira : usuario.tokenExpira,
       })
 
       Swal.fire({
@@ -108,6 +111,7 @@ function BasicInfo() {
       .then((response)=> {
         setUsuario(response.data)
         setCargando(false)
+        console.log(response.data);
       });
 
   },[cargando]);

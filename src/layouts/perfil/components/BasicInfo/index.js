@@ -73,6 +73,7 @@ function BasicInfo() {
         tipo_Mesa: usuario.tipo_Mesa,
         confirmacion_envio: usuario.confirmacion_envio,
         codigoResetPass: usuario.codigoResetPass,
+        imageName: usuario.imageName,
         refreshToken: usuario.refreshToken,
         tokenCreado : usuario.tokenCreado,
         tokenExpira : usuario.tokenExpira,

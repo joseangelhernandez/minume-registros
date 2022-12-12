@@ -1,9 +1,9 @@
 {
+  "homepage": "https://joseangelhernandez.github.io/minume-app-confirm-registros",
   "name": "minume-app",
   "version": "3.0.0",
   "private": true,
   "author": "Jose Hernandez",
-  "homepage": "https://joseangelhernandez.github.io/minume-confirn",
   "description": "-",
   "repository": {
     "type": "git",
@@ -121,5 +121,9 @@
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "4.2.0"
+  },
+  "engines":{
+    "node": "v16.13.0",
+    "npm": "8.1.0"
   }
 }

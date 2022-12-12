@@ -55,12 +55,20 @@ function getStepContent(stepIndex, formData) {
 }
 
 function NewUser() {
+  const cookies = new Cookies();
+  const jwtInterceoptor = axios.create({});
   const url = "https://minume-umnurd.edu.do/api/ESTUDIANTES"
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const { formId, formField } = form;
   const currentValidation = validations[activeStep];
   const isLastStep = activeStep === steps.length - 1;
+
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const handleBack = () => setActiveStep(activeStep - 1);
@@ -69,7 +77,7 @@ function NewUser() {
     await sleep(500);
 
     try{
-      axios.post(url,
+      jwtInterceoptor.post(url,
       {
         nombres: values.nombre,
         apellidos: values.apellido,

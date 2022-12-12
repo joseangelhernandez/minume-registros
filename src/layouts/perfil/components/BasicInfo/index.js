@@ -112,7 +112,6 @@ function BasicInfo() {
       .then((response)=> {
         setUsuario(response.data)
         setCargando(false)
-        console.log(response.data);
       });
 
   },[cargando]);

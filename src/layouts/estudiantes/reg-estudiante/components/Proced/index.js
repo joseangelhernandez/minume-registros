@@ -77,7 +77,7 @@ function Proced({ formData }) {
     }
 
     if(valores != 0){
-      axios.get('http://jose03-001-site1.htempurl.com/api/DISTRITOS_EDUCATIVOS'+`/${values.regional}`)
+      axios.get('https://minume-umnurd.edu.do/api/DISTRITOS_EDUCATIVOS'+`/${values.regional}`)
       .then((response)=> {
         setDistrito(response.data)
         setcampoDistrito(false)
@@ -92,7 +92,7 @@ function Proced({ formData }) {
     }
 
     if(valores != 0){
-      axios.get('http://jose03-001-site1.htempurl.com/api/CENTROS_EDUCATIVOS'+`/${values.distrito}`)
+      axios.get('https://minume-umnurd.edu.do/api/CENTROS_EDUCATIVOS'+`/${values.distrito}`)
       .then((response)=> {
         setCentro(response.data)
         setcampoCentro(false)
@@ -101,7 +101,7 @@ function Proced({ formData }) {
   }
 
   useEffect(()=>{
-    axios.get('http://jose03-001-site1.htempurl.com/api/REGIONALES_EDUCATIVAS')
+    axios.get('https://minume-umnurd.edu.do/api/REGIONALES_EDUCATIVAS')
     .then((response)=> {
       setRegionales(response.data)
     });

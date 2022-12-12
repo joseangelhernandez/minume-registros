@@ -51,7 +51,7 @@ function Representacion({ formData }) {
     }
 
     if(valores != 0){
-      axios.get('http://jose03-001-site1.htempurl.com/api/PAISESDROPDOWN'+`/${values.comision}`)
+      axios.get('https://minume-umnurd.edu.do/api/PAISESDROPDOWN'+`/${values.comision}`)
       .then((response)=> {
         setPaises(response.data)
         setcampoPais(false)
@@ -60,7 +60,7 @@ function Representacion({ formData }) {
   }
 
   useEffect(()=>{
-    axios.get('http://jose03-001-site1.htempurl.com/api/COMISIONDROPDOWN')
+    axios.get('https://minume-umnurd.edu.do/api/COMISIONDROPDOWN')
     .then((response)=> {
       setComisiones(response.data)
     });

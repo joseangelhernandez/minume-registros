@@ -38,6 +38,12 @@ function Calificaciones({stickyNavbar}) {
   const { auth} = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
+  const jwtInterceoptor = axios.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
   const [usuario, setUsuario] = useState([
@@ -271,7 +277,7 @@ function Calificaciones({stickyNavbar}) {
 
   useEffect(()=>{
     try{
-      axios.get('http://jose03-001-site1.htempurl.com/api/GETUSUARIOS_SP')
+      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/GETUSUARIOS_SP')
       .then((response)=> {
         setUsuarios(response.data);
       });
@@ -279,13 +285,13 @@ function Calificaciones({stickyNavbar}) {
       console.log(error);
     }
     try{
-      axios.get('http://jose03-001-site1.htempurl.com/api/USUARIOROLE_SP/'+`${cookies.get('usuario')}`)
+      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${auth.usuario}`)
       .then((response)=> {
         setUsuario(response.data);
         setCargando(false);
       }).then(()=>{
         if(usuario[0].comision != ''){
-          axios.get('http://jose03-001-site1.htempurl.com/api/CALIFICACIONES/'+`${usuario[0].comision}`)
+          jwtInterceoptor.get('https://minume-umnurd.edu.do/api/CALIFICACIONES/'+`${usuario[0].comision}`)
           .then((response)=> {
             setTblEstucalif(response.data)
           });

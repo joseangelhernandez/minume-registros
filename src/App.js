@@ -170,7 +170,6 @@ export default function App() {
         },
       ],
     },
-    
   ]
 
   const rutas =[

@@ -2,6 +2,7 @@ import {useEffect, useState, forwardRef} from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import useAuth from "hooks/useAuth";
 
 //TABLES STYLES
 import MaterialTable from "material-table";
@@ -29,12 +30,20 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function CalifTable(calificaciones) {
+  const {auth} = useAuth();
   const cookies = new Cookies();
+  const url = 'https://minume-umnurd.edu.do/api/CALIFICACIONES';
   const history = useNavigate();
   const [envioCalif, setEnvioCalif] = useState(cookies.get('sesion_trabajo'));
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;
+  const jwtInterceoptor = axios.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   const [data, setData] = useState(calificaciones.tblEstuCalif);
 
@@ -154,7 +163,7 @@ function CalifTable(calificaciones) {
   ];
 
   function PostCalif(record){
-    axios.post('http://jose03-001-site1.htempurl.com/api/CALIFICACIONES'+`/${record.delegado}`, 
+    jwtInterceoptor.post(url+`/${record.delegado}`, 
     {
       secuencia: record.secuencia,
       delegado: record.delegado,
@@ -194,7 +203,7 @@ function CalifTable(calificaciones) {
   }
 
   function Refrescar(){
-    axios.get('http://jose03-001-site1.htempurl.com/api/CALIFICACIONES/'+`${calificaciones.sesion_trabajoTBL.comision}`)
+    jwtInterceoptor.get(url+`/${calificaciones.sesion_trabajoTBL.comision}`)
     .then(response => {
       setData(response.data);
       toast.success("Datos actualizados", {
@@ -224,7 +233,7 @@ function CalifTable(calificaciones) {
 
   function EnviarCalificaciones(){
     try{
-      axios.put('http://jose03-001-site1.htempurl.com/api/USUARIOROLE_SP/'+`${cookies.get('usuario')}?sesion_trabajo=4`)
+      jwtInterceoptor.put('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${auth.usuario}?sesion_trabajo=4`)
       .then(()=> {
         toast.success("Calificaciones enviadas satisfactoriamente.", {
           position: toast.POSITION.TOP_RIGHT,
@@ -245,7 +254,7 @@ function CalifTable(calificaciones) {
     itemsProcesados = 0;
     calificaciones.Lista_usuarios.forEach(element => {
       try{
-        axios.put('http://jose03-001-site1.htempurl.com/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=3`);
+        jwtInterceoptor.put('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=3`);
       }catch(error){
         console.log(error);
       }
@@ -263,7 +272,7 @@ function CalifTable(calificaciones) {
     itemsProcesados = 0;
     calificaciones.Lista_usuarios.forEach(element => {
       try{
-        axios.put('http://jose03-001-site1.htempurl.com/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=4`);
+        jwtInterceoptor.put('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=4`);
       }catch(error){
         console.log(error);
       }

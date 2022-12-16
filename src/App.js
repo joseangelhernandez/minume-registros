@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Cookies from 'universal-cookie';
 import useAuth from 'hooks/useAuth';
+import { io } from 'socket.io-client';
+import axios from 'axios';
 
 // react-router components
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
@@ -25,21 +27,18 @@ import theme from "assets/theme";
 import Login from "layouts/authentication/sign-in/illustration";
 import ModificarEstudiante from "layouts/estudiantes/modif-estudiante";
 import PerfilEstudiante from "layouts/perfil-estudiante/profile-overview";
+import PerfilStaff from "layouts/perfil-staff/profile-overview";
+import PerfilParticipante from "layouts/perfil-participante/profile-overview";
 import ModificarUsuario from "layouts/usuarios/modif-usuario";
 import RequireAuth from "layouts/RequireAuth/RequireAuth";
 import PersistLogin  from "PersistLogin";
+import PersistLoginPerfiles  from "PersistLoginPerfiles";
 
 // Soft UI Dashboard PRO React contexts
 import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
 import brand from "assets/images/logos/logoMinume.png";
-
-// Soft UI Dashboard PRO React icons
-import SettingsIcon from "examples/Icons/Settings";
-import SpaceShip from "examples/Icons/SpaceShip";
-import CustomerSupport from "examples/Icons/CustomerSupport";
-import CreditCard from "examples/Icons/CreditCard";
 
 //#region RUTAS DE COMPONENTES
 import Default from "layouts/dashboards/default";
@@ -49,6 +48,15 @@ import RegUser from "layouts/usuarios/reg-usuario"
 import GestUser from "layouts/usuarios/gest-usuario"
 import Perfil from "layouts/perfil"
 import Calificaciones from "layouts/calificaciones/gest-calificaciones"
+import GestStaff from "layouts/staff/gest-staff"
+import RegStaff from "layouts/staff/reg-staff"
+import ModificarStaff from "layouts/staff/modif-staff";
+import GestParticipantes from "layouts/participantes/gest-participantes";
+import RegParticipantes from "layouts/participantes/reg-participante";
+import ModificarParticipantes from "layouts/participantes/modif-participantes";
+import Comunicaciones from "layouts/comunicaciones/gest-comunicaciones";
+import Temporales from "layouts/temporales/gest-temporales";
+import GestHabitaciones from "layouts/habitaciones/gest-habitaciones";
 import Error404 from "layouts/authentication/error/404";
 //#endregion
 
@@ -60,14 +68,35 @@ export default function App() {
   const { pathname } = useLocation();
   const cookies = new Cookies();
   const locations = useLocation();
+  const [usuarios, setUsuarios] = useState([]);
+  const [socket, setSocket] = useState(io("http://localhost:5000"));
+  const jwtInterceoptor = axios.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
-  const routesSuper =[
+  useEffect(() => {
+    socket?.emit("nuevoUsuario", auth?.usuario)
+  }, [socket, auth]);
+
+  useEffect(() => {
+    if(auth?.usuario !== undefined){
+      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS_SP'+`/${auth.usuario}`)
+      .then((response)=> {
+        setUsuarios(response.data)
+      });
+    }
+  }, [auth]);
+
+  let routesSuper =[
     {
       type: "individual",
       name: "Inicio",
       key: "Inicio",
       route: "/Inicio",
-      component: <Default/>,
+      component: <Default socket={socket}/>,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
     },{
@@ -75,7 +104,7 @@ export default function App() {
       name: "Perfil",
       key: "Perfil",
       route: "/Perfil",
-      component: <Perfil/>,
+      component: <Perfil socket={socket}/>,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
     },
@@ -90,13 +119,13 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante/>,
+          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
         },
         {
           name: "Registrar estudiante",
           key: "registrar-estudiante",
           route: "/estudiantes/registrar-estudiante",
-          component: <RegEstudiante/>,
+          component: <RegEstudiante socket={socket}/>,
         },
       ],
     },
@@ -107,43 +136,105 @@ export default function App() {
       icon: <Icon icon="flat-color-icons:key" />,
       collapse: [
         {
-          name: "Cuentas",
-          key: "cuentas",
-          collapse: [
-            {
-              name: "Gestionar cuentas",
-              key: "gestionar-cuentas",
-              route: "/usuarios/cuentas/gestionar-cuentas",
-              component: <GestUser/>,
-            },
-            {
-              name: "Crear cuenta",
-              key: "crear-cuenta",
-              route: "/usuarios/cuentas/crear-cuenta",
-              component: <RegUser/>,
-            },
-          ],
+          name: "Gestionar cuentas",
+          key: "gestionar-cuentas",
+          route: "/usuarios/gestionar-cuentas",
+          component: <GestUser socket={socket}/>,
+        },
+        {
+          name: "Crear cuenta",
+          key: "crear-cuenta",
+          route: "/usuarios/crear-cuenta",
+          component: <RegUser socket={socket}/>,
         },
       ],
+    },
+    {
+      type: "collapse",
+      name: "Staff",
+      key: "staff",
+      icon: <Icon icon="fluent-emoji-flat:identification-card" />,
+      collapse: [
+        {
+          name: "Gestión de staff",
+          key: "gestionar-staff",
+          route: "/staff/gestionar-staff",
+          component: <GestStaff socket={socket}/>,
+        },
+        {
+          name: "Registrar staff",
+          key: "registrar-staff",
+          route: "/staff/registrar-staff",
+          component: <RegStaff socket={socket}/>,
+        },
+      ],
+    },
+    {
+      type: "collapse",
+      name: "Participantes",
+      key: "participantes",
+      icon: <Icon icon="fluent-emoji-flat:man-office-worker" />,
+      collapse: [
+        {
+          name: "Gestión de participantes",
+          key: "gestionar-participantes",
+          route: "/participantes/gestionar-participantes",
+          component: <GestParticipantes socket={socket}/>,
+        },
+        {
+          name: "Registrar participantes",
+          key: "registrar-participantes",
+          route: "/participantes/registrar-participantes",
+          component: <RegParticipantes socket={socket}/>,
+        },
+      ],
+    },
+    {
+      type: "individual",
+      name: "Habitaciones",
+      key: "Habitaciones",
+      route: "/Habitaciones",
+      component: <GestHabitaciones socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:bed" />,
+      noCollapse: true,
+    },
+    {
+      type: "individual",
+      name: "Temporales",
+      key: "Temporales",
+      route: "/Temporales",
+      component: <Temporales socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
+      noCollapse: true,
     },
     {
       type: "individual",
       name: "Calificaciones",
       key: "Calificaciones",
       route: "/Calificaciones",
-      component: <Calificaciones/>,
+      component: <Calificaciones socket={socket}/>,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
     },
+    {
+      type: "individual",
+      name: "Comunicaciones",
+      key: "comunicaciones",
+      route: "/comunicaciones",
+      component: <Comunicaciones socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:envelope" />,
+      noCollapse: true,
+    },
+
   ]
 
-  const routesNormal =[
+  let routesNormal =[
     {
       type: "individual",
       name: "Inicio",
       key: "Inicio",
       route: "/Inicio",
-      component: <Default/>,
+      component: <Default socket={socket}/>,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
     },{
@@ -151,7 +242,7 @@ export default function App() {
       name: "Perfil",
       key: "Perfil",
       route: "/Perfil",
-      component: <Perfil/>,
+      component: <Perfil socket={socket}/>,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
     },
@@ -166,19 +257,19 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante/>,
+          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
         },
       ],
     },
   ]
 
-  const rutas =[
+  let rutas =[
     {
       type: "individual",
       name: "Inicio",
       key: "Inicio",
       route: "/Inicio",
-      component: <Default/>,
+      component: <Default socket={socket}/>,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
     },{
@@ -186,7 +277,7 @@ export default function App() {
       name: "Perfil",
       key: "Perfil",
       route: "/Perfil",
-      component: <Perfil/>,
+      component: <Perfil socket={socket}/>,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
     },
@@ -201,13 +292,13 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante/>,
+          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
         },
         {
           name: "Registrar estudiante",
           key: "registrar-estudiante",
           route: "/estudiantes/registrar-estudiante",
-          component: <RegEstudiante/>,
+          component: <RegEstudiante socket={socket}/>,
         },
       ],
     },
@@ -218,32 +309,93 @@ export default function App() {
       icon: <Icon icon="flat-color-icons:key" />,
       collapse: [
         {
-          name: "Cuentas",
-          key: "cuentas",
-          collapse: [
-            {
-              name: "Gestionar cuentas",
-              key: "gestionar-cuentas",
-              route: "/usuarios/cuentas/gestionar-cuentas",
-              component: <GestUser/>,
-            },
-            {
-              name: "Crear cuenta",
-              key: "crear-cuenta",
-              route: "/usuarios/cuentas/crear-cuenta",
-              component: <RegUser/>,
-            },
-          ],
+          name: "Gestionar cuentas",
+          key: "gestionar-cuentas",
+          route: "/usuarios/gestionar-cuentas",
+          component: <GestUser socket={socket}/>,
+        },
+        {
+          name: "Crear cuenta",
+          key: "crear-cuenta",
+          route: "/usuarios/crear-cuenta",
+          component: <RegUser socket={socket}/>,
         },
       ],
+    },
+    {
+      type: "collapse",
+      name: "Staff",
+      key: "staff",
+      icon: <Icon icon="fluent-emoji-flat:identification-card" />,
+      collapse: [
+        {
+          name: "Gestión de staff",
+          key: "gestionar-staff",
+          route: "/staff/gestionar-staff",
+          component: <GestStaff socket={socket}/>,
+        },
+        {
+          name: "Registrar staff",
+          key: "registrar-staff",
+          route: "/staff/registrar-staff",
+          component: <RegStaff socket={socket}/>,
+        },
+      ],
+    },
+    {
+      type: "collapse",
+      name: "Participantes",
+      key: "participantes",
+      icon: <Icon icon="fluent-emoji-flat:man-office-worker" />,
+      collapse: [
+        {
+          name: "Gestión de participantes",
+          key: "gestionar-participantes",
+          route: "/participantes/gestionar-participantes",
+          component: <GestParticipantes socket={socket}/>,
+        },
+        {
+          name: "Registrar participantes",
+          key: "registrar-participantes",
+          route: "/participantes/registrar-participantes",
+          component: <RegParticipantes socket={socket}/>,
+        },
+      ],
+    },
+    {
+      type: "individual",
+      name: "Habitaciones",
+      key: "Habitaciones",
+      route: "/Habitaciones",
+      component: <GestHabitaciones socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:bed" />,
+      noCollapse: true,
+    },
+    {
+      type: "individual",
+      name: "Temporales",
+      key: "Temporales",
+      route: "/Temporales",
+      component: <Temporales socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
+      noCollapse: true,
     },
     {
       type: "individual",
       name: "Calificaciones",
       key: "Calificaciones",
       route: "/Calificaciones",
-      component: <Calificaciones/>,
+      component: <Calificaciones socket={socket}/>,
       icon: <Icon icon="flat-color-icons:view-details" />,
+      noCollapse: true,
+    },
+    {
+      type: "individual",
+      name: "Comunicaciones",
+      key: "comunicaciones",
+      route: "/comunicaciones",
+      component: <Comunicaciones socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:envelope" />,
       noCollapse: true,
     },
   ]
@@ -322,38 +474,53 @@ export default function App() {
     <Routes>
       <Route path="/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)"  element={<Navigate to={pathname.slice(0, -1)} replace/>} />
       <Route path="/" element={<Login/>} />
-      <Route path="/estudiante/:estuID" element={<PerfilEstudiante/>} />
       <Route path="*" element={<Navigate to="/" replace />} />
 
+      <Route element={<PersistLoginPerfiles/>}>
+          <Route path="/estudiante/:estuID" element={<PerfilEstudiante/>} />
+          <Route path="/staffPerfil/:estuID" element={<PerfilStaff/>} />
+          <Route path="/participantePerfil/:estuID" element={<PerfilParticipante/>} />
+      </Route>
+
       <Route element={<PersistLogin/>}>
+
         <Route element={<RequireAuth/>}>
           {getRoutes(rutas)}
-          <Route path="/estudiantes/editar-estudiante" element={<ModificarEstudiante/>} />
-          <Route path="/usuarios/editar-usuario" element={<ModificarUsuario/>} />
+          <Route path="/estudiantes/editar-estudiante" element={<ModificarEstudiante socket={socket}/>} />
+          <Route path="/usuarios/editar-usuario" element={<ModificarUsuario socket={socket}/>} />
+          <Route path="/staff/editar-staff" element={<ModificarStaff socket={socket}/>} />
+          <Route path="/participantes/editar-participante" element={<ModificarParticipantes socket={socket}/>} />
         </Route>
       </Route>
       
 
     </Routes><>
-      {auth.role === 1 && (
-        <Sidenav
-        color={sidenavColor}
-        brand={brand}
-        brandName="MINUME - PLERD"
-        routes={routesSuper}
-        onMouseEnter={handleOnMouseEnter}
-        onMouseLeave={handleOnMouseLeave}
-      />
+      {auth.role === 1 && !location.pathname.includes('/estudiante/') &&(
+        !location.pathname.includes('/participantePerfil/') &&
+        !location.pathname.includes('/staffPerfil/') &&(
+          <Sidenav
+            color={sidenavColor}
+            brand={brand}
+            brandName="MINUME - PLERD"
+            routes={routesSuper}
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+          />
+        )
       )}
-      {auth.role > 1  && (
-        <Sidenav
-        color={sidenavColor}
-        brand={brand}
-        brandName="MINUME - PLERD"
-        routes={routesNormal}
-        onMouseEnter={handleOnMouseEnter}
-        onMouseLeave={handleOnMouseLeave}
-      />
+
+      {auth.role > 1  && !window.location.pathname.includes('/estudiante/') && (
+        !location.pathname.includes('/participantePerfil/') &&
+        !location.pathname.includes('/staffPerfil/') &&(
+          <Sidenav
+            color={sidenavColor}
+            brand={brand}
+            brandName="MINUME - PLERD"
+            routes={routesNormal}
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+          />
+        )
       )}
     </>
 

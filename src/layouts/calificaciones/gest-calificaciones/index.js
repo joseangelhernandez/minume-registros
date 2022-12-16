@@ -34,7 +34,7 @@ import CalifTable_general from "layouts/calificaciones/gest-calificaciones/DataT
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Calificaciones({stickyNavbar}) {
+function Calificaciones({stickyNavbar, socket}) {
   const { auth} = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -307,7 +307,7 @@ function Calificaciones({stickyNavbar}) {
   return (
   <DashboardLayout>
     <ToastContainer />
-    <DashboardNavbar />
+    <DashboardNavbar socket={socket}/>
     <SuiBox mt={stickyNavbar ? 3 : 5}>
         <Grid container>
           <Grid item xs={12} sm={12} lg={12}>

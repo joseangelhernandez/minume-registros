@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import useAuth from "hooks/useAuth";
+import axios from 'axios';
 
 // react-router components
 import { useLocation } from "react-router-dom";
@@ -14,10 +15,12 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
+import SvgIcon from '@mui/material/SvgIcon';
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
+import SuiButton from "components/SuiButton";
 
 // Soft UI Dashboard PRO React example components
 import Breadcrumbs from "examples/Breadcrumbs";
@@ -44,14 +47,66 @@ import {
 // Images
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
+import { position } from "stylis";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function AlarmIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29c-.63.63-.19 1.71.7 1.71h13.17c.89 0 1.34-1.08.71-1.71L18 16z" />
+    </SvgIcon>
+  );
+}
+
+function DashboardNavbar({ socket, absolute, light, isMini }) {
   const { auth } = useAuth();
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const [notificaciones, setNotificaciones] = useState([]);
+  let contador = 0;
+
+  useEffect(() => {
+    socket.on("obtenernotificacion", datos=>{
+      axios.get('https://minume-umnurd.edu.do/api/NOTIFICACION' + `/${auth.usuario}`)
+      .then(res => {
+        setNotificaciones((notificacion) => [...notificacion, res.data]);
+      }).catch(err => {
+        console.log(err.response.data);
+      })
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    axios.get('https://minume-umnurd.edu.do/api/NOTIFICACION' + `/${auth.usuario}`)
+    .then(res => {
+      setNotificaciones(res.data);
+    }).catch(err => {
+      console.log(err.response.data);
+    })
+  }, []);
+
+  const displayNotificaciones = ({senderName, nombreUsuario, type}) => {
+    let action;
+    contador++;
+
+    if(type === 1){
+      action = " Emergencia te ha enviado un mensaje";
+    }else if(type === 2){
+      action = " Emergencia ha aceptado tu solicitud";
+    }
+
+    return (
+      <NotificationItem
+        key={contador}
+        image={<img src={team2} alt="person" />}
+        title={[`${action}`, `${nombreUsuario}`]}
+        date="13 minutes ago"
+        onClick={handleCloseMenu}
+      />
+    )
+  };
 
   useEffect(() => {
     // Setting the navbar type
@@ -85,6 +140,12 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
 
+  const handleLeido = () => {
+    axios.put('https://minume-umnurd.edu.do/api/NOTIFICACION' + `/${auth.usuario}`)
+    setNotificaciones([]) 
+    setOpenMenu(false)
+  };
+
   // Render the notifications menu
   const renderMenu = () => (
     <Menu
@@ -98,29 +159,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
     >
-      {/*<NotificationItem
-        image={<img src={team2} alt="person" />}
-        title={["New message", "from Laur"]}
-        date="13 minutes ago"
-        onClick={handleCloseMenu}
-      />
-      <NotificationItem
-        image={<img src={logoSpotify} alt="person" />}
-        title={["New album", "by Travis Scott"]}
-        date="1 day"
-        onClick={handleCloseMenu}
-      />
-      <NotificationItem
-        color="secondary"
-        image={
-          <Icon fontSize="small" sx={{ color: ({ palette: { white } }) => white.main }}>
-            payment
-          </Icon>
-        }
-        title={["", "Payment successfully completed"]}
-        date="2 days"
-        onClick={handleCloseMenu}
-      />*/}
+      {notificaciones.map((notificacion) => {return displayNotificaciones(notificacion)})}
+      {notificaciones.length > 0 && 
+        <SuiButton variant="gradient" color="success" size="small" onClick={handleLeido}>Marcar todo como leído</SuiButton>
+      }
     </Menu>
   );
   
@@ -157,22 +199,40 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
               </IconButton>
-              <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarIconButton}
-                aria-controls="notification-menu"
-                aria-haspopup="true"
-                variant="contained"
-                onClick={handleOpenMenu}
-              >
-                <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
-              </IconButton>
+
+              {notificaciones.length > 0 ?
+                <IconButton
+                  size="large"
+                  color="inherit"
+                  sx={navbarIconButton}
+                  aria-controls="notification-menu"
+                  aria-haspopup="true"
+                  variant="contained"
+                  onClick={handleOpenMenu}
+                >
+                  <AlarmIcon sx={{ fontSize: 500 }}/>
+                  <div style={{fontSize: "9px", width: "15px", height: "15px", backgroundColor: "red", borderRadius: "50%", padding: "7.5px", display: "flex", alignItems: "center", justifyContent: "center", marginTop: -25, marginLeft: 15, position: "absolute", color: "white"}}>
+                    {notificaciones.length}
+                  </div>
+                </IconButton>
+              : <IconButton
+                  size="large"
+                  color="inherit"
+                  sx={navbarIconButton}
+                  aria-controls="notification-menu"
+                  aria-haspopup="true"
+                  variant="contained"
+                >
+                  <AlarmIcon sx={{ fontSize: 500 }}/>
+                </IconButton>}
               {renderMenu()}
             </SuiBox>
+            {notificaciones.senderName}
+            
           </SuiBox>
         )}
       </Toolbar>
+      {notificaciones.map((notificacion) => {<span>{`${notificacion.senderName} ${notificacion.type}`}</span>})}
     </AppBar>
   );
 }

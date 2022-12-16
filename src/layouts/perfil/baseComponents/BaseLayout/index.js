@@ -20,7 +20,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-function BaseLayout({ stickyNavbar, children }) {
+function BaseLayout({ stickyNavbar, children, socket }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
 
@@ -48,7 +48,7 @@ function BaseLayout({ stickyNavbar, children }) {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar absolute={!stickyNavbar} />
+      <DashboardNavbar absolute={!stickyNavbar} socket={socket}/>
       <SuiBox mt={stickyNavbar ? 3 : 10}>
         {children}
       </SuiBox>

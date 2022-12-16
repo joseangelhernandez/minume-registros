@@ -1,0 +1,62 @@
+export default {
+  formId: "new-user-form",
+  formField: {
+    cedula: {
+      name: "cedula",
+      label: "Cédula",
+      type: "number",
+      placeholder: "Introducir cédula",
+      errorMsg: "El campo Cédula es obligatorio.",
+    },
+    nombre: {
+      name: "nombre",
+      label: "Nombre completo",
+      type: "text",
+      placeholder: "Introducir nombre",
+      errorMsg: "El campo Nombre es obligatorio.",
+    },
+    sexo: {
+      name: "sexo",
+      label: "Sexo",
+      type: "text",
+      placeholder: "Seleccione un sexo",
+      errorMsg: "El campo Sexo es obligatorio.",
+    },
+    edad: {
+      name: "edad",
+      label: "Edad",
+      type: "text",
+      placeholder: "Introducir edad",
+    },
+    email: {
+      name: "email",
+      label: "Correo Electrónico",
+      type: "email",
+      placeholder: "ej. soft@gmail.com",
+      errorMsg: "El campo Correo Electrónico es obligatorio.",
+      invalidMsg: "Su correo electrónico es incorrecto.",
+    },
+    tipoParticipante: {
+      name: "tipoParticipante",
+      label: "Tipo de participante",
+      type: "text",
+      placeholder: "Ej. Técnico distrital, Docente, etc.",
+      errorMsg: "El campo Tipo de participante es obligatorio.",
+    },
+    institucion: {
+      name: "institucion",
+      label: "Institución",
+      type: "text",
+      placeholder: "Introzca la institución a la que pertenece",
+      errorMsg: "El campo institución académico es obligatorio.",
+    },
+    telefono: {
+      name: "telefono",
+      label: "Teléfono celular",
+      type: "text",
+      placeholder: "Introducir número de teléfono celular",
+      errorMsg: "El Campo Teléfono celular es obligatorio.",
+      invalidMsg: "El número de teléfono tiene que ser de 10 dígitos sin el +1 (ej. 8098200523).",
+    },
+  },
+};

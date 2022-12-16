@@ -1,0 +1,56 @@
+export default {
+  formId: "new-user-form",
+  formField: {
+    cedula: {
+      name: "cedula",
+      label: "Cédula",
+      type: "number",
+      placeholder: "Introducir cédula",
+      errorMsg: "El campo Cédula es obligatorio.",
+    },
+    nombre: {
+      name: "nombre",
+      label: "Nombre completo",
+      type: "text",
+      placeholder: "Introducir nombre",
+      errorMsg: "El campo Nombre es obligatorio.",
+    },
+    sexo: {
+      name: "sexo",
+      label: "Sexo",
+      type: "text",
+      placeholder: "Seleccione un sexo",
+      errorMsg: "El campo Sexo es obligatorio.",
+    },
+    email: {
+      name: "email",
+      label: "Correo Electrónico",
+      type: "email",
+      placeholder: "ej. soft@gmail.com",
+      errorMsg: "El campo Correo Electrónico es obligatorio.",
+      invalidMsg: "Su correo electrónico es incorrecto.",
+    },
+    comision: {
+      name: "comision",
+      label: "Comisión",
+      type: "number",
+      placeholder: "Seleccione una de las comisiones",
+      errorMsg: "El campo comisión es obligatorio.",
+    },
+    cargo: {
+      name: "cargo",
+      label: "Cargo",
+      type: "text",
+      placeholder: "Introduzca el cargo que desempeñará en el evento",
+      errorMsg: "El campo Cargo académico es obligatorio.",
+    },
+    telefono: {
+      name: "telefono",
+      label: "Teléfono celular",
+      type: "number",
+      placeholder: "Introducir número de teléfono celular",
+      errorMsg: "El Campo Teléfono celular es obligatorio.",
+      invalidMsg: "El número de teléfono tiene que ser de 10 dígitos sin el +1 (ej. 8098200523).",
+    },
+  },
+};

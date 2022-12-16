@@ -38,7 +38,7 @@ import { saveAs } from "file-saver";
 // sweetalert2 components
 import Swal from "sweetalert2";
 
-function GestUser() {
+function GestUser({socket}) {
   const navigate = useNavigate();
   const {auth} = useAuth();
   const cookies = new Cookies();
@@ -162,7 +162,7 @@ function GestUser() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar socket={socket}/>
       <SuiBox my={3}>
         <Card>
           <SuiBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>

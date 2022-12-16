@@ -50,8 +50,8 @@ function getStepContent(stepIndex, formData) {
   }
 }
 
-function NewUser() {
-  const { auth} = useAuth();
+function NewUser({socket}) {
+  const { auth } = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
   const url = "https://minume-umnurd.edu.do/api/USUARIOS"
@@ -129,7 +129,7 @@ function NewUser() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar socket={socket}/>
       <SuiBox py={3} mb={20}>
         <Grid container justifyContent="center" sx={{ height: "100%" }}>
           <Grid item xs={12} lg={8}>

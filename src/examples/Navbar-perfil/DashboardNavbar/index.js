@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-import Cookies from 'universal-cookie';
 
 // react-router components
 import { useLocation } from "react-router-dom";
@@ -52,7 +51,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
-  const cookies = new Cookies();
 
   useEffect(() => {
     // Setting the navbar type

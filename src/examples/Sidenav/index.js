@@ -157,6 +157,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }, props) {
               icon={icon}
               active={key === collapseName}
               noCollapse={noCollapse}
+              onClick={() => Paginas(name)}
             />
           </Link>
         ) : (

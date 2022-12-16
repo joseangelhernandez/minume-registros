@@ -1,6 +1,7 @@
 import axios from "axios";
 import  useAuth  from 'hooks/useAuth';
 import Cookies from 'universal-cookie';
+import { useLocation } from 'react-router-dom';
 
 // sweetalert2 components
 import Swal from "sweetalert2";
@@ -9,6 +10,9 @@ const useRefreshToken = () => {
   const { auth, setAuth } = useAuth();
   const jwtInterceoptor = axios.create({});
   const cookies = new Cookies();
+  const { pathname } = useLocation();
+  const locations = useLocation();
+  
   
   jwtInterceoptor.interceptors.request.use((config) => {
     config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
@@ -32,12 +36,15 @@ const useRefreshToken = () => {
 
       return respuesta.data.accessToken;
     }catch(error){
-      Swal.fire({
-        icon: 'info',
-        title: 'Su sesión ha expirado',
-        timer: 4500,
-        showConfirmButton: false,
-      });
+
+      if(locations.pathname !== '/estudiante/:estuID'){
+        Swal.fire({
+          icon: 'info',
+          title: 'Su sesión ha expirado',
+          timer: 4500,
+          showConfirmButton: false,
+        });
+      }
     }
   };
   return refreshToken;

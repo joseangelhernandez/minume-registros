@@ -1,10 +1,11 @@
 import { useState, useEffect, React } from "react";
 import {Route, Link, Routes, useParams} from 'react-router-dom';
-import axios from 'api/axios';
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'universal-cookie';
 import QRCODE from 'qrcode'
 import logoCarga from "assets/images/pantallaCarga/Logo-minume-carga.gif";
+import useAuth from "hooks/useAuth";
 
 //HEADER
 // @mui material components
@@ -54,10 +55,6 @@ import CardMedia from "@mui/material/CardMedia";
 // Soft UI Dashboard PRO React example components
 import DashboardLayout from "examples/LayoutContainers/PageLayout-perfil";
 import Footer from "examples/Footer";
-import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-import ProfilesList from "examples/Lists/ProfilesList";
-import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
-import PlaceholderCard from "examples/Cards/PlaceholderCard";
 import SuiBadge from "components/SuiBadge";
 import SuiButton from "components/SuiButton";
 
@@ -66,6 +63,7 @@ import Swal from "sweetalert2";
 
 
 function Overview() {
+  const { auth } = useAuth();
   const [estudiante, setEstudiante] = useState({
     alergias: '', 
     centro_educativo: '',
@@ -115,7 +113,13 @@ function Overview() {
   const [ScreenSize, setScreenSize] = useState(window.innerWidth);
   const cookies = new Cookies();
   const [qrcode, setQRCode] = useState('');
-  const _URL = 'https://localhost:44315/estudiante'+`/${parametros.estuID}`
+  const _URL = 'https://minume.minerd.gob.do/estudiante'+`/${parametros.estuID}`
+  const jwtInterceoptor = axios.create({});
+  jwtInterceoptor.interceptors.request.use((config) => {
+    config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
+    config.withCredentials = true;
+    return config;
+  });
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -128,8 +132,8 @@ function Overview() {
   );
 
   const confirmar = async () => {
-    try{
-      await axios.put('/ESTUDIANTES'+`/${parametros.estuID}`,{
+
+      await jwtInterceoptor.put('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${parametros.estuID}`,{
         id: parametros.estuID,
         nombres: estuPut.nombres,
         apellidos: estuPut.apellidos,
@@ -151,37 +155,39 @@ function Overview() {
         codigo_qr: estuPut.codigo_qr,
         confirmacion: true,
         visado_americana: estuPut.visado_americana,
-    })
-      Swal.fire({
-        icon: 'success',
-        title: 'Estudiante confirmado satisfactoriamente',
-        timer: 2500,
-        showConfirmButton: false,
+      }).then(()=> {
+        Swal.fire({
+          icon: 'success',
+          title: 'Estudiante confirmado satisfactoriamente',
+          timer: 2500,
+          showConfirmButton: false,
+        });
+
+        sleep(2700).then(() => {history(0)});
+
+      }).catch((error) => {
+        console.log(error.response.data);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error en la confirmación',
+          timer: 3000,
+          showConfirmButton: false,
+          text: 'Hubo un error intentando confirmar al estudiante, si el error persiste comunicarse con soporte.',
+        });
       });
-      await sleep(2600);
-      history(0);
-    }catch{
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en la confirmación',
-        timer: 3000,
-        showConfirmButton: false,
-        text: 'Hubo un error intentando confirmar al estudiante, si el error persiste comunicarse con soporte.',
-      });
-    }
-    
   }
 
   useEffect(()=>{
-    axios.get('/ESTUDIANTES'+`/${parametros.estuID}`)
+    axios.get('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${parametros.estuID}`)
       .then((response)=> {
         setEstuput(response.data)
       });
 
-    axios.get('/PERFIL_ESTUDIANTE'+`/${parametros.estuID}`)
+    axios.get('https://minume-umnurd.edu.do/api/PERFIL_ESTUDIANTE'+`/${parametros.estuID}`)
       .then((response)=> {
         setEstudiante(response.data)
         setCargando(false)
+        response.data[0]?.id === undefined && history('/')
       });
 
     QRCODE.toDataURL(_URL,
@@ -194,10 +200,6 @@ function Overview() {
       if(err) return console.error(err)
       setQRCode(url)
     })
-
-    if(!estudiante){
-      history('/Inicio')
-    }
 
     setScreenSize(window.innerWidth);
 
@@ -262,12 +264,12 @@ function Overview() {
               {ScreenSize < 1000 
               ? <Grid item xs={12} lg={4} sx={{ ml: "auto" }} style={{textAlign: 'center', marginTop: -15}}>
                 <SuiBox style={{textAlign: 'center', marginBottom: 12}}> </SuiBox>
-                {cookies.get('roleid') == 1 && estudiante[0].confirmacion === false
+                {auth?.usuario !== undefined && estudiante[0].confirmacion === false
               ? <SuiButton variant="gradient" color="dark" size="md" onClick={confirmar}>Confirmar</SuiButton>
               : estudiante[0].confirmacion ? confirmado : NOconfirmado}
               </Grid>
               : <Grid item xs={8} md={20} lg={4} sx={{ ml: "auto", mr:'30px' }} style={{textAlign: 'right'}}>
-                {cookies.get('roleid') == 1 && estudiante[0].confirmacion === false
+                {auth?.usuario !== undefined && estudiante[0].confirmacion === false
               ? <SuiButton variant="gradient" color="dark" size="md" onClick={confirmar}>Confirmar</SuiButton>
               : estudiante[0].confirmacion ? confirmado : NOconfirmado}
               </Grid>}

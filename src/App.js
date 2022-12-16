@@ -69,7 +69,7 @@ export default function App() {
   const cookies = new Cookies();
   const locations = useLocation();
   const [usuarios, setUsuarios] = useState([]);
-  const [socket, setSocket] = useState(io("http://localhost:5000"));
+  const [socket, setSocket] = useState(io("https://socket-io-server-minume.herokuapp.com/"));
   const jwtInterceoptor = axios.create({});
   jwtInterceoptor.interceptors.request.use((config) => {
     config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;

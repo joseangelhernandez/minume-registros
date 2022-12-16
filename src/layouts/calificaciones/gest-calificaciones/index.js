@@ -14,9 +14,14 @@ import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Skeleton from '@mui/material/Skeleton';
+import Stack from "@mui/material/Stack";
+import Icon from "@mui/material/Icon";
+import Tooltip from "@mui/material/Tooltip";
 
 // Soft UI Dashboard PRO React components
 import SuiBox from "components/SuiBox";
+import SuiTypography from "components/SuiTypography";
+import SuiButton from "components/SuiButton";
 
 // Soft UI Dashboard PRO React base styles
 import breakpoints from "assets/theme/base/breakpoints";
@@ -33,6 +38,8 @@ import CalifTable_general from "layouts/calificaciones/gest-calificaciones/DataT
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import Swal from "sweetalert2";
 
 function Calificaciones({stickyNavbar, socket}) {
   const { auth} = useAuth();
@@ -304,6 +311,43 @@ function Calificaciones({stickyNavbar, socket}) {
 
   useEffect(() => {auth.role !== 1 && navigate('/Inicio', {replace: true});}, []);
 
+  const publicarInicio = () => {
+    jwtInterceoptor.post('https://minume-umnurd.edu.do/api/ESTADOSDEL/PRIMERA')
+    .then(()=> {
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicado Correctamente las Primeras sesiones de trabajo.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }).catch((error)=>{console.log(error.response.data)});
+  }
+
+  const PublicarFinal = () => {
+    jwtInterceoptor.post('https://minume-umnurd.edu.do/api/ESTADOSDEL/FINAL')
+    .then(()=> {
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicado Correctamente todas las calificaciones.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }).catch((error)=>{console.log(error.response.data)});
+  }
+
+  const deshacerPublicaciones = () => {
+    jwtInterceoptor.post('https://minume-umnurd.edu.do/api/ESTADOSDEL/NOPUBLICAR')
+    .then(()=> {
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicaciones deshechas correctamente.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }).catch((error)=>{console.log(error.response.data)});
+  }
+
+
   return (
   <DashboardLayout>
     <ToastContainer />
@@ -326,6 +370,37 @@ function Calificaciones({stickyNavbar, socket}) {
     <SuiBox my={3}>
       
       <Card>
+        <SuiBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
+            <SuiBox lineHeight={1}>
+              <SuiTypography variant="h5" fontWeight="medium">
+                Reporte de calificaciones
+              </SuiTypography>
+              <SuiTypography variant="button" fontWeight="regular" color="text">
+                Calificaiones de los delegados en MINUME.
+              </SuiTypography>
+            </SuiBox>
+          <Stack spacing={1} direction="row">
+          {auth.role === 1 
+            &&<Tooltip title="Publicar Calificaciones Iniciales" placement="bottom">
+              <SuiButton variant="gradient" color="dark" size="medium" onClick={publicarInicio} >
+                <Icon>cloud_sync</Icon>
+              </SuiButton>
+            </Tooltip>}
+
+            {auth.role === 1 
+            &&<Tooltip title="Publicar Calificaciones Finales" placement="bottom">
+              <SuiButton variant="gradient" color="dark" size="medium" onClick={PublicarFinal} >
+                <Icon>file_download_done</Icon>
+              </SuiButton>
+            </Tooltip>}
+            {auth.role === 1 
+            &&<Tooltip title="Deshacer publicaciones" placement="bottom">
+              <SuiButton variant="gradient" color="dark" size="medium" onClick={deshacerPublicaciones} >
+                <Icon>low_priority</Icon>
+              </SuiButton>
+            </Tooltip>}
+          </Stack>
+        </SuiBox>
         {tabValue === 0 && <CalifTable_primera tblEstuCalif={tblEstuCalif} sesion_trabajoTBL={usuario[0]} Lista_usuarios={usuarios}/>}
         {tabValue === 1 && <CalifTable_segunda tblEstuCalif={tblEstuCalif} sesion_trabajoTBL={usuario[0]} Lista_usuarios={usuarios}/>}
         {tabValue === 2 && <CalifTable_tercera tblEstuCalif={tblEstuCalif} sesion_trabajoTBL={usuario[0]} Lista_usuarios={usuarios}/>}

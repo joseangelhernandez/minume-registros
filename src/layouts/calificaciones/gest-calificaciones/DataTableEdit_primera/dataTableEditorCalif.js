@@ -295,7 +295,7 @@ function CalifTable(calificaciones) {
 
   return (
     <MaterialTable
-      title="Reporte de Evaluaciones" 
+      title="Primera sesión de trabajo" 
       data={data} 
       columns={columns}
       icons={tableIcons}

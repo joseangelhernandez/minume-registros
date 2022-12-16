@@ -41,6 +41,7 @@ function SignIn(props) {
   const { auth, setAuth } = useAuth();
   const LOGIN_URL = '/USUARIOS';
   const cookies = new Cookies();
+  const [cargando, setCargando] = useState(false);
 
   const navigate = useNavigate();
 
@@ -54,6 +55,7 @@ function SignIn(props) {
   })
 
   const Ingresar = async(valores) => {
+    setCargando(true);
     await axios.get(LOGIN_URL+`/${valores.username}/${valores.password}`, {withCredentials: true})
     .then(response=>{
       return response.data;
@@ -155,11 +157,14 @@ function SignIn(props) {
               </SuiBox>
             </SuiBox>
             <SuiBox mt={4} mb={1}>
-              <SuiButton variant="gradient" color="info" size="large" fullWidth type="submit">
-                Ingresar
-              </SuiButton>
+              {cargando === true
+                ? <SuiButton variant="gradient" color="info" size="large" fullWidth type="submit" disabled><CircularProgress color="inherit" size="20px"/></SuiButton>
+                :<SuiButton variant="gradient" color="info" size="large" fullWidth type="submit">
+                  Ingresar
+                </SuiButton>}
+                
             </SuiBox>
-            <SuiBox mt={3} textAlign="center">
+            {/*<SuiBox mt={3} textAlign="center">
               <SuiTypography variant="button" color="text" fontWeight="regular">
                 ¿Olvidaste la contraseña?{" "}
               <SuiTypography
@@ -173,7 +178,7 @@ function SignIn(props) {
                 Recuperar
               </SuiTypography>
               </SuiTypography>
-            </SuiBox>
+            </SuiBox>*/}
           </Form>
         )}
       </Formik>

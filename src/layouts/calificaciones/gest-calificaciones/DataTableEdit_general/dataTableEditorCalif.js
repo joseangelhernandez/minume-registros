@@ -280,7 +280,7 @@ function CalifTable(calificaciones) {
 
   return (
     <MaterialTable
-      title="Reporte de Evaluaciones" 
+      title="Reporte Final" 
       data={data} 
       columns={columns} 
       icons={tableIcons}

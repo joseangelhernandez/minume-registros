@@ -215,16 +215,7 @@ export default function App() {
       component: <Calificaciones socket={socket}/>,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
-    },
-    {
-      type: "individual",
-      name: "Comunicaciones",
-      key: "comunicaciones",
-      route: "/comunicaciones",
-      component: <Comunicaciones socket={socket}/>,
-      icon: <Icon icon="fluent-emoji-flat:envelope" />,
-      noCollapse: true,
-    },
+    }
 
   ]
 
@@ -388,16 +379,7 @@ export default function App() {
       component: <Calificaciones socket={socket}/>,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
-    },
-    {
-      type: "individual",
-      name: "Comunicaciones",
-      key: "comunicaciones",
-      route: "/comunicaciones",
-      component: <Comunicaciones socket={socket}/>,
-      icon: <Icon icon="fluent-emoji-flat:envelope" />,
-      noCollapse: true,
-    },
+    }
   ]
 
 

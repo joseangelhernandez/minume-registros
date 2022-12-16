@@ -2,4 +2,7 @@
 
 ![version](https://img.shields.io/badge/version-2.0.1-blue)
 ![Image](https://s3.amazonaws.com/creativetim_bucket/products/499/original/soft-ui-dashboard-pro-material-ui.jpg?1632132493)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5f5161b1d91ab2830248fae1fb36666aa5f54285

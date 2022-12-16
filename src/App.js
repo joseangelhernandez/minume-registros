@@ -252,6 +252,37 @@ export default function App() {
         },
       ],
     },
+    { type: "title", title: "COM", key: "title-com" },
+    {
+      type: "individual",
+      name: "Calificaciones",
+      key: "Calificaciones",
+      route: "/Calificaciones",
+      component: <Calificaciones socket={socket}/>,
+      icon: <Icon icon="flat-color-icons:view-details" />,
+      noCollapse: true,
+    },
+    { type: "title", title: "REG", key: "title-reg" },
+    {
+      type: "collapse",
+      name: "Staff",
+      key: "staff",
+      icon: <Icon icon="fluent-emoji-flat:identification-card" />,
+      collapse: [
+        {
+          name: "Gestión de staff",
+          key: "gestionar-staff",
+          route: "/staff/gestionar-staff",
+          component: <GestStaff socket={socket}/>,
+        },
+        {
+          name: "Registrar staff",
+          key: "registrar-staff",
+          route: "/staff/registrar-staff",
+          component: <RegStaff socket={socket}/>,
+        },
+      ],
+    },
   ]
 
   let rutas =[

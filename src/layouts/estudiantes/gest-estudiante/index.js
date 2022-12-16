@@ -38,7 +38,7 @@ import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { string } from "prop-types";
 
-function ProductsList({ socket, usuarios }) {
+function ProductsList({ socket }) {
   const { auth } = useAuth();
   const [tblEstu, setTblEstu] = useState([
     {
@@ -54,21 +54,6 @@ function ProductsList({ socket, usuarios }) {
       }]
   );
 
-  const handleNotificacion = (type, usuarioRecibe, nombreUsuario) => {
-    axiosOrigin.post('https://minume-umnurd.edu.do/api/NOTIFICACION'+`/${usuarioRecibe}`,
-    {
-      senderName: auth.usuario, 
-      nombreUsuario: nombreUsuario.replace(/ .*/, ''),
-      type: type
-      
-    }).catch((error)=>{console.log(error.response.data)})
-    socket.emit("notificacion2", {
-      senderName: auth.usuario,
-      receiverName: usuarioRecibe,
-      nombreUsuario,
-      type,
-    });
-  };
 
   const [qrcode, setQRCode] = useState('');
 
@@ -208,12 +193,6 @@ function ProductsList({ socket, usuarios }) {
       <DashboardNavbar socket={socket}/>
       <SuiBox my={3}>
         <Card>
-          {usuarios.map((usuario) => (
-            <SuiButton key={usuario.usuario} onClick={()=>handleNotificacion(1, usuario.usuario, usuario.nombre)}>Tipo 1 {usuario.nombre}</SuiButton>
-          ))}
-          {usuarios.map((usuario) => (
-            <SuiButton key={usuario.usuario} onClick={()=>handleNotificacion(2, usuario.usuario, usuario.nombre)}>Tipo 2 {usuario.nombre}</SuiButton>
-          ))}
           <SuiBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
             <SuiBox lineHeight={1}>
               <SuiTypography variant="h5" fontWeight="medium">
@@ -405,3 +384,19 @@ function ProductsList({ socket, usuarios }) {
 }
 
 export default ProductsList;
+
+/*const handleNotificacion = (type, usuarioRecibe, nombreUsuario) => {
+  axiosOrigin.post('https://minume-umnurd.edu.do/api/NOTIFICACION'+`/${usuarioRecibe}`,
+  {
+    senderName: auth.usuario, 
+    //nombreUsuario: nombreUsuario.replace(/ .*///, ''),
+    //type: type
+    
+  /*}).catch((error)=>{console.log(error.response.data)})
+  socket.emit("notificacion2", {
+    senderName: auth.usuario,
+    receiverName: usuarioRecibe,
+    nombreUsuario,
+    type,
+  });
+};*/

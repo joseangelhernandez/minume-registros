@@ -119,7 +119,7 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
+          component: <GestEstudiante socket={socket}/>,
         },
         {
           name: "Registrar estudiante",
@@ -257,7 +257,7 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
+          component: <GestEstudiante socket={socket}/>,
         },
       ],
     },
@@ -292,7 +292,7 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
+          component: <GestEstudiante socket={socket}/>,
         },
         {
           name: "Registrar estudiante",

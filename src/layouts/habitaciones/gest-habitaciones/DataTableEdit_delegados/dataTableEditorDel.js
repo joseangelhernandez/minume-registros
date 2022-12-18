@@ -284,6 +284,11 @@ function CalifTable(tblDelegados)
           }
         })
     });
+
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES')
+    .then((response)=> {
+      setHabitaciones(response.data);
+    });
   }
 
   return (

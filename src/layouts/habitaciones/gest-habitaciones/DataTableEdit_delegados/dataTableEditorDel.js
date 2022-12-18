@@ -57,9 +57,9 @@ function CalifTable(tblDelegados)
     jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES/ESTUDIANTES')
     .then((response)=> {
       setData(response.data);
-    });
+    }).catch((error)=>{console.log(error.response.data)});
 
-    axios.get('https://minume-umnurd.edu.do/api/HABITACIONES/DISPONIBLESDROP')
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES')
     .then((response)=> {
       setHabitaciones(response.data);
     });

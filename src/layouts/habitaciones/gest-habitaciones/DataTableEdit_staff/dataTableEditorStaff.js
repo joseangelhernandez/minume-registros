@@ -59,7 +59,7 @@ function CalifTable(tblStaff) {
       setData(response.data);
     });
 
-    axios.get('https://minume-umnurd.edu.do/api/HABITACIONES/DISPONIBLESDROP')
+    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES')
     .then((response)=> {
       setHabitaciones(response.data);
     });

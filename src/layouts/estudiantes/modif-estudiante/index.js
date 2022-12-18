@@ -68,6 +68,7 @@ function NewUser({socket}) {
   const { formId, formField } = form;
   const currentValidation = validations[activeStep];
   const isLastStep = activeStep === steps.length - 1;
+  const rutas_dev = ""
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const handleBack = () => setActiveStep(activeStep - 1);
@@ -129,7 +130,7 @@ function NewUser({socket}) {
 
     await sleep(2500);
 
-    history('/estudiantes/gestionar-estudiantes');
+    history(rutas_dev+'/estudiantes/gestionar-estudiantes');
     history(0);
   };
 

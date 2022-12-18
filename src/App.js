@@ -3,9 +3,10 @@ import Cookies from 'universal-cookie';
 import useAuth from 'hooks/useAuth';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import { Analytics } from '@vercel/analytics/dist/react';
 
 // react-router components
-import { Route, Routes, useLocation, Navigate } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate, Router } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -57,10 +58,14 @@ import ModificarParticipantes from "layouts/participantes/modif-participantes";
 import Comunicaciones from "layouts/comunicaciones/gest-comunicaciones";
 import Temporales from "layouts/temporales/gest-temporales";
 import GestHabitaciones from "layouts/habitaciones/gest-habitaciones";
+import Asistencia from "layouts/asistencia";
+import SubidaDoc from "layouts/subidaDocDel"
 import Error404 from "layouts/authentication/error/404";
 //#endregion
 
 export default function App() {
+  const rutas_dev = ""
+  const rutas_produccion= ''
   const { auth } = useAuth();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, openConfigurator, sidenavColor } = controller;
@@ -88,14 +93,15 @@ export default function App() {
         setUsuarios(response.data)
       });
     }
+
   }, [auth]);
 
-  let routesSuper =[
+  const routesSuper =[
     {
       type: "individual",
       name: "Inicio",
       key: "Inicio",
-      route: "/Inicio",
+      route: rutas_dev+"/Inicio",
       component: <Default socket={socket}/>,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
@@ -103,7 +109,7 @@ export default function App() {
       type: "individual",
       name: "Perfil",
       key: "Perfil",
-      route: "/Perfil",
+      route: rutas_dev+"/Perfil",
       component: <Perfil socket={socket}/>,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
@@ -118,16 +124,25 @@ export default function App() {
         {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
-          route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket}/>,
+          route: rutas_dev+"/estudiantes/gestionar-estudiantes",
+          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
         },
         {
           name: "Registrar estudiante",
           key: "registrar-estudiante",
-          route: "/estudiantes/registrar-estudiante",
+          route: rutas_dev+"/estudiantes/registrar-estudiante",
           component: <RegEstudiante socket={socket}/>,
         },
       ],
+    },
+    {
+      type: "individual",
+      name: "Asistencia",
+      key: "asistencia",
+      route: rutas_dev+"/asistencia",
+      component: <Asistencia socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:man-raising-hand" />,
+      noCollapse: true,
     },
     {
       type: "collapse",
@@ -138,13 +153,13 @@ export default function App() {
         {
           name: "Gestionar cuentas",
           key: "gestionar-cuentas",
-          route: "/usuarios/gestionar-cuentas",
+          route: rutas_dev+"/usuarios/gestionar-cuentas",
           component: <GestUser socket={socket}/>,
         },
         {
           name: "Crear cuenta",
           key: "crear-cuenta",
-          route: "/usuarios/crear-cuenta",
+          route: rutas_dev+"/usuarios/crear-cuenta",
           component: <RegUser socket={socket}/>,
         },
       ],
@@ -158,13 +173,13 @@ export default function App() {
         {
           name: "Gestión de staff",
           key: "gestionar-staff",
-          route: "/staff/gestionar-staff",
+          route: rutas_dev+"/staff/gestionar-staff",
           component: <GestStaff socket={socket}/>,
         },
         {
           name: "Registrar staff",
           key: "registrar-staff",
-          route: "/staff/registrar-staff",
+          route: rutas_dev+"/staff/registrar-staff",
           component: <RegStaff socket={socket}/>,
         },
       ],
@@ -178,13 +193,13 @@ export default function App() {
         {
           name: "Gestión de participantes",
           key: "gestionar-participantes",
-          route: "/participantes/gestionar-participantes",
+          route: rutas_dev+"/participantes/gestionar-participantes",
           component: <GestParticipantes socket={socket}/>,
         },
         {
           name: "Registrar participantes",
           key: "registrar-participantes",
-          route: "/participantes/registrar-participantes",
+          route: rutas_dev+"/participantes/registrar-participantes",
           component: <RegParticipantes socket={socket}/>,
         },
       ],
@@ -193,7 +208,7 @@ export default function App() {
       type: "individual",
       name: "Habitaciones",
       key: "Habitaciones",
-      route: "/Habitaciones",
+      route: rutas_dev+"/Habitaciones",
       component: <GestHabitaciones socket={socket}/>,
       icon: <Icon icon="fluent-emoji-flat:bed" />,
       noCollapse: true,
@@ -202,7 +217,7 @@ export default function App() {
       type: "individual",
       name: "Temporales",
       key: "Temporales",
-      route: "/Temporales",
+      route: rutas_dev+"/Temporales",
       component: <Temporales socket={socket}/>,
       icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
       noCollapse: true,
@@ -211,7 +226,7 @@ export default function App() {
       type: "individual",
       name: "Calificaciones",
       key: "Calificaciones",
-      route: "/Calificaciones",
+      route: rutas_dev+"/Calificaciones",
       component: <Calificaciones socket={socket}/>,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
@@ -219,12 +234,12 @@ export default function App() {
 
   ]
 
-  let routesNormal =[
+  const routesNormal =[
     {
       type: "individual",
       name: "Inicio",
       key: "Inicio",
-      route: "/Inicio",
+      route: rutas_dev+"/Inicio",
       component: <Default socket={socket}/>,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
@@ -232,7 +247,7 @@ export default function App() {
       type: "individual",
       name: "Perfil",
       key: "Perfil",
-      route: "/Perfil",
+      route: rutas_dev+"/Perfil",
       component: <Perfil socket={socket}/>,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
@@ -247,50 +262,48 @@ export default function App() {
         {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
-          route: "/estudiantes/gestionar-estudiantes",
+          route: rutas_dev+"/estudiantes/gestionar-estudiantes",
           component: <GestEstudiante socket={socket}/>,
-        },
+        }
       ],
     },
     { type: "title", title: "COM", key: "title-com" },
     {
       type: "individual",
+      name: "Asistencia",
+      key: "asistencia",
+      route: rutas_dev+"/asistencia",
+      component: <Asistencia socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:man-raising-hand" />,
+      noCollapse: true,
+    },
+    {
+      type: "individual",
       name: "Calificaciones",
       key: "Calificaciones",
-      route: "/Calificaciones",
+      route: rutas_dev+"/Calificaciones",
       component: <Calificaciones socket={socket}/>,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
     },
     { type: "title", title: "REG", key: "title-reg" },
     {
-      type: "collapse",
-      name: "Staff",
-      key: "staff",
-      icon: <Icon icon="fluent-emoji-flat:identification-card" />,
-      collapse: [
-        {
-          name: "Gestión de staff",
-          key: "gestionar-staff",
-          route: "/staff/gestionar-staff",
-          component: <GestStaff socket={socket}/>,
-        },
-        {
-          name: "Registrar staff",
-          key: "registrar-staff",
-          route: "/staff/registrar-staff",
-          component: <RegStaff socket={socket}/>,
-        },
-      ],
+      type: "individual",
+      name: "Temporales",
+      key: "Temporales",
+      route: rutas_dev+"/Temporales",
+      component: <Temporales socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
+      noCollapse: true,
     },
   ]
 
-  let rutas =[
+  const rutas =[
     {
       type: "individual",
       name: "Inicio",
       key: "Inicio",
-      route: "/Inicio",
+      route: rutas_dev+"/Inicio",
       component: <Default socket={socket}/>,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
@@ -298,7 +311,7 @@ export default function App() {
       type: "individual",
       name: "Perfil",
       key: "Perfil",
-      route: "/Perfil",
+      route: rutas_dev+"/Perfil",
       component: <Perfil socket={socket}/>,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
@@ -313,16 +326,25 @@ export default function App() {
         {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
-          route: "/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket}/>,
+          route: rutas_dev+"/estudiantes/gestionar-estudiantes",
+          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
         },
         {
           name: "Registrar estudiante",
           key: "registrar-estudiante",
-          route: "/estudiantes/registrar-estudiante",
+          route: rutas_dev+"/estudiantes/registrar-estudiante",
           component: <RegEstudiante socket={socket}/>,
         },
       ],
+    },
+    {
+      type: "individual",
+      name: "Asistencia",
+      key: "asistencia",
+      route: rutas_dev+"/asistencia",
+      component: <Asistencia socket={socket}/>,
+      icon: <Icon icon="fluent-emoji-flat:man-raising-hand" />,
+      noCollapse: true,
     },
     {
       type: "collapse",
@@ -333,13 +355,13 @@ export default function App() {
         {
           name: "Gestionar cuentas",
           key: "gestionar-cuentas",
-          route: "/usuarios/gestionar-cuentas",
+          route: rutas_dev+"/usuarios/gestionar-cuentas",
           component: <GestUser socket={socket}/>,
         },
         {
           name: "Crear cuenta",
           key: "crear-cuenta",
-          route: "/usuarios/crear-cuenta",
+          route: rutas_dev+"/usuarios/crear-cuenta",
           component: <RegUser socket={socket}/>,
         },
       ],
@@ -353,13 +375,13 @@ export default function App() {
         {
           name: "Gestión de staff",
           key: "gestionar-staff",
-          route: "/staff/gestionar-staff",
+          route: rutas_dev+"/staff/gestionar-staff",
           component: <GestStaff socket={socket}/>,
         },
         {
           name: "Registrar staff",
           key: "registrar-staff",
-          route: "/staff/registrar-staff",
+          route: rutas_dev+"/staff/registrar-staff",
           component: <RegStaff socket={socket}/>,
         },
       ],
@@ -373,13 +395,13 @@ export default function App() {
         {
           name: "Gestión de participantes",
           key: "gestionar-participantes",
-          route: "/participantes/gestionar-participantes",
+          route: rutas_dev+"/participantes/gestionar-participantes",
           component: <GestParticipantes socket={socket}/>,
         },
         {
           name: "Registrar participantes",
           key: "registrar-participantes",
-          route: "/participantes/registrar-participantes",
+          route: rutas_dev+"/participantes/registrar-participantes",
           component: <RegParticipantes socket={socket}/>,
         },
       ],
@@ -388,7 +410,7 @@ export default function App() {
       type: "individual",
       name: "Habitaciones",
       key: "Habitaciones",
-      route: "/Habitaciones",
+      route: rutas_dev+"/Habitaciones",
       component: <GestHabitaciones socket={socket}/>,
       icon: <Icon icon="fluent-emoji-flat:bed" />,
       noCollapse: true,
@@ -397,7 +419,7 @@ export default function App() {
       type: "individual",
       name: "Temporales",
       key: "Temporales",
-      route: "/Temporales",
+      route: rutas_dev+"/Temporales",
       component: <Temporales socket={socket}/>,
       icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
       noCollapse: true,
@@ -406,7 +428,7 @@ export default function App() {
       type: "individual",
       name: "Calificaciones",
       key: "Calificaciones",
-      route: "/Calificaciones",
+      route: rutas_dev+"/Calificaciones",
       component: <Calificaciones socket={socket}/>,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
@@ -483,34 +505,35 @@ export default function App() {
 
   return(
     <ThemeProvider theme={theme}>
+      <Analytics />
     <CssBaseline />
-    <Routes>
-      <Route path="/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)"  element={<Navigate to={pathname.slice(0, -1)} replace/>} />
-      <Route path="/" element={<Login/>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Routes>
+        <Route path={rutas_dev+"/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)"}  element={<Navigate to={pathname.slice(0, -1)} replace/>} />
+        <Route path={rutas_dev+"/delegados-docs"} element={<SubidaDoc/>} />
+        <Route path={rutas_dev+"/"} element={<Login/>} />
+        <Route path="*" element={<Navigate to={rutas_dev+"/"} replace />} />
 
-      <Route element={<PersistLoginPerfiles/>}>
-          <Route path="/estudiante/:estuID" element={<PerfilEstudiante/>} />
-          <Route path="/staffPerfil/:estuID" element={<PerfilStaff/>} />
-          <Route path="/participantePerfil/:estuID" element={<PerfilParticipante/>} />
-      </Route>
-
-      <Route element={<PersistLogin/>}>
-
-        <Route element={<RequireAuth/>}>
-          {getRoutes(rutas)}
-          <Route path="/estudiantes/editar-estudiante" element={<ModificarEstudiante socket={socket}/>} />
-          <Route path="/usuarios/editar-usuario" element={<ModificarUsuario socket={socket}/>} />
-          <Route path="/staff/editar-staff" element={<ModificarStaff socket={socket}/>} />
-          <Route path="/participantes/editar-participante" element={<ModificarParticipantes socket={socket}/>} />
+        <Route element={<PersistLoginPerfiles/>}>
+            <Route path={rutas_dev+"/estudiante/:estuID"} element={<PerfilEstudiante/>} />
+            <Route path={rutas_dev+"/staffPerfil/:estuID"} element={<PerfilStaff/>} />
+            <Route path={rutas_dev+"/participantePerfil/:estuID"} element={<PerfilParticipante/>} />
         </Route>
-      </Route>
-      
 
-    </Routes><>
-      {auth.role === 1 && !location.pathname.includes('/estudiante/') &&(
-        !location.pathname.includes('/participantePerfil/') &&
-        !location.pathname.includes('/staffPerfil/') &&(
+        <Route element={<PersistLogin/>}>
+
+          <Route element={<RequireAuth/>}>
+            {getRoutes(rutas)}
+            <Route path={rutas_dev+"/estudiantes/editar-estudiante"} element={<ModificarEstudiante socket={socket}/>} />
+            <Route path={rutas_dev+"/usuarios/editar-usuario"} element={<ModificarUsuario socket={socket}/>} />
+            <Route path={rutas_dev+"/staff/editar-staff" }element={<ModificarStaff socket={socket}/>} />
+            <Route path={rutas_dev+"/participantes/editar-participante"} element={<ModificarParticipantes socket={socket}/>} />
+          </Route>
+        </Route>
+      </Routes>
+    <>
+      {auth.role === 1 && !location.pathname.includes(rutas_dev+'/estudiante/') &&(
+        !location.pathname.includes(rutas_dev+'/participantePerfil/') &&
+        !location.pathname.includes(rutas_dev+'/staffPerfil/') &&(
           <Sidenav
             color={sidenavColor}
             brand={brand}
@@ -522,9 +545,9 @@ export default function App() {
         )
       )}
 
-      {auth.role > 1  && !window.location.pathname.includes('/estudiante/') && (
-        !location.pathname.includes('/participantePerfil/') &&
-        !location.pathname.includes('/staffPerfil/') &&(
+      {auth.role > 1  && !window.location.pathname.includes(rutas_dev+'/estudiante/') && (
+        !location.pathname.includes(rutas_dev+'/participantePerfil/') &&
+        !location.pathname.includes(rutas_dev+'/staffPerfil/') &&(
           <Sidenav
             color={sidenavColor}
             brand={brand}

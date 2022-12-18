@@ -60,6 +60,7 @@ function NewUser({socket}) {
   const { formId, formField } = form;
   const currentValidation = validations[activeStep];
   const isLastStep = activeStep === steps.length - 1;
+  const rutas_dev = ""
 
   jwtInterceoptor.interceptors.request.use((config) => {
     config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
@@ -120,7 +121,7 @@ function NewUser({socket}) {
 
     await sleep(2500);
 
-    history('/staff/gestionar-staff');
+    history(rutas_dev+'/staff/gestionar-staff');
     history(0);
   };
 

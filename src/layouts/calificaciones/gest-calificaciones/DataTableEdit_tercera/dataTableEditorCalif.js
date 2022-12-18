@@ -48,7 +48,12 @@ function CalifTable(calificaciones) {
   const [data, setData] = useState(calificaciones.tblEstuCalif);
 
   useEffect(()=>{
-    setData(calificaciones.tblEstuCalif);
+    if(calificaciones.sesion_trabajoTBL.comision != ''){
+      jwtInterceoptor.get(url+`/${calificaciones.sesion_trabajoTBL.comision}`)
+      .then(response => {
+        setData(response.data);
+      })
+    }
   },[calificaciones.tblEstuCalif]);
 
   const tableIcons = {
@@ -74,6 +79,7 @@ function CalifTable(calificaciones) {
     Activar_Envios: forwardRef((props, ref) => <Icon icon="mdi:playlist-check" {...props} ref={ref} />),
     Desactivar_Envios: forwardRef((props, ref) => <Icon icon="mdi:playlist-remove" {...props} ref={ref} />)
   };
+
   const columns = [
     {
       title: 'Secuencia', field: 'secuencia', editable: 'never',
@@ -139,8 +145,8 @@ function CalifTable(calificaciones) {
         paddingBottom: '10px'
        }
     },
-    data.length>10
-    ?{ title: "Confirmación", field: "confir_dir_ad", type: 'boolean',
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación director adj.", field: "confir_dir_ad3",editable: 'never',
       headerStyle: {
         fontSize: '0.8rem',
         fontWeight: '700',
@@ -150,7 +156,7 @@ function CalifTable(calificaciones) {
         paddingBottom: '10px'
        }
     }
-    :{ title: "Confirmación", field: "confir_dir_ad",
+    :{ title: "Confirmación director adj.", field: "confir_dir_ad3",type: 'boolean',editable: 'never',
     headerStyle: {
       fontSize: '0.8rem',
       fontWeight: '700',
@@ -160,46 +166,444 @@ function CalifTable(calificaciones) {
       paddingBottom: '10px'
      }
     },
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación control y ev.", field: "confir_ce3",editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    }
+    :{ title: "Confirmación control y ev.", field: "confir_ce3",type: 'boolean',editable: 'never',
+    headerStyle: {
+      fontSize: '0.8rem',
+      fontWeight: '700',
+      opacity: '0.7',
+      backgroundColor: 'transparent',
+      color: '#8392ab',
+      paddingBottom: '10px'
+     }
+    }
+  ];
+
+  const columnsControl = [
+    {
+      title: 'Secuencia', field: 'secuencia', editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+      }
+    },
+    { title: "Delegado ID", field: "delegado", editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       },
+    },
+    { title: "Representación", field: "pais", editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+      },
+    },
+    { title: "PENC", field: "pen_critico", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    { title: "RELP", field: "resol_problemas", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    { title: "NEG", field: "negociacion", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación director adj.", field: "confir_dir_ad3",editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    }
+    :{ title: "Confirmación director adj.", field: "confir_dir_ad3",type: 'boolean',editable: 'never',
+    headerStyle: {
+      fontSize: '0.8rem',
+      fontWeight: '700',
+      opacity: '0.7',
+      backgroundColor: 'transparent',
+      color: '#8392ab',
+      paddingBottom: '10px'
+     }
+    },
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación control y ev.", field: "confir_ce3",editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    }
+    :{ title: "Confirmación control y ev.", field: "confir_ce3",type: 'boolean',
+    headerStyle: {
+      fontSize: '0.8rem',
+      fontWeight: '700',
+      opacity: '0.7',
+      backgroundColor: 'transparent',
+      color: '#8392ab',
+      paddingBottom: '10px'
+     }
+    }
+  ];
+
+  const columnsAdj = [
+    {
+      title: 'Secuencia', field: 'secuencia', editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+      }
+    },
+    { title: "Delegado ID", field: "delegado", editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       },
+    },
+    { title: "Representación", field: "pais", editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+      },
+    },
+    { title: "PENC", field: "pen_critico", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    { title: "RELP", field: "resol_problemas", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    { title: "NEG", field: "negociacion", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación director adj.", field: "confir_dir_ad3",editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    }
+    :{ title: "Confirmación director adj.", field: "confir_dir_ad3",type: 'boolean',
+    headerStyle: {
+      fontSize: '0.8rem',
+      fontWeight: '700',
+      opacity: '0.7',
+      backgroundColor: 'transparent',
+      color: '#8392ab',
+      paddingBottom: '10px'
+     }
+    },
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación control y ev.", field: "confir_ce3",editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    }
+    :{ title: "Confirmación control y ev.", field: "confir_ce3",type: 'boolean',editable: 'never',
+    headerStyle: {
+      fontSize: '0.8rem',
+      fontWeight: '700',
+      opacity: '0.7',
+      backgroundColor: 'transparent',
+      color: '#8392ab',
+      paddingBottom: '10px'
+     }
+    }
+  ];
+
+  const columnsVice = [
+    {
+      title: 'Secuencia', field: 'secuencia', editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+      }
+    },
+    { title: "Delegado ID", field: "delegado", editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       },
+    },
+    { title: "Representación", field: "pais", editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+      },
+    },
+    { title: "PENC", field: "pen_critico", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    { title: "RELP", field: "resol_problemas", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    { title: "NEG", field: "negociacion", type: 'numeric',editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    },
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación director adj.", field: "confir_dir_ad3",editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    }
+    :{ title: "Confirmación director adj.", field: "confir_dir_ad3",type: 'boolean',
+    headerStyle: {
+      fontSize: '0.8rem',
+      fontWeight: '700',
+      opacity: '0.7',
+      backgroundColor: 'transparent',
+      color: '#8392ab',
+      paddingBottom: '10px'
+     }
+    },
+    calificaciones.tblEstuCalif.length < 11
+    ?{ title: "Confirmación control y ev.", field: "confir_ce3",editable: 'never',
+      headerStyle: {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        opacity: '0.7',
+        backgroundColor: 'transparent',
+        color: '#8392ab',
+        paddingBottom: '10px'
+       }
+    }
+    :{ title: "Confirmación control y ev.", field: "confir_ce3",type: 'boolean',editable: 'never',
+    headerStyle: {
+      fontSize: '0.8rem',
+      fontWeight: '700',
+      opacity: '0.7',
+      backgroundColor: 'transparent',
+      color: '#8392ab',
+      paddingBottom: '10px'
+     }
+    }
   ];
 
   function PostCalif(record){
-    jwtInterceoptor.post(url+`/${record.delegado}`, 
-    {
-      secuencia: record.secuencia,
-      delegado: record.delegado,
-      comision: record.comision,
-      pais: record.pais,
-      comunicativa: record.comunicativa,
-      oratoria: record.oratoria,
-      redaccion: record.redaccion,
-      pen_logico: record.pen_logico,
-      argumentacion: record.argumentacion,
-      pen_critico: record.pen_critico,
-      resol_problemas: record.resol_problemas,
-      negociacion: record.negociacion,
-      des_personal: record.des_personal,
-      liderazgo: record.liderazgo,
-      starpoint: record.starpoint,
-      total: record.total,
-      confir_dir_ad: record.confir_dir_ad
-    }).catch(() => {
-      let timerInterval
-      Swal.fire({
-        icon: 'error',
-        title: 'Error en el envío de datos',
-        timer: 8000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-        text: 'Por favor asegurarse de no utilizar decimales en los campos de publicación.',
-        willClose: () => {
-          clearInterval(timerInterval)
-        }
-      }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.timer) {
-          history(0)
-        }
+
+    if(auth.ocupacion == 'CONTROL Y EVALUACION'){
+      jwtInterceoptor.post(url+`/TERCERACE/${record.delegado}`+`/${record.confir_ce3}`).then(()=>{
+        jwtInterceoptor.get(url+`/${calificaciones.sesion_trabajoTBL.comision}`)
+        .then(response => {
+          setData(response.data);
       })
-    });
+        }).catch(() => {
+          let timerInterval
+          Swal.fire({
+            icon: 'error',
+            title: 'Error en el envío de datos',
+            timer: 8000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            text: 'Por favor asegurarse de no utilizar decimales en los campos de publicación.',
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+              history(0)
+            }
+          })
+        });
+    }else if(auth.ocupacion == 'DIRECTOR ADJUNTO'){
+      jwtInterceoptor.post(url+`/TERCERADIRAD/${record.delegado}`+`/${record.confir_dir_ad3}`).then(()=>{
+        jwtInterceoptor.get(url+`/${calificaciones.sesion_trabajoTBL.comision}`)
+        .then(response => {
+          setData(response.data);
+      })
+        }).catch(() => {
+          let timerInterval
+          Swal.fire({
+            icon: 'error',
+            title: 'Error en el envío de datos',
+            timer: 8000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            text: 'Por favor asegurarse de no utilizar decimales en los campos de publicación.',
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+              history(0)
+            }
+          })
+        });
+    }else if(auth.ocupacion == 'VICEPRESIDENTE'){
+      jwtInterceoptor.post(url+`/TERCERADIRAD/${record.delegado}`+`/${record.confir_dir_ad3}`).then(()=>{
+        jwtInterceoptor.get(url+`/${calificaciones.sesion_trabajoTBL.comision}`)
+        .then(response => {
+          setData(response.data);
+      })
+        }).catch(() => {
+          let timerInterval
+          Swal.fire({
+            icon: 'error',
+            title: 'Error en el envío de datos',
+            timer: 8000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            text: 'Por favor asegurarse de no utilizar decimales en los campos de publicación.',
+            willClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+              history(0)
+            }
+          })
+        });
+    }else{
+      jwtInterceoptor.post(url+`/TERCERA/${record.delegado}`+`/${record.pen_critico}`+`/${record.resol_problemas}`+`/${record.negociacion}`)
+      .catch(() => {
+        let timerInterval
+        Swal.fire({
+          icon: 'error',
+          title: 'Error en el envío de datos',
+          timer: 8000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          text: 'Por favor asegurarse de no utilizar decimales en los campos de publicación.',
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            history(0)
+          }
+        })
+      });
+    }
+
+    
   }
 
   function Refrescar(){
@@ -295,7 +699,10 @@ function CalifTable(calificaciones) {
     <MaterialTable 
       title="Tercera sesión de trabajo" 
       data={data} 
-      columns={columns}
+      columns={
+        auth.ocupacion === 'CONTROL Y EVALUACION' ? columnsControl : auth.ocupacion === 'DIRECTOR ADJUNTO' ? columnsAdj
+        : auth.ocupacion === 'VICEPRESIDENTE' ? columnsVice : columns
+      }
       icons={tableIcons}
       actions={data.length>10
         ?[

@@ -39,6 +39,7 @@ import Swal from "sweetalert2";
 function ProductsList({ socket }) {
   const cookies = new Cookies();
   const { auth } = useAuth();
+  const rutas_dev = ""
   let url = '';
   const jwtInterceoptor = axiosOrigin.create({});
   const _url = 'https://minume-umnurd.edu.do/api/PARTICIPANTE';
@@ -184,7 +185,7 @@ function ProductsList({ socket }) {
             </SuiBox>
             <Stack spacing={1} direction="row">
               {auth.role === 1 
-              &&<Link to="/participantes/registrar-participantes">
+              &&<Link to={rutas_dev+"/participantes/registrar-participantes"}>
                 <SuiButton variant="gradient" color="info" size="small">
                   + Nuevo participante
                 </SuiButton>

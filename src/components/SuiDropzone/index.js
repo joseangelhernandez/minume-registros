@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Cookies from 'universal-cookie';
+import useAuth from "hooks/useAuth";
 
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
@@ -19,12 +20,14 @@ import SuiButton from "components/SuiButton";
 import SuiDropzoneRoot from "components/SuiDropzone/SuiDropzoneRoot";
 
 function SuiDropzone({ options }) {
+  const {auth} = useAuth();
   const cookies = new Cookies();
-  const url = 'https://minume-umnurd.edu.do/api/USUARIOPERFIL'+`/${cookies.get('usuario')}`
+  const url = 'https://minume-umnurd.edu.do/api/USUARIOPERFIL'+`/${auth?.usuario}`
   const dropzoneRef = useRef();
+  Dropzone.autoDiscover = false;
 
   useEffect(() => {
-    Dropzone.autoDiscover = false;
+    
 
     function createDropzone() {
       return new Dropzone(dropzoneRef.current, { ...options});

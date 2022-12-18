@@ -55,6 +55,7 @@ function NewUser({socket}) {
   const cookies = new Cookies();
   const location = useLocation();
   const jwtInterceoptor = axios.create({});
+  const rutas_dev = ""
   jwtInterceoptor.interceptors.request.use((config) => {
     config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
     config.withCredentials = true;
@@ -115,7 +116,7 @@ function NewUser({socket}) {
 
     await sleep(2500);
 
-    history('/usuarios/cuentas/gestionar-cuentas');
+    history(rutas_dev+'/usuarios/gestionar-cuentas');
     history(0);
   };
 

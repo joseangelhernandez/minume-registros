@@ -4,11 +4,12 @@ import useAuth from "hooks/useAuth";
 const RequireAuth = () => {
     const{ auth } = useAuth();
     const location = useLocation();
+    const rutas_dev = ""
 
     return(
         auth?.usuario
         ? <Outlet />
-        : <Navigate to="/"  state={{from: location}} replace/>
+        : <Navigate to={rutas_dev+"/"}  state={{from: location}} replace/>
     )
 }
 

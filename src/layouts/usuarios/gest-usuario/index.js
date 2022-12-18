@@ -42,6 +42,7 @@ function GestUser({socket}) {
   const navigate = useNavigate();
   const {auth} = useAuth();
   const cookies = new Cookies();
+  const rutas_dev = ""
   const jwtInterceoptor = axiosORIGIN.create({});
   jwtInterceoptor.interceptors.request.use((config) => {
     config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
@@ -175,7 +176,7 @@ function GestUser({socket}) {
               </SuiTypography>
             </SuiBox>
             <Stack spacing={1} direction="row">
-              <Link to="/usuarios/cuentas/crear-cuenta">
+              <Link to={rutas_dev+"/usuarios/cuentas/crear-cuenta"}>
                 <SuiButton variant="gradient" color="info" size="small">
                   + Nueva cuenta
                 </SuiButton>

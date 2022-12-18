@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import useAuth from "hooks/useAuth";
 import axios from 'axios';
 
+
 // react-router components
 import { useLocation } from "react-router-dom";
 
@@ -25,6 +26,11 @@ import SuiButton from "components/SuiButton";
 // Soft UI Dashboard PRO React example components
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
+import audio from "examples/Navbars/notificationRigntone/notification.mp3";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // Custom styles for DashboardNavbar
 import {
@@ -58,6 +64,8 @@ function AlarmIcon(props) {
 }
 
 function DashboardNavbar({ socket, absolute, light, isMini }) {
+  const notifAud = new Audio(audio);
+  notifAud.muted = false;
   const { auth } = useAuth();
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
@@ -65,31 +73,49 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
   const [notificaciones, setNotificaciones] = useState([]);
+  const [cargado, setcargado] = useState(false);
   let contador = 0;
 
   useEffect(() => {
     socket.on("obtenernotificacion", datos=>{
-      axios.get('https://minume-umnurd.edu.do/api/NOTIFICACION' + `/${auth.usuario}`)
-      .then(res => {
-        setNotificaciones((notificacion) => [...notificacion, res.data]);
-      }).catch(err => {
-        console.log(err.response.data);
-      })
+      setNotificaciones(notificaciones => [...notificaciones, datos]);
     });
   }, [socket]);
+
+  useEffect(() => {
+    if(cargado){
+      if(notificaciones.length === 0){null}else{
+        notificaciones.length === 1 ? toast.info(`Tienes ${notificaciones.length} notificación.`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000
+        }) :
+        toast.info(`Tienes ${notificaciones.length} notificaciones.`, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000
+        });
+        notifAud.play();
+        
+      }
+    }
+
+  }, [notificaciones.length]);
 
   useEffect(() => {
     axios.get('https://minume-umnurd.edu.do/api/NOTIFICACION' + `/${auth.usuario}`)
     .then(res => {
       setNotificaciones(res.data);
+      setcargado(true);
     }).catch(err => {
       console.log(err.response.data);
     })
+    
   }, []);
 
-  const displayNotificaciones = ({senderName, nombreUsuario, type}) => {
+  const displayNotificaciones = (senderName, nombreUsuario, type) => {
+
     let action;
     contador++;
+    
 
     if(type === 1){
       action = " Emergencia te ha enviado un mensaje";
@@ -105,7 +131,8 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
         date="13 minutes ago"
         onClick={handleCloseMenu}
       />
-    )
+    );
+
   };
 
   useEffect(() => {
@@ -159,7 +186,7 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
     >
-      {notificaciones.map((notificacion) => {return displayNotificaciones(notificacion)})}
+      {notificaciones.map((notificacion) => {return displayNotificaciones(notificacion.senderName, notificacion.nombreUsuario, notificacion.type)})}
       {notificaciones.length > 0 && 
         <SuiButton variant="gradient" color="success" size="small" onClick={handleLeido}>Marcar todo como leído</SuiButton>
       }

@@ -25,6 +25,7 @@ function ActionCell(id) {
   const cookies = new Cookies();
   const { auth } = useAuth();
   const [estudiante, setEstudiante] = useState([]);
+  const rutas_dev = ""
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: "button button-success",
@@ -42,13 +43,13 @@ function ActionCell(id) {
   });
 
   const Perfil = () => {
-    window.open('/estudiante'+`/${id.id}`, "_blank")
+    window.open(rutas_dev+'/estudiante'+`/${id.id}`, "_blank")
   }
 
   const Editar = () => {
     jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${id.id}`)
       .then((response)=> {
-        history('/estudiantes/editar-estudiante',{state: {persona: response.data}});
+        history(rutas_dev+'/estudiantes/editar-estudiante',{state: {persona: response.data}});
       });
   }
 

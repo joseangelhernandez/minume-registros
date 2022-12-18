@@ -44,6 +44,7 @@ function ProductsList({ socket }) {
   const jwtInterceoptor = axios.create({});
   const url = 'https://minume-umnurd.edu.do/api/STAFF';
   let _url = '';
+  const rutas_dev = ""
   jwtInterceoptor.interceptors.request.use((config) => {
     config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
     config.withCredentials = true;
@@ -185,7 +186,7 @@ function ProductsList({ socket }) {
             </SuiBox>
             <Stack spacing={1} direction="row">
               {auth.role === 1 
-              &&<Link to="/staff/registrar-staff">
+              &&<Link to={rutas_dev+"/staff/registrar-staff"}>
                 <SuiButton variant="gradient" color="info" size="small">
                   + Nuevo Staff
                 </SuiButton>

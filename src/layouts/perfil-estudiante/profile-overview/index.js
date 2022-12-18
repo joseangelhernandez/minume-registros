@@ -1,4 +1,4 @@
-import { useState, useEffect, React } from "react";
+import { useState, useEffect, React, useMemo } from "react";
 import {Route, Link, Routes, useParams} from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import useAuth from "hooks/useAuth";
 
 //HEADER
 // @mui material components
+import Stack from "@mui/material/Stack";
 import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -18,9 +19,9 @@ import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
 import SuiAvatar from "components/SuiAvatar";
 import logoMinume from "assets/images/logos/logoMinume.png"
-
-// Soft UI Dashboard PRO React example components
+import DashboardLayout from "examples/LayoutContainers/PageLayout-perfil";
 import DashboardNavbar from "examples/Navbar-perfil/DashboardNavbar";
+import DataTable from "examples/Tables/DataTable";
 
 // Soft UI Dashboard PRO React icons
 import Cube from "examples/Icons/Cube";
@@ -51,9 +52,6 @@ import typography from "assets/theme/base/typography";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import CardMedia from "@mui/material/CardMedia";
-
-// Soft UI Dashboard PRO React example components
-import DashboardLayout from "examples/LayoutContainers/PageLayout-perfil";
 import Footer from "examples/Footer";
 import SuiBadge from "components/SuiBadge";
 import SuiButton from "components/SuiButton";
@@ -64,6 +62,35 @@ import Swal from "sweetalert2";
 
 function Overview() {
   const { auth } = useAuth();
+  const [calificacionInicial, setCalificacionInicial] = useState([
+    {
+      secuencia: '',
+      delegacion: '',
+      com: '',
+      ora: '',
+      red: '',
+      penl: '',
+      ar: ''
+    }
+  ]);
+  const [calificacionFinal, setCalificacionFinal] = useState([
+    {
+      secuencia: '',
+      delegacion: '',
+      com: '',
+      ora: '',
+      red: '',
+      penl: '',
+      ar: '',
+      penc: '',
+      relp: '',
+      neg: '',
+      desp: '',
+      lid: '',
+      total: ''
+    }
+  ]);
+  const [publicacion, setPublicacion] = useState([{}]);
   const [estudiante, setEstudiante] = useState({
     alergias: '', 
     centro_educativo: '',
@@ -108,11 +135,14 @@ function Overview() {
     visado_americana: '',
   });
   const parametros = useParams();
+  const rutas_dev = ""
   const history = useNavigate();
   const [cargando, setCargando] = useState(true)
   const [ScreenSize, setScreenSize] = useState(window.innerWidth);
   const cookies = new Cookies();
   const [qrcode, setQRCode] = useState('');
+  const [total, setTotal] = useState('');
+  const [starpoint, setStarpoint] = useState("Total: 0 / 410" );
   const _URL = 'https://minume.minerd.gob.do/estudiante'+`/${parametros.estuID}`
   const jwtInterceoptor = axios.create({});
   jwtInterceoptor.interceptors.request.use((config) => {
@@ -178,6 +208,47 @@ function Overview() {
   }
 
   useEffect(()=>{
+    axios.get('https://minume-umnurd.edu.do/api/PUBLICACION'+`/${parametros.estuID}`)
+      .then((response)=> {
+        setPublicacion(response.data)
+      }).then(()=>{
+        axios.get('https://minume-umnurd.edu.do/api/ESTADOSDEL/calificacion'+`/${parametros.estuID}`)
+        .then((response)=> {
+        setCalificacionInicial(response.data)
+        setCalificacionInicial([{
+          secuencia: response.data[0].secuencia,
+          delegacion: response.data[0].pais,
+          com: response.data[0].comunicativa,
+          ora: response.data[0].oratoria,
+          red: response.data[0].redaccion,
+          penl: response.data[0].pen_logico,
+          ar: response.data[0].argumentacion
+        }])
+        setCalificacionFinal([
+          {
+            secuencia: response.data[0].secuencia,
+            delegacion: response.data[0].pais,
+            com: response.data[0].comunicativa,
+            ora: response.data[0].oratoria,
+            red: response.data[0].redaccion,
+            penl: response.data[0].pen_logico,
+            ar: response.data[0].argumentacion,
+            penc: response.data[0].pen_critico,
+            relp: response.data[0].resol_problemas,
+            neg: response.data[0].negociacion,
+            desp: response.data[0].des_personal,
+            lid: response.data[0].liderazgo,
+            total: response.data[0].total
+          }
+        ])
+        var total = Number(response.data[0].comunicativa) + Number(response.data[0].oratoria) + Number(response.data[0].redaccion) + Number(response.data[0].pen_logico) + Number(response.data[0].argumentacion)
+        publicacion[0].primera_publi && setTotal('Total: '+total+' / 410');
+        publicacion[0].final_publi && setTotal('Total: '+response.data[0].total+' / 410');
+        setStarpoint(response.data[0].starpoint);
+      }).catch((error)=>{console.log(error.response)});
+
+      }).catch((error)=>{console.log(error.response)});
+ 
     axios.get('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${parametros.estuID}`)
       .then((response)=> {
         setEstuput(response.data)
@@ -187,7 +258,7 @@ function Overview() {
       .then((response)=> {
         setEstudiante(response.data)
         setCargando(false)
-        response.data[0]?.id === undefined && history('/')
+        response.data[0]?.id === undefined && history(rutas_dev+'/')
       });
 
     QRCODE.toDataURL(_URL,
@@ -205,13 +276,55 @@ function Overview() {
 
   },[cargando, ScreenSize])
 
+  const atributosInicial = {
+    columns: [
+      {
+        Header: "Reporte ID",
+        accessor: "secuencia",
+      },
+      { Header: "Delegación", accessor: "delegacion" },
+      { Header: "Comunicación", accessor: "com" },
+      { Header: "Oratoria", accessor: "ora" },
+      { Header: "Redacción", accessor: "red" },
+      { Header: "Pensamiento Lógico", accessor: "penl" },
+      { Header: "Argumentación", accessor: "ar" }
+    ],
+  
+    rows: calificacionInicial,
+  }
+
+  const atributosFinal = {
+    columns: [
+      {
+        Header: "Reporte ID",
+        accessor: "secuencia",
+      },
+      { Header: "Delegación", accessor: "delegacion" },
+      { Header: "Comunicación", accessor: "com" },
+      { Header: "Oratoria", accessor: "ora" },
+      { Header: "Redacción", accessor: "red" },
+      { Header: "Pensamiento Lógico", accessor: "penl" },
+      { Header: "Argumentación", accessor: "ar" },
+      { Header: "Pensamiento Crítico", accessor: "penc" },
+      { Header: "Resolución de problemas", accessor: "relp" },
+      { Header: "Negociación", accessor: "neg" },
+      { Header: "Desarrollo personal", accessor: "desp" },
+      { Header: "Liderazgo", accessor: "lid" },
+    ],
+  
+    rows: calificacionFinal,
+  }
+
+  const tablaDatosInicial = useMemo(() => atributosInicial, [calificacionInicial]);
+  const tablaDatosFinal= useMemo(() => atributosFinal, [calificacionFinal]);
+
   if(cargando){
     return(<img src={logoCarga} alt="loading..." style={{position: 'absolute', top: '50%', left: '50%', transform: 'translateX(-50%) translateY(-50%)', maxWidth: '40%', maxHeight: '40%'}}/>)
   }else{
     return (
       <DashboardLayout>
         <SuiBox position="relative">
-          <DashboardNavbar absolute light />
+        <DashboardNavbar absolute light />
           <SuiBox
             display="flex"
             alignItems="center"
@@ -316,10 +429,21 @@ function Overview() {
                     </SuiBox>
                   </SuiBox>
                   <SuiTypography variant="subtitle2" fontWeight="bold" color="text" textTransform="uppercase" style={{textAlign: 'center', marginBottom : 10, marginTop: 10}}>
-                    Número de habitación: <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="dark">
-                    {estudiante[0].habitacion}
-                    </SuiTypography>
+                    Hotel de la habitación
+                    <SuiBox width="100%">
+                      <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="dark">
+                        {estudiante[0].hotel}
+                      </SuiTypography>
+                    </SuiBox>
                   </SuiTypography>
+                  <SuiTypography variant="subtitle2" fontWeight="bold" color="text" textTransform="uppercase" style={{textAlign: 'center', marginBottom : 10, marginTop: 10}}>
+                    Número de habitación
+                    <SuiBox width="100%">
+                      <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="dark">
+                        {estudiante[0].habitacion}
+                      </SuiTypography>
+                    </SuiBox>
+                  </SuiTypography>                  
                 </SuiBox>
               </Card>
             </Grid>
@@ -449,21 +573,53 @@ function Overview() {
         </SuiBox>
         <SuiBox mb={3}>
           <Card>
-            <SuiBox pt={2} px={2}>
-              <SuiBox mb={0.5}>
-                <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="info">
+            <SuiBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>
+              <SuiBox lineHeight={1}>
+                <SuiTypography variant="h5" fontWeight="medium">
                   CALIFICACIONES
                 </SuiTypography>
-              </SuiBox>
-              <SuiBox mb={1}>
                 <SuiTypography variant="button" fontWeight="regular" color="text">
-                  En este espacio podrá visualizar las calificaciones publicadas.
+                  Reporte de calificaciones publicadas hasta el momento
                 </SuiTypography>
               </SuiBox>
+              <Stack spacing={1} direction="row">
+                {publicacion[0].primera_publi ? total == "Total: 0 / 410" 
+                ? <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />
+                : <SuiBadge variant="gradient" color="error" size="lg" badgeContent={total} container />
+                : <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />}
+                {publicacion[0].final_publi ? starpoint == 1
+                  ? <SuiBadge variant="contained" color="dark" size="lg" badgeContent="Mejorable" container />
+                  : starpoint == 2 
+                  ? <SuiBadge variant="gradient" color="warning" size="lg" badgeContent="Bueno" container />
+                  : starpoint == 3 || starpoint == 4
+                  ? <SuiBadge variant="gradient" color="info" size="lg" badgeContent="Muy Bueno" container />
+                  : starpoint == 5 && <SuiBadge variant="gradient" color="success" size="lg" badgeContent="EXCELENTE" container />
+                  : <SuiBadge variant="contained" color="secondary" size="lg" badgeContent="Sin calificar" container />}
+              </Stack>
             </SuiBox>
             <SuiBox p={2}>
               <Grid container spacing={3}>
-                
+                {publicacion[0].final_publi 
+                  ? <DataTable
+                      table={tablaDatosFinal}
+                      autoResetPage = {false}
+                      entriesPerPage = {false}
+                      canSearch = {false}
+                      isSorted = {false}
+                    />
+                  : publicacion[0].primera_publi 
+                  ? <DataTable
+                      table={tablaDatosInicial}
+                      autoResetPage = {false}
+                      entriesPerPage = {false}
+                      canSearch = {false}
+                      isSorted = {false}
+                    />
+                  : <SuiTypography variant="button" fontWeight="regular" color="text" pl={4}>
+                      Aun no se han realizado publicaciones de calificaciones para {estudiante[0].nombre}
+                    </SuiTypography>
+                }
+                  
               </Grid>
             </SuiBox>
           </Card>
@@ -478,3 +634,16 @@ function Overview() {
 }
 
 export default Overview;
+
+/*<SuiBox pt={2} px={2}>
+              <SuiBox mb={0.5}>
+                <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="info">
+                  CALIFICACIONES
+                </SuiTypography>
+              </SuiBox>
+              <SuiBox mb={1}>
+                <SuiTypography variant="button" fontWeight="regular" color="text">
+                  En este espacio podrá visualizar las calificaciones publicadas.
+                </SuiTypography>
+              </SuiBox>
+            </SuiBox>*/

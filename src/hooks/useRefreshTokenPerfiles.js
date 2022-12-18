@@ -25,8 +25,9 @@ const useRefreshToken = () => {
       var comision = respuesta.data.comision;
       var nombre = respuesta.data.nombre;
       var apellido = respuesta.data.apellido;
+      var ocupacion = respuesta.data.cargo
 
-      setAuth({usuario, nombre, apellido, comision, role, token});
+      setAuth({usuario, nombre, apellido, comision, role, token, ocupacion});
       cookies.set('TaHjtwSe', respuesta.data.accessToken, {path: '/'});
 
       return respuesta.data.accessToken;

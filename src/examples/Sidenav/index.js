@@ -34,6 +34,7 @@ import { useSoftUIController, setMiniSidenav } from "context";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }, props) {
   const cookies = new Cookies();
+  const rutas_dev = ''
 
   const cerrarSesion=()=>{
     cookies.remove('usuario', {path: '/'});
@@ -42,7 +43,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }, props) {
   }
 
   const Paginas=(name)=>{
-    window.location.replace('/'+name);
+    window.location.replace(rutas_dev+'/'+name);
   }
 
   const [openCollapse, setOpenCollapse] = useState(false);

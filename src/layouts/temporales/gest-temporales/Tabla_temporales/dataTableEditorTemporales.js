@@ -332,7 +332,7 @@ function CalifTable(tblTemporales) {
           },
         },
       ]}
-      editable={
+      editable={auth.role === 1 ?
         {onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -363,7 +363,7 @@ function CalifTable(tblTemporales) {
                     resolve();
                 }, 1000);
           })
-        }
+        }:{}
       }
       style=
       {{

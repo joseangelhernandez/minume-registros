@@ -38,8 +38,9 @@ import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { string } from "prop-types";
 
-function ProductsList({ socket }) {
+function ProductsList({ socket, usuarios }) {
   const { auth } = useAuth();
+  const rutas_dev = ""
   const [tblEstu, setTblEstu] = useState([
     {
       id: '',
@@ -97,7 +98,24 @@ function ProductsList({ socket }) {
     action: <ActionCell id={e.id}/>,
   }))
   
+  const handleNotificacion = (type, usuarioRecibe, nombreUsuario) => {
+    axiosOrigin.post('https://minume-umnurd.edu.do/api/NOTIFICACION'+`/${usuarioRecibe}`,
+    {
+      senderName: auth.usuario, 
+      nombreUsuario: nombreUsuario,
+      type: type
+      
+    }).catch((error)=>{console.log(error.response.data)})
 
+    console.log(nombreUsuario)
+    socket.emit("notificacion2", {
+      senderName: auth.usuario,
+      receiverName: usuarioRecibe,
+      nombreUsuario,
+      type,
+    });
+  };
+  
 
   const generarQRs = () => {
     Swal.fire({
@@ -204,7 +222,7 @@ function ProductsList({ socket }) {
             </SuiBox>
             <Stack spacing={1} direction="row">
               {auth.role === 1 
-              &&<Link to="/estudiantes/registrar-estudiante">
+              &&<Link to={rutas_dev+"/estudiantes/registrar-estudiante"}>
                 <SuiButton variant="gradient" color="info" size="small">
                   + Nuevo estudiante
                 </SuiButton>
@@ -385,18 +403,9 @@ function ProductsList({ socket }) {
 
 export default ProductsList;
 
-/*const handleNotificacion = (type, usuarioRecibe, nombreUsuario) => {
-  axiosOrigin.post('https://minume-umnurd.edu.do/api/NOTIFICACION'+`/${usuarioRecibe}`,
-  {
-    senderName: auth.usuario, 
-    //nombreUsuario: nombreUsuario.replace(/ .*///, ''),
-    //type: type
-    
-  /*}).catch((error)=>{console.log(error.response.data)})
-  socket.emit("notificacion2", {
-    senderName: auth.usuario,
-    receiverName: usuarioRecibe,
-    nombreUsuario,
-    type,
-  });
-};*/
+/*          {usuarios.map((usuario) => (
+            <SuiButton key={usuario.usuario} onClick={()=>handleNotificacion(1, usuario.usuario, auth.nombre.replace(/ .*//*, ''))}>Tipo 1 {usuario.nombre}</SuiButton>
+            ))}
+            {usuarios.map((usuario) => (
+              <SuiButton key={usuario.usuario} onClick={()=>handleNotificacion(2, usuario.usuario, auth.nombre.replace(/ .*//*, ''))}>Tipo 2 {usuario.nombre}</SuiButton>
+            ))}*/

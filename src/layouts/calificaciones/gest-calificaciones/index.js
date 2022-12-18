@@ -42,7 +42,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Swal from "sweetalert2";
 
 function Calificaciones({stickyNavbar, socket}) {
-  const { auth} = useAuth();
+  const { auth } = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
   const jwtInterceoptor = axios.create({});
@@ -66,7 +66,7 @@ function Calificaciones({stickyNavbar, socket}) {
   }])
   const [cargando, setCargando] = useState(true);
   const [tblEstuCalif, setTblEstucalif] = useState([
-{
+    {
       secuencia: <Skeleton/>,
       delegado: <Skeleton/>,
       comision: <Skeleton/>,
@@ -83,7 +83,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -102,7 +103,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -121,7 +123,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -140,7 +143,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -159,7 +163,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -178,7 +183,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -197,7 +203,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -216,7 +223,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -235,7 +243,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     {
       secuencia: <Skeleton/>,
@@ -254,7 +263,8 @@ function Calificaciones({stickyNavbar, socket}) {
       liderazgo: <Skeleton/>,
       total: <Skeleton/>,
       starpoint: <Skeleton/>,
-      confir_dir_ad: <Skeleton/>
+      confir_dir_ad: <Skeleton/>,
+      confir_ce: <Skeleton/>
     },
     
     ]
@@ -301,7 +311,7 @@ function Calificaciones({stickyNavbar, socket}) {
           jwtInterceoptor.get('https://minume-umnurd.edu.do/api/CALIFICACIONES/'+`${usuario[0].comision}`)
           .then((response)=> {
             setTblEstucalif(response.data)
-          });
+          }).catch((error)=>{console.log(error.response.data)});
         }
       });
     }catch(error){
@@ -309,7 +319,14 @@ function Calificaciones({stickyNavbar, socket}) {
     }
   }, [cargando]);
 
-  useEffect(() => {auth.role !== 1 && navigate('/Inicio', {replace: true});}, []);
+  useEffect(()=>{
+    if(usuario[0].comision != ''){
+      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/CALIFICACIONES/'+`${usuario[0].comision}`)
+      .then((response)=> {
+        setTblEstucalif(response.data)
+      });
+    }
+  },[tabValue])
 
   const publicarInicio = () => {
     jwtInterceoptor.post('https://minume-umnurd.edu.do/api/ESTADOSDEL/PRIMERA')

@@ -42,6 +42,7 @@ function SignIn(props) {
   const LOGIN_URL = '/USUARIOS';
   const cookies = new Cookies();
   const [cargando, setCargando] = useState(false);
+  const rutas_dev = ""
 
   const navigate = useNavigate();
 
@@ -68,8 +69,10 @@ function SignIn(props) {
       var comision = respuesta.comision;
       var nombre = respuesta.nombre;
       var apellido = respuesta.apellido;
-      setAuth({usuario, nombre, apellido, comision, role, token});
-      navigate('/Inicio');
+      var ocupacion = respuesta.cargo;
+
+      setAuth({usuario, nombre, apellido, comision, role, token, ocupacion});
+      navigate(rutas_dev+'/Inicio');
     })
 
     .catch(error=>{
@@ -80,6 +83,7 @@ function SignIn(props) {
         showConfirmButton: false,
         text: 'El usuario o contrasena no son correctos.',
       });
+      setCargando(false);
       console.log(error);
     })
   };
@@ -98,7 +102,7 @@ function SignIn(props) {
 
   useEffect(()=>{
   if(auth !== ''){
-    navigate('/Inicio');
+    navigate(rutas_dev+'/Inicio');
   }
   },[]);
 

@@ -209,7 +209,7 @@ function CalifTable(tblHabitaciones) {
     jwtInterceoptor.put(url+`/${record.id}`, 
       {
         id: record.id,
-        habitacion: Number(record.habitacion),
+        habitacion: record.habitacion,
         tipo: Number(record.tipo),
         hotel: record.hotel.toUpperCase(),
         edificio: record.edificio.toUpperCase(),

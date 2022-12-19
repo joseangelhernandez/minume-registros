@@ -187,52 +187,34 @@ function CalifTable(tblStaff) {
   ];
 
   function PostTemp(record){
-    axios.get('https://minume-umnurd.edu.do/api/HABITACIONES/DISPONIBLESDROP')
-    .then((response)=> {
-      setHabitaciones(response.data);
-    });
-
-    if(record.habitacion === undefined)
-    {
-      toast.error("Por favor, rellene el campo de habitación.", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000
-      });
-
+    jwtInterceoptor.post(url+`/${record.id}/${record.habitacion}`).then(()=>{
       jwtInterceoptor.get(url)
-          .then(response => {
-            setData(response.data);
-          })
-    }else{
-      jwtInterceoptor.post(url+`/${record.id}/${record.habitacion}`).then(()=>{
-          jwtInterceoptor.get(url)
-          .then(response => {
-            setData(response.data);
-            toast.success("Habitación agregado satisfactoriamente.", {
-              position: toast.POSITION.TOP_RIGHT,
-              autoClose: 2000
-            });
-          })
-        }).catch((error) => {
-          console.log(error.response.data)
-          let timerInterval
-          Swal.fire({
-            icon: 'error',
-            title: 'Error en el envío de datos',
-            timer: 8000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            text: 'Reintente el envío, asegurese de colocar los valores adecuadamente, si el error persiste comuníquese con soporte.',
-            willClose: () => {
-              clearInterval(timerInterval)
-            }
-          }).then((result) => {
-            if (result.dismiss === Swal.DismissReason.timer) {
-              //history(0)
-            }
-          })
+      .then(response => {
+        setData(response.data);
+        toast.success("Habitación agregado satisfactoriamente.", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000
         });
-    }
+      })
+    }).catch((error) => {
+      console.log(error.response.data)
+      let timerInterval
+      Swal.fire({
+        icon: 'error',
+        title: 'Error en el envío de datos',
+        timer: 8000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        text: 'Reintente el envío, asegurese de colocar los valores adecuadamente, si el error persiste comuníquese con soporte.',
+        willClose: () => {
+          clearInterval(timerInterval)
+        }
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          //history(0)
+        }
+      })
+    });
   }
 
 

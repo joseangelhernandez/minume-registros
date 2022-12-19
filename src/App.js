@@ -3,7 +3,6 @@ import Cookies from 'universal-cookie';
 import useAuth from 'hooks/useAuth';
 import { io } from 'socket.io-client';
 import axios from 'axios';
-import { Analytics } from '@vercel/analytics/dist/react';
 
 // react-router components
 import { Route, Routes, useLocation, Navigate, Router } from "react-router-dom";
@@ -500,7 +499,6 @@ export default function App() {
 
   return(
     <ThemeProvider theme={theme}>
-      <Analytics />
     <CssBaseline />
       <Routes>
         <Route path={rutas_dev+"/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)"}  element={<Navigate to={pathname.slice(0, -1)} replace/>} />

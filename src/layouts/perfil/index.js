@@ -13,9 +13,9 @@ import ChangePassword from "layouts/perfil/components/ChangePassword";
 import Notifications from "layouts/perfil/components/Notifications";
 import ChangeProfilePic from "layouts/perfil/components/ChangeProfilePic";
 
-function Settings({socket}) {
+function Settings() {
   return (
-    <BaseLayout socket={socket}>
+    <BaseLayout >
       <SuiBox mt={4}>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={3}>

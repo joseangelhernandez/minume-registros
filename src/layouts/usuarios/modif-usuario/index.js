@@ -50,7 +50,7 @@ function getStepContent(stepIndex, formData, usuarioPut, id) {
   }
 }
 
-function NewUser({socket}) {
+function NewUser() {
   const { auth} = useAuth();
   const cookies = new Cookies();
   const location = useLocation();
@@ -132,7 +132,7 @@ function NewUser({socket}) {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar socket={socket}/>
+      <DashboardNavbar />
       <SuiBox py={3} mb={20}>
         <Grid container justifyContent="center" sx={{ height: "100%" }}>
           <Grid item xs={12} lg={8}>

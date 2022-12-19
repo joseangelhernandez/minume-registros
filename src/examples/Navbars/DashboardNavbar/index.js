@@ -63,7 +63,7 @@ function AlarmIcon(props) {
   );
 }
 
-function DashboardNavbar({ socket, absolute, light, isMini }) {
+function DashboardNavbar({  absolute, light, isMini }) {
   const notifAud = new Audio(audio);
   notifAud.muted = false;
   const { auth } = useAuth();
@@ -76,7 +76,7 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
   const [cargado, setcargado] = useState(false);
   let contador = 0;
 
-  useEffect(() => {
+  /*useEffect(() => {
     socket.on("obtenernotificacion", datos=>{
       setNotificaciones(notificaciones => [...notificaciones, datos]);
     });
@@ -133,7 +133,7 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
       />
     );
 
-  };
+  };*/
 
   useEffect(() => {
     // Setting the navbar type
@@ -167,14 +167,14 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
 
-  const handleLeido = () => {
+  /*const handleLeido = () => {
     axios.put('https://minume-umnurd.edu.do/api/NOTIFICACION' + `/${auth.usuario}`)
     setNotificaciones([]) 
     setOpenMenu(false)
-  };
+  };*/
 
   // Render the notifications menu
-  const renderMenu = () => (
+  /*const renderMenu = () => (
     <Menu
       anchorEl={openMenu}
       anchorReference={null}
@@ -191,7 +191,7 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
         <SuiButton variant="gradient" color="success" size="small" onClick={handleLeido}>Marcar todo como leído</SuiButton>
       }
     </Menu>
-  );
+  );*/
   
   return (
     <AppBar
@@ -227,7 +227,6 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
                 </Icon>
               </IconButton>
 
-              {notificaciones.length > 0 ?
                 <IconButton
                   size="large"
                   color="inherit"
@@ -238,11 +237,11 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
                   onClick={handleOpenMenu}
                 >
                   <AlarmIcon sx={{ fontSize: 500 }}/>
-                  <div style={{fontSize: "9px", width: "15px", height: "15px", backgroundColor: "red", borderRadius: "50%", padding: "7.5px", display: "flex", alignItems: "center", justifyContent: "center", marginTop: -25, marginLeft: 15, position: "absolute", color: "white"}}>
+                  {/*<div style={{fontSize: "9px", width: "15px", height: "15px", backgroundColor: "red", borderRadius: "50%", padding: "7.5px", display: "flex", alignItems: "center", justifyContent: "center", marginTop: -25, marginLeft: 15, position: "absolute", color: "white"}}>
                     {notificaciones.length}
-                  </div>
+                  </div>*/}
                 </IconButton>
-              : <IconButton
+              {/*: <IconButton
                   size="large"
                   color="inherit"
                   sx={navbarIconButton}
@@ -251,15 +250,12 @@ function DashboardNavbar({ socket, absolute, light, isMini }) {
                   variant="contained"
                 >
                   <AlarmIcon sx={{ fontSize: 500 }}/>
-                </IconButton>}
-              {renderMenu()}
+                </IconButton>*/}
             </SuiBox>
-            {notificaciones.senderName}
             
           </SuiBox>
         )}
       </Toolbar>
-      {notificaciones.map((notificacion) => {<span>{`${notificacion.senderName} ${notificacion.type}`}</span>})}
     </AppBar>
   );
 }

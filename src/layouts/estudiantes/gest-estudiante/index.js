@@ -38,7 +38,7 @@ import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { string } from "prop-types";
 
-function ProductsList({ socket, usuarios }) {
+function ProductsList() {
   const { auth } = useAuth();
   const rutas_dev = ""
   const [tblEstu, setTblEstu] = useState([
@@ -208,7 +208,7 @@ function ProductsList({ socket, usuarios }) {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar socket={socket}/>
+      <DashboardNavbar />
       <SuiBox my={3}>
         <Card>
           <SuiBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>

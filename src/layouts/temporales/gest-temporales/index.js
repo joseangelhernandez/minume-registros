@@ -24,7 +24,7 @@ import Table_temporales from "layouts/temporales/gest-temporales/Tabla_temporale
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function CheckTemporales({socket}) {
+function CheckTemporales() {
   const { auth} = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -150,7 +150,7 @@ function CheckTemporales({socket}) {
   return (
   <DashboardLayout>
     <ToastContainer />
-    <DashboardNavbar socket={socket}/>
+    <DashboardNavbar />
     <SuiBox my={3}>
       <Card>
         <Table_temporales tblTemporales={tblTemporales}/>

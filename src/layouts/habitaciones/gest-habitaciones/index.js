@@ -35,7 +35,7 @@ import Staff from "layouts/habitaciones/gest-habitaciones/DataTableEdit_staff/da
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function CheckTemporales({stickyNavbar, socket}) {
+function CheckTemporales({stickyNavbar}) {
   const { auth} = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -541,7 +541,7 @@ function CheckTemporales({stickyNavbar, socket}) {
   return (
   <DashboardLayout>
     <ToastContainer />
-    <DashboardNavbar socket={socket}/>
+    <DashboardNavbar/>
     <SuiBox my={3}>
       <Card>
         <Table_Habitaciones tblHabitaciones={tblHabitaciones}/>

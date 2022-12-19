@@ -41,7 +41,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Swal from "sweetalert2";
 
-function Calificaciones({stickyNavbar, socket}) {
+function Calificaciones({stickyNavbar}) {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -368,7 +368,7 @@ function Calificaciones({stickyNavbar, socket}) {
   return (
   <DashboardLayout>
     <ToastContainer />
-    <DashboardNavbar socket={socket}/>
+    <DashboardNavbar />
     <SuiBox mt={stickyNavbar ? 3 : 5}>
         <Grid container>
           <Grid item xs={12} sm={12} lg={12}>

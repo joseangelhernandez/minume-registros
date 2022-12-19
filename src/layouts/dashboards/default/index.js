@@ -34,7 +34,7 @@ import reportsBarChartData from "layouts/dashboards/default/data/reportsBarChart
 import gradientLineChartData from "layouts/dashboards/default/data/gradientLineChartData";
 import Card from "assets/theme/components/card";
 
-function Default({socket}) {
+function Default() {
   const { auth } = useAuth();
   const { values } = breakpoints;
   const { size } = typography;
@@ -153,7 +153,7 @@ function Default({socket}) {
 
   return(
     <DashboardLayout>
-      <DashboardNavbar socket={socket}/>
+      <DashboardNavbar />
       <SuiBox py={3}>
         <Grid container>
           <Grid item xs={12}>

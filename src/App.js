@@ -74,17 +74,12 @@ export default function App() {
   const cookies = new Cookies();
   const locations = useLocation();
   const [usuarios, setUsuarios] = useState([]);
-  const [socket, setSocket] = useState(io("https://socket-io-server-minume.herokuapp.com/"));
   const jwtInterceoptor = axios.create({});
   jwtInterceoptor.interceptors.request.use((config) => {
     config.headers.common["Authorization"] = `Bearer ${cookies.get('TaHjtwSe')}`;
     config.withCredentials = true;
     return config;
   });
-
-  useEffect(() => {
-    socket?.emit("nuevoUsuario", auth?.usuario)
-  }, [socket, auth]);
 
   useEffect(() => {
     if(auth?.usuario !== undefined){
@@ -102,7 +97,7 @@ export default function App() {
       name: "Inicio",
       key: "Inicio",
       route: rutas_dev+"/Inicio",
-      component: <Default socket={socket}/>,
+      component: <Default />,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
     },{
@@ -110,7 +105,7 @@ export default function App() {
       name: "Perfil",
       key: "Perfil",
       route: rutas_dev+"/Perfil",
-      component: <Perfil socket={socket}/>,
+      component: <Perfil />,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
     },
@@ -125,22 +120,22 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: rutas_dev+"/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
+          component: <GestEstudiante/>,
         },
         {
           name: "Registrar estudiante",
           key: "registrar-estudiante",
           route: rutas_dev+"/estudiantes/registrar-estudiante",
-          component: <RegEstudiante socket={socket}/>,
+          component: <RegEstudiante />,
         },
       ],
     },
     {
       type: "individual",
       name: "Asistencia",
-      key: "asistencia",
+      key: "Asistencia",
       route: rutas_dev+"/asistencia",
-      component: <Asistencia socket={socket}/>,
+      component: <Asistencia />,
       icon: <Icon icon="fluent-emoji-flat:man-raising-hand" />,
       noCollapse: true,
     },
@@ -154,13 +149,13 @@ export default function App() {
           name: "Gestionar cuentas",
           key: "gestionar-cuentas",
           route: rutas_dev+"/usuarios/gestionar-cuentas",
-          component: <GestUser socket={socket}/>,
+          component: <GestUser />,
         },
         {
           name: "Crear cuenta",
           key: "crear-cuenta",
           route: rutas_dev+"/usuarios/crear-cuenta",
-          component: <RegUser socket={socket}/>,
+          component: <RegUser />,
         },
       ],
     },
@@ -174,13 +169,13 @@ export default function App() {
           name: "Gestión de staff",
           key: "gestionar-staff",
           route: rutas_dev+"/staff/gestionar-staff",
-          component: <GestStaff socket={socket}/>,
+          component: <GestStaff />,
         },
         {
           name: "Registrar staff",
           key: "registrar-staff",
           route: rutas_dev+"/staff/registrar-staff",
-          component: <RegStaff socket={socket}/>,
+          component: <RegStaff />,
         },
       ],
     },
@@ -194,13 +189,13 @@ export default function App() {
           name: "Gestión de participantes",
           key: "gestionar-participantes",
           route: rutas_dev+"/participantes/gestionar-participantes",
-          component: <GestParticipantes socket={socket}/>,
+          component: <GestParticipantes />,
         },
         {
           name: "Registrar participantes",
           key: "registrar-participantes",
           route: rutas_dev+"/participantes/registrar-participantes",
-          component: <RegParticipantes socket={socket}/>,
+          component: <RegParticipantes />,
         },
       ],
     },
@@ -209,7 +204,7 @@ export default function App() {
       name: "Habitaciones",
       key: "Habitaciones",
       route: rutas_dev+"/Habitaciones",
-      component: <GestHabitaciones socket={socket}/>,
+      component: <GestHabitaciones />,
       icon: <Icon icon="fluent-emoji-flat:bed" />,
       noCollapse: true,
     },
@@ -218,7 +213,7 @@ export default function App() {
       name: "Temporales",
       key: "Temporales",
       route: rutas_dev+"/Temporales",
-      component: <Temporales socket={socket}/>,
+      component: <Temporales />,
       icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
       noCollapse: true,
     },
@@ -227,7 +222,7 @@ export default function App() {
       name: "Calificaciones",
       key: "Calificaciones",
       route: rutas_dev+"/Calificaciones",
-      component: <Calificaciones socket={socket}/>,
+      component: <Calificaciones />,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
     }
@@ -240,7 +235,7 @@ export default function App() {
       name: "Inicio",
       key: "Inicio",
       route: rutas_dev+"/Inicio",
-      component: <Default socket={socket}/>,
+      component: <Default />,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
     },{
@@ -248,7 +243,7 @@ export default function App() {
       name: "Perfil",
       key: "Perfil",
       route: rutas_dev+"/Perfil",
-      component: <Perfil socket={socket}/>,
+      component: <Perfil />,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
     },
@@ -263,7 +258,7 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: rutas_dev+"/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket}/>,
+          component: <GestEstudiante/>,
         }
       ],
     },
@@ -271,9 +266,9 @@ export default function App() {
     {
       type: "individual",
       name: "Asistencia",
-      key: "asistencia",
+      key: "Asistencia",
       route: rutas_dev+"/asistencia",
-      component: <Asistencia socket={socket}/>,
+      component: <Asistencia />,
       icon: <Icon icon="fluent-emoji-flat:man-raising-hand" />,
       noCollapse: true,
     },
@@ -282,7 +277,7 @@ export default function App() {
       name: "Calificaciones",
       key: "Calificaciones",
       route: rutas_dev+"/Calificaciones",
-      component: <Calificaciones socket={socket}/>,
+      component: <Calificaciones />,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
     },
@@ -292,7 +287,7 @@ export default function App() {
       name: "Temporales",
       key: "Temporales",
       route: rutas_dev+"/Temporales",
-      component: <Temporales socket={socket}/>,
+      component: <Temporales />,
       icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
       noCollapse: true,
     },
@@ -304,7 +299,7 @@ export default function App() {
       name: "Inicio",
       key: "Inicio",
       route: rutas_dev+"/Inicio",
-      component: <Default socket={socket}/>,
+      component: <Default />,
       icon: <Icon icon="flat-color-icons:home" />,
       noCollapse: true,
     },{
@@ -312,7 +307,7 @@ export default function App() {
       name: "Perfil",
       key: "Perfil",
       route: rutas_dev+"/Perfil",
-      component: <Perfil socket={socket}/>,
+      component: <Perfil />,
       icon: <Icon icon="flat-color-icons:info" />,
       noCollapse: true,
     },
@@ -327,22 +322,22 @@ export default function App() {
           name: "Gestión de estudiantes",
           key: "gestionar-estudiantes",
           route: rutas_dev+"/estudiantes/gestionar-estudiantes",
-          component: <GestEstudiante socket={socket} usuarios={usuarios}/>,
+          component: <GestEstudiante  />,
         },
         {
           name: "Registrar estudiante",
           key: "registrar-estudiante",
           route: rutas_dev+"/estudiantes/registrar-estudiante",
-          component: <RegEstudiante socket={socket}/>,
+          component: <RegEstudiante />,
         },
       ],
     },
     {
       type: "individual",
       name: "Asistencia",
-      key: "asistencia",
+      key: "Asistencia",
       route: rutas_dev+"/asistencia",
-      component: <Asistencia socket={socket}/>,
+      component: <Asistencia />,
       icon: <Icon icon="fluent-emoji-flat:man-raising-hand" />,
       noCollapse: true,
     },
@@ -356,13 +351,13 @@ export default function App() {
           name: "Gestionar cuentas",
           key: "gestionar-cuentas",
           route: rutas_dev+"/usuarios/gestionar-cuentas",
-          component: <GestUser socket={socket}/>,
+          component: <GestUser />,
         },
         {
           name: "Crear cuenta",
           key: "crear-cuenta",
           route: rutas_dev+"/usuarios/crear-cuenta",
-          component: <RegUser socket={socket}/>,
+          component: <RegUser />,
         },
       ],
     },
@@ -376,13 +371,13 @@ export default function App() {
           name: "Gestión de staff",
           key: "gestionar-staff",
           route: rutas_dev+"/staff/gestionar-staff",
-          component: <GestStaff socket={socket}/>,
+          component: <GestStaff />,
         },
         {
           name: "Registrar staff",
           key: "registrar-staff",
           route: rutas_dev+"/staff/registrar-staff",
-          component: <RegStaff socket={socket}/>,
+          component: <RegStaff />,
         },
       ],
     },
@@ -396,13 +391,13 @@ export default function App() {
           name: "Gestión de participantes",
           key: "gestionar-participantes",
           route: rutas_dev+"/participantes/gestionar-participantes",
-          component: <GestParticipantes socket={socket}/>,
+          component: <GestParticipantes />,
         },
         {
           name: "Registrar participantes",
           key: "registrar-participantes",
           route: rutas_dev+"/participantes/registrar-participantes",
-          component: <RegParticipantes socket={socket}/>,
+          component: <RegParticipantes />,
         },
       ],
     },
@@ -411,7 +406,7 @@ export default function App() {
       name: "Habitaciones",
       key: "Habitaciones",
       route: rutas_dev+"/Habitaciones",
-      component: <GestHabitaciones socket={socket}/>,
+      component: <GestHabitaciones />,
       icon: <Icon icon="fluent-emoji-flat:bed" />,
       noCollapse: true,
     },
@@ -420,7 +415,7 @@ export default function App() {
       name: "Temporales",
       key: "Temporales",
       route: rutas_dev+"/Temporales",
-      component: <Temporales socket={socket}/>,
+      component: <Temporales />,
       icon: <Icon icon="fluent-emoji-flat:repeat-button" />,
       noCollapse: true,
     },
@@ -429,7 +424,7 @@ export default function App() {
       name: "Calificaciones",
       key: "Calificaciones",
       route: rutas_dev+"/Calificaciones",
-      component: <Calificaciones socket={socket}/>,
+      component: <Calificaciones />,
       icon: <Icon icon="flat-color-icons:view-details" />,
       noCollapse: true,
     }
@@ -523,10 +518,10 @@ export default function App() {
 
           <Route element={<RequireAuth/>}>
             {getRoutes(rutas)}
-            <Route path={rutas_dev+"/estudiantes/editar-estudiante"} element={<ModificarEstudiante socket={socket}/>} />
-            <Route path={rutas_dev+"/usuarios/editar-usuario"} element={<ModificarUsuario socket={socket}/>} />
-            <Route path={rutas_dev+"/staff/editar-staff" }element={<ModificarStaff socket={socket}/>} />
-            <Route path={rutas_dev+"/participantes/editar-participante"} element={<ModificarParticipantes socket={socket}/>} />
+            <Route path={rutas_dev+"/estudiantes/editar-estudiante"} element={<ModificarEstudiante />} />
+            <Route path={rutas_dev+"/usuarios/editar-usuario"} element={<ModificarUsuario />} />
+            <Route path={rutas_dev+"/staff/editar-staff" }element={<ModificarStaff />} />
+            <Route path={rutas_dev+"/participantes/editar-participante"} element={<ModificarParticipantes />} />
           </Route>
         </Route>
       </Routes>

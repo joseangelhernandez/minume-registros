@@ -36,7 +36,7 @@ import { saveAs } from "file-saver";
 // sweetalert2 components
 import Swal from "sweetalert2";
 
-function ProductsList({ socket }) {
+function ProductsList() {
   const cookies = new Cookies();
   const { auth } = useAuth();
   const rutas_dev = ""
@@ -171,7 +171,7 @@ function ProductsList({ socket }) {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar socket={socket}/>
+      <DashboardNavbar />
       <SuiBox my={3}>
         <Card>
           <SuiBox display="flex" justifyContent="space-between" alignItems="flex-start" p={3}>

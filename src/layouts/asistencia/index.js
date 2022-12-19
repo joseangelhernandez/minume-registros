@@ -24,7 +24,7 @@ import Table_asist from "layouts/asistencia/Tabla_asistencia/dataTableEditorAsis
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function CheckTemporales({socket}) {
+function CheckTemporales() {
   const { auth} = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -80,7 +80,7 @@ function CheckTemporales({socket}) {
   return (
   <DashboardLayout>
     <ToastContainer />
-    <DashboardNavbar socket={socket}/>
+    <DashboardNavbar/>
     <SuiBox my={3}>
       <Card>
         {auth.comision > 12 && <Table_asist tblasist={tblasist2}/>}

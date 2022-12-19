@@ -101,9 +101,9 @@ function Overview() {
   }
 
   useEffect(()=>{
-    axios.get('/PARTICIPANTE'+`/${parametros.estuID}`)
+    axios.get('/PARTICIPANTE/GET'+`/${parametros.estuID}`)
       .then((response)=> {
-        setParticipante(response.data)
+        setParticipante(response.data[0])
         setCargando(false)
       });
 
@@ -225,9 +225,20 @@ function Overview() {
                     </SuiBox>
                   </SuiBox>
                   <SuiTypography variant="subtitle2" fontWeight="bold" color="text" textTransform="uppercase" style={{textAlign: 'center', marginBottom : 10, marginTop: 10}}>
-                    Número de habitación: <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="dark">
-                    {participante.habitacion}
-                    </SuiTypography>
+                    Hotel de la habitación
+                    <SuiBox width="100%">
+                      <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="dark">
+                        {participante.hotel}
+                      </SuiTypography>
+                    </SuiBox>
+                  </SuiTypography>
+                  <SuiTypography variant="subtitle2" fontWeight="bold" color="text" textTransform="uppercase" style={{textAlign: 'center', marginBottom : 10, marginTop: 10}}>
+                    Número de habitación
+                    <SuiBox width="100%">
+                      <SuiTypography variant="h5" fontWeight="bold" textTransform="capitalize" textGradient color="dark">
+                        {participante.habitacion}
+                      </SuiTypography>
+                    </SuiBox>
                   </SuiTypography>
                 </SuiBox>
               </Card>

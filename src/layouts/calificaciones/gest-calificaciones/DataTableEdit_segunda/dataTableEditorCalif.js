@@ -696,7 +696,12 @@ function CalifTable(calificaciones) {
           tooltip: 'Enviar calificaciones',
           isFreeAction: true,
           onClick: () => {EnviarCalificaciones()},
-        }:null
+        }:auth.comision === 6 && calificaciones.sesion_trabajoTBL.sesion_trabajo === 1 && {  
+          icon: tableIcons.Listo,
+          tooltip: 'Enviar calificaciones',
+          isFreeAction: true,
+          onClick: () => {EnviarCalificaciones()},
+        }
         
       ]:[]}
       editable={data.length>10
@@ -725,7 +730,18 @@ function CalifTable(calificaciones) {
             }, 1000)
           }),}
         :{}
-        :null
+        :auth.comision === 6 && calificaciones.sesion_trabajoTBL.sesion_trabajo === 1 && 
+        {onRowUpdate: (newData, oldData) =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              dataUpdate = [...data];
+              index = oldData.tableData.id;
+              dataUpdate[index] = newData;
+              setData([...dataUpdate]);
+              PostCalif(newData);
+              resolve();
+            }, 1000)
+          }),}
       }
       style=
       {{

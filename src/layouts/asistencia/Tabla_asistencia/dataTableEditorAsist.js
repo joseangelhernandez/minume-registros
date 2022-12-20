@@ -275,7 +275,12 @@ function CalifTable(tblasist) {
 
 
   function PutTemp(record){
-    jwtInterceoptor.post(url+`AISTENCIA1/${record.idDel}/${record.primera}`, ).catch((error) => {
+    jwtInterceoptor.post(url+`AISTENCIA1/${record.idDel}/${record.primera}`).then(()=>{
+      toast.success("Asistencia registrada", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
+    }).catch((error) => {
         console.log(error.response.data)
         let timerInterval
         Swal.fire({
@@ -295,7 +300,12 @@ function CalifTable(tblasist) {
         })
       });
 
-      jwtInterceoptor.post(url+`AISTENCIA2/${record.idDel}/${record.segunda}`, ).catch((error) => {
+      jwtInterceoptor.post(url+`AISTENCIA2/${record.idDel}/${record.segunda}`).then(()=>{
+      toast.success("Asistencia registrada", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
+    }).catch((error) => {
         console.log(error.response.data)
         let timerInterval
         Swal.fire({
@@ -315,7 +325,12 @@ function CalifTable(tblasist) {
         })
       });
 
-      jwtInterceoptor.post(url+`AISTENCIA3/${record.idDel}/${record.tercera}`, ).catch((error) => {
+      jwtInterceoptor.post(url+`AISTENCIA3/${record.idDel}/${record.tercera}`).then(()=>{
+      toast.success("Asistencia registrada", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
+    }).catch((error) => {
         console.log(error.response.data)
         let timerInterval
         Swal.fire({
@@ -335,7 +350,12 @@ function CalifTable(tblasist) {
         })
       });
 
-      jwtInterceoptor.post(url+`AISTENCIA4/${record.idDel}/${record.cuarta}`, ).catch((error) => {
+      jwtInterceoptor.post(url+`AISTENCIA4/${record.idDel}/${record.cuarta}`).then(()=>{
+      toast.success("Asistencia registrada", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000
+      });
+    }).catch((error) => {
         console.log(error.response.data)
         let timerInterval
         Swal.fire({

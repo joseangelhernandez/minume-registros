@@ -33,7 +33,7 @@ export default {
     pais: {
       name: "pais",
       label: "País de representación",
-      type: "number",
+      type: "text",
       placeholder: "Seleccione uno de los paises disponibles",
       errorMsg: "El campo país de representación es obligatorio.",
     },

@@ -114,10 +114,10 @@ function Representacion({ formData, estudiantePut, id }) {
                 type={pais.type}
                 label={pais.label}
                 name={pais.name}
-                value={comisionV}
+                value={paisV}
                 placeholder={pais.placeholder}
                 error={errors.pais && touched.pais}
-                success={comisionV.length > 0 && !errors.pais}
+                success={paisV.length > 0 && !errors.pais}
               />
           </Grid>
         </Grid>

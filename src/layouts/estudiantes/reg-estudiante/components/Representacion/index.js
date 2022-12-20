@@ -51,7 +51,7 @@ function Representacion({ formData }) {
     }
 
     if(valores != 0){
-      axios.get('https://minume-umnurd.edu.do/api/PAISESDROPDOWN'+`/${values.comision}`)
+      axios.get('https://minumeapi.azurewebsites.net/api/PAISESDROPDOWN'+`/${values.comision}`)
       .then((response)=> {
         setPaises(response.data)
         setcampoPais(false)
@@ -60,7 +60,7 @@ function Representacion({ formData }) {
   }
 
   useEffect(()=>{
-    axios.get('https://minume-umnurd.edu.do/api/COMISIONDROPDOWN')
+    axios.get('https://minumeapi.azurewebsites.net/api/COMISIONDROPDOWN')
     .then((response)=> {
       setComisiones(response.data)
     });

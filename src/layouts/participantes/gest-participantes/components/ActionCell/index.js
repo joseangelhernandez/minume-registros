@@ -45,7 +45,7 @@ function ActionCell(id) {
   }
 
   const Editar = () => {
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/PARTICIPANTE'+`/${id.id}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/PARTICIPANTE'+`/${id.id}`)
       .then((response)=> {
         history('/participantes/editar-participante',{state: {persona: response.data}});
       });
@@ -62,7 +62,7 @@ function ActionCell(id) {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        jwtInterceoptor.delete('https://minume-umnurd.edu.do/api/PARTICIPANTE'+`/${id.id}`)
+        jwtInterceoptor.delete('https://minumeapi.azurewebsites.net/api/PARTICIPANTE'+`/${id.id}`)
         .then(()=> {
           swalWithBootstrapButtons.fire(
             id.id + ' Eliminado',

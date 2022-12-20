@@ -34,7 +34,7 @@ function CalifTable(tblasist) {
   const {auth} = useAuth();
   const cookies = new Cookies();
   const history = useNavigate();
-  const url = 'https://minume-umnurd.edu.do/api/ESTADOSDEL/';
+  const url = 'https://minumeapi.azurewebsites.net/api/ESTADOSDEL/';
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;
@@ -49,7 +49,7 @@ function CalifTable(tblasist) {
   const [data, setData] = useState(tblasist.tblasist);
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTADOSDEL/'+`${auth.comision}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/ESTADOSDEL/'+`${auth.comision}`)
       .then((response)=> {
         setData(response.data);
       }).catch((error) => {console.log(error.response.data)});
@@ -378,7 +378,7 @@ function CalifTable(tblasist) {
 
 
   function Refrescar(){
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTADOSDEL/'+`${auth.comision}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/ESTADOSDEL/'+`${auth.comision}`)
     .then(response => {
       setData(response.data);
       toast.success("Datos actualizados", {

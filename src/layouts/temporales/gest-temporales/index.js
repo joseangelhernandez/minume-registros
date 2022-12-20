@@ -141,7 +141,7 @@ function CheckTemporales() {
 
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/TEMPORALES')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/TEMPORALES')
       .then((response)=> {
         setTblTemporales(response.data);
       });

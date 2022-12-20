@@ -22,7 +22,7 @@ import SuiDropzoneRoot from "components/SuiDropzone/SuiDropzoneRoot";
 function SuiDropzone({ options }) {
   const {auth} = useAuth();
   const cookies = new Cookies();
-  const url = 'https://minume-umnurd.edu.do/api/USUARIOPERFIL'+`/${auth?.usuario}`
+  const url = 'https://minumeapi.azurewebsites.net/api/USUARIOPERFIL'+`/${auth?.usuario}`
   const dropzoneRef = useRef();
   Dropzone.autoDiscover = false;
 

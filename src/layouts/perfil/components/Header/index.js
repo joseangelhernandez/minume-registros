@@ -35,7 +35,7 @@ function Header() {
   const handleSetVisible = () => setVisible(!visible);
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOPERFIL'+`/${auth.usuario}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/USUARIOPERFIL'+`/${auth.usuario}`)
       .then((response) => {
         setUsuario(response.data)
         setCargando(false);

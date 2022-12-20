@@ -34,7 +34,7 @@ function CalifTable(tblResumen) {
   const {auth} = useAuth();
   const cookies = new Cookies();
   const history = useNavigate();
-  const url = 'https://minume-umnurd.edu.do/api/HABITACIONES/RESUMEN';
+  const url = 'https://minumeapi.azurewebsites.net/api/HABITACIONES/RESUMEN';
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;

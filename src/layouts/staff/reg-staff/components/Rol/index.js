@@ -37,7 +37,7 @@ function Rol({ formData }) {
   };
 
   useEffect(()=>{
-    axios.get('https://minume-umnurd.edu.do/api/COMISIONDROPDOWN')
+    axios.get('https://minumeapi.azurewebsites.net/api/COMISIONDROPDOWN')
     .then((response)=> {
       setComisiones(response.data)
     });

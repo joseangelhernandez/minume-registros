@@ -77,14 +77,14 @@ function GestUser() {
   }
 
   function obtenerDatos(){
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS_SP'+`/${auth.usuario}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/USUARIOS_SP'+`/${auth.usuario}`)
     .then((response)=> {
       settblUser(response.data)
     });
   }
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS_SP'+`/${auth.usuario}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/USUARIOS_SP'+`/${auth.usuario}`)
     .then((response)=> {
       settblUser(response.data)
     });

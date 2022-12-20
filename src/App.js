@@ -84,7 +84,7 @@ export default function App() {
 
   useEffect(() => {
     if(auth?.usuario !== undefined){
-      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS_SP'+`/${auth.usuario}`)
+      jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/USUARIOS_SP'+`/${auth.usuario}`)
       .then((response)=> {
         setUsuarios(response.data)
       });

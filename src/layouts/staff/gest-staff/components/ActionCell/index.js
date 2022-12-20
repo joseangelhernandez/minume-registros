@@ -40,7 +40,7 @@ function ActionCell(id) {
   }
 
   const Editar = () => {
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/STAFF'+`/${id.id}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/STAFF'+`/${id.id}`)
       .then((response)=> {
         console.log(response.data);
         history('/staff/editar-staff',{state: {persona: response.data}});
@@ -67,7 +67,7 @@ function ActionCell(id) {
             history(0);
           }
         })
-        jwtInterceoptor.delete('https://minume-umnurd.edu.do/api/STAFF'+`/${id.id}`);
+        jwtInterceoptor.delete('https://minumeapi.azurewebsites.net/api/STAFF'+`/${id.id}`);
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {

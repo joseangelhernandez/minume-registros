@@ -61,7 +61,7 @@ function NewUser() {
     config.withCredentials = true;
     return config;
   });
-  const url = 'https://minume-umnurd.edu.do/api/USUARIOS'+`/${location.state.persona.usuario}`
+  const url = 'https://minumeapi.azurewebsites.net/api/USUARIOS'+`/${location.state.persona.usuario}`
   const [activeStep, setActiveStep] = useState(0);
   const history = useNavigate();
   const steps = getSteps();

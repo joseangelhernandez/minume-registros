@@ -34,7 +34,7 @@ function CalifTable(tblHabitaciones) {
   const {auth} = useAuth();
   const cookies = new Cookies();
   const history = useNavigate();
-  const url = 'https://minume-umnurd.edu.do/api/HABITACIONES';
+  const url = 'https://minumeapi.azurewebsites.net/api/HABITACIONES';
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;

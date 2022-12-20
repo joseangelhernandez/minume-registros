@@ -54,7 +54,7 @@ function NewUser() {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const cookies = new Cookies();
-  const url = "https://minume-umnurd.edu.do/api/USUARIOS"
+  const url = "https://minumeapi.azurewebsites.net/api/USUARIOS"
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const { formId, formField } = form;

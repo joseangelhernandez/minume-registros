@@ -174,7 +174,7 @@ function Overview() {
 
   const confirmar = async () => {
 
-      await jwtInterceoptor.put('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${parametros.estuID}`,{
+      await jwtInterceoptor.put('https://minumeapi.azurewebsites.net/api/ESTUDIANTES'+`/${parametros.estuID}`,{
         id: parametros.estuID,
         nombres: estuPut.nombres,
         apellidos: estuPut.apellidos,
@@ -219,11 +219,11 @@ function Overview() {
   }
 
   useEffect(()=>{
-    axios.get('https://minume-umnurd.edu.do/api/PUBLICACION'+`/${parametros.estuID}`)
+    axios.get('https://minumeapi.azurewebsites.net/api/PUBLICACION'+`/${parametros.estuID}`)
       .then((response)=> {
         setPublicacion(response.data)
       }).then(()=>{
-        axios.get('https://minume-umnurd.edu.do/api/ESTADOSDEL/calificacion'+`/${parametros.estuID}`)
+        axios.get('https://minumeapi.azurewebsites.net/api/ESTADOSDEL/calificacion'+`/${parametros.estuID}`)
         .then((response)=> {
         setCalificacionInicial(response.data)
         setCalificacionInicial([{
@@ -260,12 +260,12 @@ function Overview() {
 
       }).catch((error)=>{console.log(error.response)});
  
-    axios.get('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${parametros.estuID}`)
+    axios.get('https://minumeapi.azurewebsites.net/api/ESTUDIANTES'+`/${parametros.estuID}`)
       .then((response)=> {
         setEstuput(response.data)
       });
 
-    axios.get('https://minume-umnurd.edu.do/api/PERFIL_ESTUDIANTE'+`/${parametros.estuID}`)
+    axios.get('https://minumeapi.azurewebsites.net/api/PERFIL_ESTUDIANTE'+`/${parametros.estuID}`)
       .then((response)=> {
         setEstudiante(response.data)
         setCargando(false)

@@ -53,7 +53,7 @@ function NewUser() {
   const cookies = new Cookies();
   const location = useLocation();
   const jwtInterceoptor = axiosORIGIN.create({});
-  const url = 'https://minume-umnurd.edu.do/api/PARTICIPANTE'+`/${location.state.persona.id}`
+  const url = 'https://minumeapi.azurewebsites.net/api/PARTICIPANTE'+`/${location.state.persona.id}`
   const [activeStep, setActiveStep] = useState(0);
   const history = useNavigate();
   const steps = getSteps();

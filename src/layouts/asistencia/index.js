@@ -70,7 +70,7 @@ function CheckTemporales() {
 
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTADOSDEL/'+`${auth.comision}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/ESTADOSDEL/'+`${auth.comision}`)
       .then((response)=> {
         setTblasist1(response.data);
         setTblasist2(response.data);

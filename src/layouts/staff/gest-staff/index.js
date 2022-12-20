@@ -42,7 +42,7 @@ function ProductsList() {
   const { auth } = useAuth();
   const cookies = new Cookies();
   const jwtInterceoptor = axios.create({});
-  const url = 'https://minume-umnurd.edu.do/api/STAFF';
+  const url = 'https://minumeapi.azurewebsites.net/api/STAFF';
   let _url = '';
   const rutas_dev = ""
   jwtInterceoptor.interceptors.request.use((config) => {

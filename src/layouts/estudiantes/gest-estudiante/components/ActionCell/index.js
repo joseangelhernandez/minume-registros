@@ -47,14 +47,14 @@ function ActionCell(id) {
   }
 
   const Editar = () => {
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${id.id}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/ESTUDIANTES'+`/${id.id}`)
       .then((response)=> {
         history(rutas_dev+'/estudiantes/editar-estudiante',{state: {persona: response.data}});
       });
   }
 
   const Confirmar = () => {
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/ESTUDIANTES/confirmar', { params: {estudianteID: id.id}}).then(() => {
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/ESTUDIANTES/confirmar', { params: {estudianteID: id.id}}).then(() => {
         Swal.fire({
           icon: 'success',
           title: 'Registro confirmado',
@@ -97,7 +97,7 @@ function ActionCell(id) {
             history(0);
           }
         })
-        jwtInterceoptor.delete('https://minume-umnurd.edu.do/api/ESTUDIANTES'+`/${id.id}`);
+        jwtInterceoptor.delete('https://minumeapi.azurewebsites.net/api/ESTUDIANTES'+`/${id.id}`);
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {

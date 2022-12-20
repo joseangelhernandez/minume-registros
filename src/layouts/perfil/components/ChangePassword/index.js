@@ -199,7 +199,7 @@ function ChangePassword() {
 
   const [usuario, setUsuario] = useState('');
   const [cargando, setCargando] = useState(true);
-  const url = 'https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`;
+  const url = 'https://minumeapi.azurewebsites.net/api/USUARIOS'+`/${auth.usuario}`;
   const { formId, formField } = form;
 
   const cookies = new Cookies();
@@ -289,7 +289,7 @@ function ChangePassword() {
 
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/USUARIOS'+`/${auth.usuario}`)
       .then((response)=> {
         setUsuario(response.data)
         setCargando(false)

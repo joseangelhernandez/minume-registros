@@ -526,12 +526,12 @@ function CheckTemporales({stickyNavbar}) {
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES')
       .then((response)=> {
         setblHabitaciones(response.data);
     });
 
-    axios.get('https://minume-umnurd.edu.do/api/HABITACIONES/DISPONIBLESDROP')
+    axios.get('https://minumeapi.azurewebsites.net/api/HABITACIONES/DISPONIBLESDROP')
     .then((response)=> {
       setHabitacionesDisp(response.data);
     });

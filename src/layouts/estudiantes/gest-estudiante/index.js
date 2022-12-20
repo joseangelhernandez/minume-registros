@@ -99,7 +99,7 @@ function ProductsList() {
   }))
   
   const handleNotificacion = (type, usuarioRecibe, nombreUsuario) => {
-    axiosOrigin.post('https://minume-umnurd.edu.do/api/NOTIFICACION'+`/${usuarioRecibe}`,
+    axiosOrigin.post('https://minumeapi.azurewebsites.net/api/NOTIFICACION'+`/${usuarioRecibe}`,
     {
       senderName: auth.usuario, 
       nombreUsuario: nombreUsuario,

@@ -38,7 +38,7 @@ function CalifTable(tblDelegados)
   const {auth} = useAuth();
   const cookies = new Cookies();
   const history = useNavigate();
-  const url = 'https://minume-umnurd.edu.do/api/HABITACIONES/ESTUDIANTES';
+  const url = 'https://minumeapi.azurewebsites.net/api/HABITACIONES/ESTUDIANTES';
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;
@@ -54,12 +54,12 @@ function CalifTable(tblDelegados)
   const [habitaciones, setHabitaciones] = useState();
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES/ESTUDIANTES')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES/ESTUDIANTES')
     .then((response)=> {
       setData(response.data);
     }).catch((error)=>{console.log(error.response.data)});
 
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES')
     .then((response)=> {
       setHabitaciones(response.data);
     });
@@ -241,7 +241,7 @@ function CalifTable(tblDelegados)
 
 
   function Refrescar(){
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES/ESTUDIANTES')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES/ESTUDIANTES')
     .then(response => {
       setData(response.data);
       toast.success("Datos actualizados", {
@@ -268,7 +268,7 @@ function CalifTable(tblDelegados)
         })
     });
 
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES')
     .then((response)=> {
       setHabitaciones(response.data);
     });

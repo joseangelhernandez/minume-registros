@@ -38,7 +38,7 @@ function CalifTable(tblStaff) {
   const {auth} = useAuth();
   const cookies = new Cookies();
   const history = useNavigate();
-  const url = 'https://minume-umnurd.edu.do/api/HABITACIONES/STAFF';
+  const url = 'https://minumeapi.azurewebsites.net/api/HABITACIONES/STAFF';
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;
@@ -54,12 +54,12 @@ function CalifTable(tblStaff) {
   const [habitaciones, setHabitaciones] = useState();
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES/STAFF')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES/STAFF')
     .then((response)=> {
       setData(response.data);
     });
 
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES')
     .then((response)=> {
       setHabitaciones(response.data);
     });
@@ -219,7 +219,7 @@ function CalifTable(tblStaff) {
 
 
   function Refrescar(){
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/HABITACIONES/STAFF')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/HABITACIONES/STAFF')
     .then(response => {
       setData(response.data);
       toast.success("Datos actualizados", {

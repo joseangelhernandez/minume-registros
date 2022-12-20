@@ -74,7 +74,7 @@ function SubidaDoc(props) {
   const navigate = useNavigate();
 
   useEffect(()=>{
-    axios.get('https://minume-umnurd.edu.do/api/ESTUDIANTES').then((res)=>{
+    axios.get('https://minumeapi.azurewebsites.net/api/ESTUDIANTES').then((res)=>{
         setDelegados(res.data);
     });
   },[])

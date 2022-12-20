@@ -34,7 +34,7 @@ function CalifTable(calificaciones) {
   const {auth} = useAuth();
   const cookies = new Cookies();
   const history = useNavigate();
-  const url = 'https://minume-umnurd.edu.do/api/CALIFICACIONES';
+  const url = 'https://minumeapi.azurewebsites.net/api/CALIFICACIONES';
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;
@@ -644,7 +644,7 @@ function CalifTable(calificaciones) {
 
   function EnviarCalificaciones(){
     try{
-      jwtInterceoptor.put('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${auth.usuario}?sesion_trabajo=2`)
+      jwtInterceoptor.put('https://minumeapi.azurewebsites.net/api/USUARIOROLE_SP/'+`${auth.usuario}?sesion_trabajo=2`)
       .then(()=> {
         toast.success("Calificaciones enviadas satisfactoriamente.", {
           position: toast.POSITION.TOP_RIGHT,
@@ -665,7 +665,7 @@ function CalifTable(calificaciones) {
     itemsProcesados = 0;
     calificaciones.Lista_usuarios.forEach(element => {
       try{
-        jwtInterceoptor.put('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=1`);
+        jwtInterceoptor.put('https://minumeapi.azurewebsites.net/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=1`);
       }catch(error){
         console.log(error);
       }
@@ -683,7 +683,7 @@ function CalifTable(calificaciones) {
     itemsProcesados = 0;
     calificaciones.Lista_usuarios.forEach(element => {
       try{
-        jwtInterceoptor.put('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=0`);
+        jwtInterceoptor.put('https://minumeapi.azurewebsites.net/api/USUARIOROLE_SP/'+`${element.usuario}?sesion_trabajo=0`);
       }catch(error){
         console.log(error);
       }

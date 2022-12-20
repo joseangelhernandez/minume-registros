@@ -34,7 +34,7 @@ function CalifTable(tblTemporales) {
   const {auth} = useAuth();
   const cookies = new Cookies();
   const history = useNavigate();
-  const url = 'https://minume-umnurd.edu.do/api/TEMPORALES';
+  const url = 'https://minumeapi.azurewebsites.net/api/TEMPORALES';
   let dataUpdate = [];
   let index = 0;
   let itemsProcesados = 0;

@@ -57,12 +57,12 @@ function Comision({ formData, usuarioPut, id }) {
   };
 
   useEffect(()=>{
-    axios.get('https://minume-umnurd.edu.do/api/COMISIONDROPDOWN')
+    axios.get('https://minumeapi.azurewebsites.net/api/COMISIONDROPDOWN')
     .then((response)=> {
       setComisiones(response.data)
     });
 
-    axios.get('https://minume-umnurd.edu.do/api/REGIONALES_EDUCATIVAS')
+    axios.get('https://minumeapi.azurewebsites.net/api/REGIONALES_EDUCATIVAS')
     .then((response)=> {
       setRegionales(response.data)
     });

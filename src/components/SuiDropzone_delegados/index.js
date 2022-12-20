@@ -41,7 +41,7 @@ function SuiDropzone({ options }) {
     <SuiDropzoneRoot
       component="form"
       id="dropform"
-      action= 'https://minume-umnurd.edu.do/api/DELDOCS'
+      action= 'https://minumeapi.azurewebsites.net/api/DELDOCS'
       method="post" 
       encType="multipart/form-data"
       ref={dropzoneRef}

@@ -77,7 +77,7 @@ function Overview() {
   );
 
   const confirmar = async () => {
-    await jwtInterceoptor.post('https://minume-umnurd.edu.do/api/PARTICIPANTE/'+`${parametros.estuID}`)
+    await jwtInterceoptor.post('https://minumeapi.azurewebsites.net/api/PARTICIPANTE/'+`${parametros.estuID}`)
     .then(()=> {
         Swal.fire({
           icon: 'success',

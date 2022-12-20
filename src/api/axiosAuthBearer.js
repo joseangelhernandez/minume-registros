@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 
 
 const axiosInstance = () =>{
-    const BASE_URL = 'https://minume-umnurd.edu.do/api'
+    const BASE_URL = 'https://minumeapi.azurewebsites.net/api'
     const cookies = new Cookies();
     const jwtInterceoptor = axios.create({});
 

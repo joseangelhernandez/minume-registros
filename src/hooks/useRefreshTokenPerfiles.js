@@ -17,7 +17,7 @@ const useRefreshToken = () => {
 
   const refreshToken = async () => {
     try{
-      const respuesta = await jwtInterceoptor.post("https://minume-umnurd.edu.do/api/USUARIOS/refreshToken");
+      const respuesta = await jwtInterceoptor.post("https://minumeapi.azurewebsites.net/api/USUARIOS/refreshToken");
 
       var usuario = respuesta.data.usuario;
       var role = respuesta.data.roleId;

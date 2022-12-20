@@ -124,7 +124,7 @@ function Default() {
       setTotalDocentes(response.data.total)
     });
 
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/TOTAL_VOLUNTARIOS')
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/TOTAL_VOLUNTARIOS')
     .then((response)=>{
       setTotalVoluntarios(response.data.total)
     });

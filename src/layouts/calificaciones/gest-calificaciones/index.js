@@ -306,7 +306,7 @@ function Calificaciones({stickyNavbar}) {
 
   useEffect(()=>{
     try{
-      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/GETUSUARIOS_SP')
+      jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/GETUSUARIOS_SP')
       .then((response)=> {
         setUsuarios(response.data);
       });
@@ -314,13 +314,13 @@ function Calificaciones({stickyNavbar}) {
       console.log(error);
     }
     try{
-      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOROLE_SP/'+`${auth.usuario}`)
+      jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/USUARIOROLE_SP/'+`${auth.usuario}`)
       .then((response)=> {
         setUsuario(response.data);
         setCargando(false);
       }).then(()=>{
         if(usuario[0].comision != ''){
-          jwtInterceoptor.get('https://minume-umnurd.edu.do/api/CALIFICACIONES/'+`${usuario[0].comision}`)
+          jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/CALIFICACIONES/'+`${usuario[0].comision}`)
           .then((response)=> {
             setTblEstucalif(response.data)
           }).catch((error)=>{console.log(error.response.data)});
@@ -333,7 +333,7 @@ function Calificaciones({stickyNavbar}) {
 
   useEffect(()=>{
     if(usuario[0].comision != ''){
-      jwtInterceoptor.get('https://minume-umnurd.edu.do/api/CALIFICACIONES/'+`${usuario[0].comision}`)
+      jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/CALIFICACIONES/'+`${usuario[0].comision}`)
       .then((response)=> {
         setTblEstucalif(response.data)
       });
@@ -341,7 +341,7 @@ function Calificaciones({stickyNavbar}) {
   },[tabValue])
 
   const publicarInicio = () => {
-    jwtInterceoptor.post('https://minume-umnurd.edu.do/api/ESTADOSDEL/PRIMERA')
+    jwtInterceoptor.post('https://minumeapi.azurewebsites.net/api/ESTADOSDEL/PRIMERA')
     .then(()=> {
       Swal.fire({
         icon: 'success',
@@ -353,7 +353,7 @@ function Calificaciones({stickyNavbar}) {
   }
 
   const PublicarFinal = () => {
-    jwtInterceoptor.post('https://minume-umnurd.edu.do/api/ESTADOSDEL/FINAL')
+    jwtInterceoptor.post('https://minumeapi.azurewebsites.net/api/ESTADOSDEL/FINAL')
     .then(()=> {
       Swal.fire({
         icon: 'success',
@@ -365,7 +365,7 @@ function Calificaciones({stickyNavbar}) {
   }
 
   const deshacerPublicaciones = () => {
-    jwtInterceoptor.post('https://minume-umnurd.edu.do/api/ESTADOSDEL/NOPUBLICAR')
+    jwtInterceoptor.post('https://minumeapi.azurewebsites.net/api/ESTADOSDEL/NOPUBLICAR')
     .then(()=> {
       Swal.fire({
         icon: 'success',

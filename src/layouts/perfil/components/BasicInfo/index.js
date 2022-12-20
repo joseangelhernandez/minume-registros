@@ -41,7 +41,7 @@ function BasicInfo() {
   const [usuario, setUsuario] = useState('');
   const currentValidation = validations[0];
   const [cargando, setCargando] = useState(true);
-  const url = 'https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`;
+  const url = 'https://minumeapi.azurewebsites.net/api/USUARIOS'+`/${auth.usuario}`;
   const { formId, formField } = form;
   const cookies = new Cookies();
   const jwtInterceoptor = axiosORIGIN.create({});
@@ -108,7 +108,7 @@ function BasicInfo() {
   };
 
   useEffect(()=>{
-    jwtInterceoptor.get('https://minume-umnurd.edu.do/api/USUARIOS'+`/${auth.usuario}`)
+    jwtInterceoptor.get('https://minumeapi.azurewebsites.net/api/USUARIOS'+`/${auth.usuario}`)
       .then((response)=> {
         setUsuario(response.data)
         setCargando(false)

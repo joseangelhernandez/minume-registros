@@ -15,6 +15,7 @@ import SuiTypography from "components/SuiTypography";
 import SuiInput from "components/SuiInput";
 
 // NewUser page components
+import FormField from "layouts/estudiantes/modif-estudiante/components/FormField";
 import FormFieldSelect from "layouts/estudiantes/reg-estudiante/components/FormFieldSelect";
 
 function Representacion({ formData, estudiantePut, id }) {
@@ -37,13 +38,13 @@ function Representacion({ formData, estudiantePut, id }) {
     paisesSelect(event.value)
   };
 
-  const handleInput2 = (event) => {
+  /*const handleInput2 = (event) => {
     values.pais = event.value;
     paisesSelect()
-  };
+  };*/
 
   let [campoPais, setcampoPais] = useState(true)
-  let [paises, setPaises] = useState([{value: '', label: 'Debe seleccionar una comisión', comision: 0}])
+  /*let [paises, setPaises] = useState([{value: '', label: 'Debe seleccionar una comisión', comision: 0}])
 
   function paisesSelect(valores){
     if(comparador){
@@ -58,7 +59,7 @@ function Representacion({ formData, estudiantePut, id }) {
         setcampoPais(false)
       });
     }
-  }
+  }*/
 
   useEffect(()=>{
     axios.get('/COMISIONDROPDOWN')
@@ -66,11 +67,11 @@ function Representacion({ formData, estudiantePut, id }) {
       setComisiones(response.data)
     });
 
-    paisesSelect(values.comision);
+    //paisesSelect(values.comision);
 
-    if(values.comision != 0){
+    /*if(values.comision != 0){
       setcampoPais(false)
-    }
+    }*/
 
     if(values.comision == ''){
       values.ide3 = id;
@@ -109,19 +110,14 @@ function Representacion({ formData, estudiantePut, id }) {
         </Grid>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-              <FormFieldSelect
+              <FormField
                 type={pais.type}
                 label={pais.label}
                 name={pais.name}
-                onChange={handleInput2}
-                options={paises}
-                isDisabled={campoPais}
-                value={paises.filter(function(option) {
-                  return option.value === values.pais;
-                })}
+                value={comisionV}
                 placeholder={pais.placeholder}
                 error={errors.pais && touched.pais}
-                success={values.pais.length > 0 && !errors.pais}
+                success={comisionV.length > 0 && !errors.pais}
               />
           </Grid>
         </Grid>

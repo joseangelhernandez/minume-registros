@@ -705,7 +705,7 @@ function CalifTable(calificaciones) {
         
       ]:[]}
       editable={data.length>10
-        ?calificaciones.sesion_trabajoTBL.roleid === 1
+        ?calificaciones.sesion_trabajoTBL.roleid === 1 || calificaciones.sesion_trabajoTBL.comision === 6
         ?{onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -730,18 +730,7 @@ function CalifTable(calificaciones) {
             }, 1000)
           }),}
         :{}
-        :auth.comision === 6 && calificaciones.sesion_trabajoTBL.sesion_trabajo === 1 && 
-        {onRowUpdate: (newData, oldData) =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              dataUpdate = [...data];
-              index = oldData.tableData.id;
-              dataUpdate[index] = newData;
-              setData([...dataUpdate]);
-              PostCalif(newData);
-              resolve();
-            }, 1000)
-          }),}
+        :null
       }
       style=
       {{

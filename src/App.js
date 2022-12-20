@@ -58,8 +58,10 @@ import Comunicaciones from "layouts/comunicaciones/gest-comunicaciones";
 import Temporales from "layouts/temporales/gest-temporales";
 import GestHabitaciones from "layouts/habitaciones/gest-habitaciones";
 import Asistencia from "layouts/asistencia";
-import SubidaDoc from "layouts/subidaDocDel"
+import SubidaDoc from "layouts/subidaDocDel";
 import Error404 from "layouts/authentication/error/404";
+
+
 //#endregion
 
 export default function App() {

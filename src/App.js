@@ -58,7 +58,6 @@ import Comunicaciones from "layouts/comunicaciones/gest-comunicaciones";
 import Temporales from "layouts/temporales/gest-temporales";
 import GestHabitaciones from "layouts/habitaciones/gest-habitaciones";
 import Asistencia from "layouts/asistencia";
-import SubidaDoc from "layouts/subidaDocDel";
 import Error404 from "layouts/authentication/error/404";
 
 
@@ -504,7 +503,6 @@ export default function App() {
     <CssBaseline />
       <Routes>
         <Route path={rutas_dev+"/:url([a-z/]*[A-Z]+[a-z/]*)*(/+)"}  element={<Navigate to={pathname.slice(0, -1)} replace/>} />
-        <Route path={rutas_dev+"/delegados-docs"} element={<SubidaDoc/>} />
         <Route path={rutas_dev+"/"} element={<Login/>} />
         <Route path="*" element={<Navigate to={rutas_dev+"/"} replace />} />
 

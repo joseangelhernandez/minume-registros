@@ -35,7 +35,6 @@ function Representacion({ formData, estudiantePut, id }) {
     values.comision = event.value;
     comparador = true;
     setcampoPais(false)
-    paisesSelect(event.value)
   };
 
   /*const handleInput2 = (event) => {
@@ -76,11 +75,9 @@ function Representacion({ formData, estudiantePut, id }) {
     if(values.comision == ''){
       values.ide3 = id;
       values.comision = estudiantePut.comision
-      values.pais = estudiantePut.pais
     }else if(values.ide3 != id){
       values.ide3 = id;
       values.comision = estudiantePut.comision
-      values.pais = estudiantePut.pais
     }
     
   }, [values.ide3, values.comision]);

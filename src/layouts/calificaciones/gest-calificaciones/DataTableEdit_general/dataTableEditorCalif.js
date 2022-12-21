@@ -658,7 +658,7 @@ function CalifTable(calificaciones) {
           isFreeAction: true,
           onClick: () => {EnviarCorreos()},
         }
-        :calificaciones.sesion_trabajoTBL.sesion_trabajo === 5 && calificaciones.sesion_trabajoTBL.roleid > 1
+        :calificaciones.sesion_trabajoTBL.sesion_trabajo > 0 && calificaciones.sesion_trabajoTBL.roleid > 1
         ?{  
           icon: tableIcons.Listo,
           tooltip: 'Enviar calificaciones',

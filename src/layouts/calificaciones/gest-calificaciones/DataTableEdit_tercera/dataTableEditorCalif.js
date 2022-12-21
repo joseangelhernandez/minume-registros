@@ -759,7 +759,7 @@ function CalifTable(calificaciones) {
               resolve();
             }, 1000)
           }),}
-        :calificaciones.sesion_trabajoTBL.sesion_trabajo === 3 && calificaciones.sesion_trabajoTBL.roleid > 1
+        :calificaciones.sesion_trabajoTBL.sesion_trabajo > 0 && calificaciones.sesion_trabajoTBL.roleid > 1
         ?{onRowUpdate: (newData, oldData) =>
           new Promise((resolve, reject) => {
             setTimeout(() => {

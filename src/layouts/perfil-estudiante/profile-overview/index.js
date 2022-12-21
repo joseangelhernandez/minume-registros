@@ -593,21 +593,23 @@ function Overview() {
                   Reporte de calificaciones publicadas hasta el momento
                 </SuiTypography>
               </SuiBox>
-              <Stack spacing={1} direction="row">
-                {publicacion[0].primera_publi ? total == "Total: 0 / 410" 
-                ? <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />
-                : <SuiBadge variant="gradient" color="error" size="lg" badgeContent={total} container />
-                : <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />}
-                {publicacion[0].final_publi ? starpoint == 1
-                  ? <SuiBadge variant="contained" color="dark" size="lg" badgeContent="Mejorable" container />
-                  : starpoint == 2 
-                  ? <SuiBadge variant="gradient" color="warning" size="lg" badgeContent="Bueno" container />
-                  : starpoint == 3 || starpoint == 4
-                  ? <SuiBadge variant="gradient" color="info" size="lg" badgeContent="Muy Bueno" container />
-                  : starpoint == 5 && <SuiBadge variant="gradient" color="success" size="lg" badgeContent="EXCELENTE" container />
-                  : <SuiBadge variant="contained" color="secondary" size="lg" badgeContent="Sin calificar" container />}
-              </Stack>
             </SuiBox>
+            <Stack direction="row" style={{textAlign: 'center', marginTop: 8, marginLeft: '25%'}}>
+              {publicacion[0].primera_publi ? total == "Total: 0 / 410" 
+              ? <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />
+              : <SuiBadge variant="gradient" color="error" size="lg" badgeContent={total} container />
+              : <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />}
+            </Stack>
+            <Stack spacing={1} direction="row" style={{textAlign: 'center', marginTop: 8, marginLeft: '28%', marginBottom: 24}}>
+              {publicacion[0].final_publi ? starpoint == 1
+                ? <SuiBadge variant="contained" color="dark" size="lg" badgeContent="Mejorable" container />
+                : starpoint == 2 
+                ? <SuiBadge variant="gradient" color="warning" size="lg" badgeContent="Bueno" container />
+                : starpoint == 3 || starpoint == 4
+                ? <SuiBadge variant="gradient" color="info" size="lg" badgeContent="Muy Bueno" container />
+                : starpoint == 5 && <SuiBadge variant="gradient" color="success" size="lg" badgeContent="EXCELENTE" container />
+                : <SuiBadge variant="contained" color="secondary" size="lg" badgeContent="Sin calificar" container />}
+            </Stack>
             <SuiBox p={2}>
               <Grid container spacing={3}>
                 {publicacion[0].final_publi 
@@ -885,3 +887,19 @@ export default Overview;
                 </SuiTypography>
               </SuiBox>
             </SuiBox>*/
+
+
+/*<Stack spacing={1} direction="row" style={{position: 'relative',textAlign: 'center', marginTop: 122, marginLeft: -120}}>
+                {publicacion[0].primera_publi ? total == "Total: 0 / 410" 
+                ? <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />
+                : <SuiBadge variant="gradient" color="error" size="lg" badgeContent={total} container />
+                : <SuiBadge variant="gradient" color="error" size="lg" badgeContent="Sin calificar aun" container />}
+                {publicacion[0].final_publi ? starpoint == 1
+                  ? <SuiBadge variant="contained" color="dark" size="lg" badgeContent="Mejorable" container />
+                  : starpoint == 2 
+                  ? <SuiBadge variant="gradient" color="warning" size="lg" badgeContent="Bueno" container />
+                  : starpoint == 3 || starpoint == 4
+                  ? <SuiBadge variant="gradient" color="info" size="lg" badgeContent="Muy Bueno" container />
+                  : starpoint == 5 && <SuiBadge variant="gradient" color="success" size="lg" badgeContent="EXCELENTE" container />
+                  : <SuiBadge variant="contained" color="secondary" size="lg" badgeContent="Sin calificar" container />}
+              </Stack>*/

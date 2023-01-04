@@ -193,7 +193,7 @@ function Default() {
                 </SuiBox>
                 <MiniStatisticsCard
                   title={{ text: "Invitados", fontWeight: "bold" }}
-                  count={TotalDocentes}
+                  count={34}
                   icon={{ color: "info", component: "volunteer_activism" }}
                 />
               </Grid>
@@ -201,14 +201,14 @@ function Default() {
                 <SuiBox mb={3}>
                   <MiniStatisticsCard
                     title={{ text: "Voluntarios", fontWeight: "bold" }}
-                    count={TotalVoluntarios}
+                    count={58}
                     icon={{ color: "info", component: "volunteer_activism" }}
                   />
                   
                 </SuiBox>
                 <MiniStatisticsCard
                   title={{ text: "Del. Internacionales", fontWeight: "bold" }}
-                  count={TotalDocentes}
+                  count={14}
                   icon={{ color: "info", component: "volunteer_activism" }}
                 />
               </Grid>
@@ -224,7 +224,7 @@ function Default() {
                 <SuiBox mb={3}>
                   <MiniStatisticsCard
                     title={{ text: "Comisiones", fontWeight: "bold" }}
-                    count="12"
+                    count="9"
                     icon={{
                       color: "info",
                       component: "business_center",
